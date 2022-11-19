@@ -13,9 +13,9 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         """Initialize the DimensionalityReducer."""
         super().__init__()
 
-    def fit(self, X, y=None):
-        """Fit the model."""
-        super().fit(X, y)
+    @abstractmethod
+    def fit(self, X, y):
+        """Fit the DimensionalityReducer to the data."""
 
     @abstractmethod
     def transform(self, X):
