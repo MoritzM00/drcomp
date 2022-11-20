@@ -14,6 +14,7 @@ source .venv/bin/activate
 and then install the package `drcomp` locally with pip:
 
 ```bash
+pip3 install -r requirements.txt
 pip3 install -e .
 ```
 
@@ -32,3 +33,17 @@ The main dependencies are:
 - matplotlib
 - pandas
 - jupyter
+
+### Development
+
+To develop, you need to install the development dependencies:
+
+```bash
+pip3 install -r requirements-dev.txt
+```
+
+and install the pre-commit hooks by executing:
+
+```bash
+pre-commit install
+```
