@@ -2,6 +2,7 @@
 
 from abc import ABCMeta, abstractmethod
 
+import numpy as np
 import pyDRMetrics.pyDRMetrics as metrics
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -31,6 +32,11 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
 
     def evaluate(self, X) -> dict:
         """Evaluate the quality of the Dimensionality Reduction."""
-        check_is_fitted(self)
+        check_is_fitted(self.pca)
         drm = metrics.DRMetrics(X, self.transform(X))
-        return {"trustworthiness": drm.T, "continuity": drm.C, "LCMC": drm.LCMC}
+        self.drm_ = drm
+        return {
+            "trustworthiness": np.mean(drm.T),
+            "continuity": np.mean(drm.C),
+            "LCMC": np.mean(drm.LCMC),
+        }
