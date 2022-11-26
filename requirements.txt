@@ -6,3 +6,5 @@ seaborn>=0.12.1
 scikit-dimension>=0.3.2
 pyDRMetrics>=0.0.7
 tqdm>=4.64.1
+torch>=1.13.0
+skorch>=0.12.1
