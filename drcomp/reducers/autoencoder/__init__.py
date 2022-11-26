@@ -1,5 +1,9 @@
 """Module for autoencoders."""
 
-from .autoencoder import Autoencoder
+from drcomp.reducers.autoencoder.autoencoder import (
+    AutoEncoder,
+    SimpleDecoder,
+    SimpleEncoder,
+)
 
-__all__ = ["Autoencoder"]
+__all__ = ["AutoEncoder", "SimpleEncoder", "SimpleDecoder"]

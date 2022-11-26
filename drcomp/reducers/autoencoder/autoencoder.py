@@ -6,16 +6,16 @@ from skorch import NeuralNet
 from drcomp import DimensionalityReducer
 
 
-class Encoder(nn.Module):
+class SimpleEncoder(nn.Module):
     """Simple Fully Connected Encoder."""
 
-    def __init__(self, input_size, hidden_size):
+    def __init__(self, input_size, intrinsic_dim):
         """Initialize the Encoder."""
         super().__init__()
         self.input_size = input_size
-        self.hidden_size = hidden_size
+        self.intrinsic_dim = intrinsic_dim
         self.encoder = nn.Sequential(
-            nn.Linear(self.input_size, self.hidden_size), nn.ReLU()
+            nn.Linear(self.input_size, self.intrinsic_dim), nn.ReLU()
         )
 
     def forward(self, x):
@@ -23,16 +23,16 @@ class Encoder(nn.Module):
         return self.encoder(x)
 
 
-class Decoder(nn.Module):
+class SimpleDecoder(nn.Module):
     """Simple Fully Connected Decoder."""
 
-    def __init__(self, hidden_size, output_size):
+    def __init__(self, intrinsic_dim, output_size):
         """Initialize the Decoder."""
         super().__init__()
-        self.hidden_size = hidden_size
+        self.intrinsic_dim = intrinsic_dim
         self.output_size = output_size
         self.decoder = nn.Sequential(
-            nn.Linear(self.hidden_size, self.output_size), nn.ReLU()
+            nn.Linear(self.intrinsic_dim, self.output_size), nn.ReLU()
         )
 
     def forward(self, x):
@@ -40,24 +40,46 @@ class Decoder(nn.Module):
         return self.decoder(x)
 
 
-class Autoencoder(NeuralNet, DimensionalityReducer):
+class AutoEncoder(NeuralNet, DimensionalityReducer):
     """Autoencoder Implementation using Skorch."""
 
     def __init__(
         self,
-        encoder: nn.Module = Encoder,
-        decoder: nn.Module = Decoder,
+        encoder: nn.Module,
+        decoder: nn.Module,
         lr: float = 1e-3,
         max_epochs: int = 10,
         **kwargs
     ):
         """Initialize the autoencoder."""
-        net = nn.Sequential(encoder, decoder)
-        super(self).__init__(
-            net,
+        self.encoder = encoder
+        self.decoder = decoder
+
+        class Net(nn.Module):
+            def __init__(self):
+                super(Net, self).__init__()
+                self.encoder = encoder
+                self.decoder = decoder
+
+            def forward(self, x):
+                encoded = self.encoder(x)
+                decoded = self.decoder(encoded)
+                return decoded, encoded
+
+        super().__init__(
+            Net,
             criterion=nn.MSELoss,
             optimizer=optim.Adam,
             lr=lr,
             max_epochs=max_epochs,
             **kwargs
         )
+
+    def get_loss(self, y_pred, y_true, *args, **kwargs):
+        decoded, _ = y_pred
+        reconstr_loss = super().get_loss(decoded, y_true, *args, **kwargs)
+        return reconstr_loss
+
+    def transform(self, X):
+        _, encoded = self.forward(X)
+        return encoded
