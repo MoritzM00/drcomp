@@ -82,4 +82,4 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
 
     def transform(self, X):
         _, encoded = self.forward(X)
-        return encoded
+        return encoded.detach().numpy()
