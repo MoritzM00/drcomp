@@ -23,23 +23,21 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
     ):
         """Initialize the autoencoder."""
         layer_sizes = [input_size, *hidden_layer_sizes, intrinsic_dim]
-        encoder = nn.ModuleList()
-        decoder = nn.ModuleList()
-        depth = len(layer_sizes) - 1
-        for i in range(depth):
-            encoder.append(nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
-            encoder.append(act_fn())
-
-            decoder.append(
-                nn.Linear(layer_sizes[depth - i], layer_sizes[depth - i - 1])
-            )
-            decoder.append(act_fn())
-        self.encoder = encoder
-        self.decoder = decoder
 
         class Net(nn.Module):
             def __init__(self):
                 super(Net, self).__init__()
+                encoder = nn.ModuleList()
+                decoder = nn.ModuleList()
+                depth = len(layer_sizes) - 1
+                for i in range(depth):
+                    encoder.append(nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
+                    encoder.append(act_fn())
+
+                    decoder.append(
+                        nn.Linear(layer_sizes[depth - i], layer_sizes[depth - i - 1])
+                    )
+                    decoder.append(act_fn())
                 self.encoder = encoder
                 self.decoder = decoder
 
