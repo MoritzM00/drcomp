@@ -18,10 +18,6 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     """Base class for Dimensionality Reducers."""
 
     @abstractmethod
-    def fit(self, X, y=None):
-        """Fit the DimensionalityReducer to the data."""
-
-    @abstractmethod
     def transform(self, X) -> np.ndarray:
         """Reduce the dimensionality of the data."""
 
