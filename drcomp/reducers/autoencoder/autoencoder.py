@@ -1,4 +1,6 @@
 """Autoencoder Implementation using Skorch."""
+from typing import List
+
 import torch.nn as nn
 import torch.optim as optim
 from skorch import NeuralNet
@@ -6,52 +8,32 @@ from skorch import NeuralNet
 from drcomp import DimensionalityReducer
 
 
-class SimpleEncoder(nn.Module):
-    """Simple Fully Connected Encoder."""
-
-    def __init__(self, input_size, intrinsic_dim):
-        """Initialize the Encoder."""
-        super().__init__()
-        self.input_size = input_size
-        self.intrinsic_dim = intrinsic_dim
-        self.encoder = nn.Sequential(
-            nn.Linear(self.input_size, self.intrinsic_dim), nn.ReLU()
-        )
-
-    def forward(self, x):
-        """Forward pass."""
-        return self.encoder(x)
-
-
-class SimpleDecoder(nn.Module):
-    """Simple Fully Connected Decoder."""
-
-    def __init__(self, intrinsic_dim, output_size):
-        """Initialize the Decoder."""
-        super().__init__()
-        self.intrinsic_dim = intrinsic_dim
-        self.output_size = output_size
-        self.decoder = nn.Sequential(
-            nn.Linear(self.intrinsic_dim, self.output_size), nn.ReLU()
-        )
-
-    def forward(self, x):
-        """Forward pass."""
-        return self.decoder(x)
-
-
 class AutoEncoder(NeuralNet, DimensionalityReducer):
     """Autoencoder Implementation using Skorch."""
 
     def __init__(
         self,
-        encoder: nn.Module,
-        decoder: nn.Module,
+        input_size: int,
+        intrinsic_dim: int,
+        hidden_layer_sizes: List[int] = [],
+        act_fn: object = nn.ReLU,
         lr: float = 1e-3,
         max_epochs: int = 10,
         **kwargs
     ):
         """Initialize the autoencoder."""
+        layer_sizes = [input_size, *hidden_layer_sizes, intrinsic_dim]
+        encoder = nn.ModuleList()
+        decoder = nn.ModuleList()
+        depth = len(layer_sizes) - 1
+        for i in range(depth):
+            encoder.append(nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
+            encoder.append(act_fn())
+
+            decoder.append(
+                nn.Linear(layer_sizes[depth - i], layer_sizes[depth - i - 1])
+            )
+            decoder.append(act_fn())
         self.encoder = encoder
         self.decoder = decoder
 
@@ -62,10 +44,17 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
                 self.decoder = decoder
 
             def forward(self, x):
-                encoded = self.encoder(x)
-                decoded = self.decoder(encoded)
+                # Encode
+                for layer in self.encoder:
+                    x = layer(x)
+                encoded = x
+                # Decode
+                for layer in self.decoder:
+                    x = layer(x)
+                decoded = x
                 return decoded, encoded
 
+        # skorch neural net provides a wrapper around pytorch, which includes training loop etc.
         super().__init__(
             Net,
             criterion=nn.MSELoss,
