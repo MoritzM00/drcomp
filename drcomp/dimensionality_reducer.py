@@ -2,15 +2,14 @@
 
 from abc import ABCMeta, abstractmethod
 
-import numpy as np
-import pyDRMetrics.pyDRMetrics as metrics
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.manifold import trustworthiness
 
 
-def estimate_intrinsic_dimension(X) -> int:
+def estimate_intrinsic_dimension(X, K: int = 5) -> int:
     """Estimate the intrinsic dimensionality of the data."""
-    dimension = MLE().fit_transform(X)
+    dimension = MLE(K=K).fit_transform(X)
     return int(dimension)
 
 
@@ -29,12 +28,9 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     def transform(self, X):
         """Reduce the dimensionality of the data."""
 
-    def evaluate(self, X) -> dict:
+    def evaluate(self, X, K: int = 5) -> dict:
         """Evaluate the quality of the Dimensionality Reduction."""
-        drm = metrics.DRMetrics(X, self.transform(X))
-        self.drm_ = drm
+        t = trustworthiness(X, self.transform(X), n_neighbors=K)
         return {
-            "trustworthiness": np.mean(drm.T),
-            "continuity": np.mean(drm.C),
-            "LCMC": np.mean(drm.LCMC),
+            "trustworthiness": t,
         }
