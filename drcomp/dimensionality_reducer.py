@@ -2,6 +2,7 @@
 
 from abc import ABCMeta, abstractmethod
 
+import numpy as np
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.manifold import trustworthiness
@@ -16,16 +17,12 @@ def estimate_intrinsic_dimension(X, K: int = 5) -> int:
 class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     """Base class for Dimensionality Reducers."""
 
-    def __init__(self):
-        """Initialize the DimensionalityReducer."""
-        super().__init__()
-
     @abstractmethod
-    def fit(self, X, y):
+    def fit(self, X, y=None):
         """Fit the DimensionalityReducer to the data."""
 
     @abstractmethod
-    def transform(self, X):
+    def transform(self, X) -> np.ndarray:
         """Reduce the dimensionality of the data."""
 
     def evaluate(self, X, K: int = 5) -> dict:
