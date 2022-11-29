@@ -22,6 +22,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         **kwargs
     ):
         """Initialize the autoencoder."""
+        self.intrinsic_dim = intrinsic_dim
         layer_sizes = [input_size, *hidden_layer_sizes, intrinsic_dim]
 
         class Net(nn.Module):

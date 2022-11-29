@@ -23,6 +23,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     def __init__(self) -> None:
         super().__init__()
         self.supports_inverse_transform = False
+        self.intrinsic_dim = None
 
     @abstractmethod
     def fit(self, X, y=None):
