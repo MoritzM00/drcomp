@@ -1,6 +1,7 @@
 """Autoencoder Implementation using Skorch."""
 from typing import List
 
+import numpy as np
 import torch.nn as nn
 import torch.optim as optim
 from skorch import NeuralNet
@@ -71,3 +72,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
     def transform(self, X):
         _, encoded = self.forward(X)
         return encoded.detach().numpy()
+
+    def inverse_transform(self, X) -> np.ndarray:
+        decoded, _ = self.forward(X)
+        return decoded.detach().numpy()
