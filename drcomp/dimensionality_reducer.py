@@ -15,15 +15,84 @@ def estimate_intrinsic_dimension(X, K: int = 5) -> int:
 
 
 class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
-    """Base class for Dimensionality Reducers."""
+    """Base class for Dimensionality Reducers.
+
+    It specifies the interface that all dimensionality reducers should implement.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.supports_inverse_transform = False
+
+    @abstractmethod
+    def fit(self, X, y=None):
+        """Fit the dimensionality reducer with X.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training data, where `n_samples` is the number of samples and
+            `n_features` is the number of features.
+        y : ignored
+            Sklearn API compatibility.
+        Returns
+        -------
+        self : object
+            Returns the instance itself.
+        """
 
     @abstractmethod
     def transform(self, X) -> np.ndarray:
-        """Reduce the dimensionality of the data."""
+        """Apply dimensionality reduction to X.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            The samples, where `n_samples` is the number of samples
+            and `n_features` is the number of features.
+
+        Returns
+        -------
+        X_new : array-like of shape (n_samples, n_components)
+            Projection of X in the first principal components, where `n_samples`
+            is the number of samples and `n_components` is the number of the components.
+        """
 
     def evaluate(self, X, K: int = 5) -> dict:
-        """Evaluate the quality of the Dimensionality Reduction."""
+        """Evaluate the quality of the Dimensionality Reduction.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Samples.
+        K : int, default=5
+            Number of nearest neighbors to consider for the evaluation measures.
+
+        Returns
+        -------
+        dict
+            A dictionary containing the evaluation measures.
+        """
         t = trustworthiness(X, self.transform(X), n_neighbors=K)
         return {
             "trustworthiness": t,
         }
+
+    def inverse_transform(self, X) -> np.ndarray:
+        """Transform data back to its original space, if it is supported by this dimensionality reducer.
+
+        In other words, return an input `X_original` whose transform would be X.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_components)
+            Samples, where `n_samples` is the number of samples
+            and `n_components` is the number of components.
+
+        Returns
+        -------
+        X_original : array-like of shape (n_samples, n_features)
+            Original data, where `n_samples` is the number of samples
+            and `n_features` is the number of features.
+        """
+        raise ValueError("Inverse transform is not supported for this reducer.")
