@@ -42,8 +42,8 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
                         nn.Linear(layer_sizes[depth - i], layer_sizes[depth - i - 1])
                     )
                     decoder.append(act_fn())
-                self.encoder = encoder
-                self.decoder = decoder
+                self.encoder = nn.Sequential(*encoder)
+                self.decoder = nn.Sequential(*decoder)
 
             def forward(self, x):
                 # Encode
@@ -56,9 +56,6 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
                 decoded = x
                 return decoded, encoded
 
-        self.encoder = nn.Sequential(*Net().encoder)
-        self.decoder = nn.Sequential(*Net().decoder)
-
         # skorch neural net provides a wrapper around pytorch, which includes training loop etc.
         super().__init__(
             Net,
@@ -68,6 +65,10 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
             max_epochs=max_epochs,
             **kwargs
         )
+
+    def fit(self, X, y=None):
+        super().fit(X, X)
+        return self
 
     def get_loss(self, y_pred, y_true, *args, **kwargs):
         decoded, _ = y_pred
@@ -80,4 +81,5 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
 
     def inverse_transform(self, X) -> np.ndarray:
         X = from_numpy(X)
-        return self.decoder.forward(X).detach().numpy()
+        decoded = self.module_.decoder.forward(X)
+        return decoded.detach().numpy()
