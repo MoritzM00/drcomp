@@ -4,8 +4,10 @@
     "Autoencoder",
     "CIFAR",
     "drcomp",
+    "ndarray",
     "optim",
     "relu",
+    "skdim",
     "skorch",
     "torchvision"
   ]
