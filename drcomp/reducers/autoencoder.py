@@ -7,6 +7,7 @@ from skorch import NeuralNet
 from torch import from_numpy
 
 from drcomp import DimensionalityReducer
+from drcomp.autoencoder.base import AbstractAutoEncoder
 
 
 class AutoEncoder(NeuralNet, DimensionalityReducer):
@@ -14,9 +15,10 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
 
     def __init__(
         self,
-        AutoEncoderClass: nn.Module,
+        AutoEncoderClass: AbstractAutoEncoder,
         lr: float = 1e-3,
         max_epochs: int = 10,
+        criterion=nn.MSELoss,
         **kwargs
     ):
         """Initialize the autoencoder."""
@@ -24,7 +26,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         # skorch neural net provides a wrapper around pytorch, which includes training loop etc.
         super().__init__(
             AutoEncoderClass,
-            criterion=nn.MSELoss,
+            criterion=criterion,
             optimizer=optim.Adam,
             lr=lr,
             max_epochs=max_epochs,
@@ -46,5 +48,5 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
 
     def inverse_transform(self, X) -> np.ndarray:
         X = from_numpy(X)
-        decoded = self.module_.decoder.forward(X)
+        decoded = self.module_.decoder(X)
         return decoded.detach().numpy()

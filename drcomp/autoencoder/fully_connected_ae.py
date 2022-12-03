@@ -1,18 +1,20 @@
 """Fully Connected Autoencoder"""
 import torch.nn as nn
 
+from drcomp.autoencoder.base import AbstractAutoEncoder
 
-class FullyConnectedAE(nn.Module):
+
+class FullyConnectedAutoencoder(AbstractAutoEncoder):
     def __init__(
         self,
         input_size: int,
         intrinsic_dim: int,
-        hidden_layer_sizes: list[int] = [],
+        hidden_layer_dims: list[int] = [],
         act_fn: object = nn.ReLU,
     ):
-        super(FullyConnectedAE, self).__init__()
+        super().__init__()
         self.intrinsic_dim = intrinsic_dim
-        layer_sizes = [input_size, *hidden_layer_sizes, intrinsic_dim]
+        layer_sizes = [input_size, *hidden_layer_dims, intrinsic_dim]
 
         encoder = nn.ModuleList()
         decoder = nn.ModuleList()
@@ -27,14 +29,3 @@ class FullyConnectedAE(nn.Module):
             decoder.append(act_fn())
         self.encoder = nn.Sequential(*encoder)
         self.decoder = nn.Sequential(*decoder)
-
-    def forward(self, x):
-        # Encode
-        for layer in self.encoder:
-            x = layer(x)
-        encoded = x
-        # Decode
-        for layer in self.decoder:
-            x = layer(x)
-        decoded = x
-        return decoded, encoded
