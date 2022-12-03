@@ -59,7 +59,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             is the number of samples and `n_components` is the number of the components.
         """
 
-    def evaluate(self, X, K: int = 5) -> dict:
+    def evaluate(self, X, X_hat=None, K: int = 5) -> dict:
         """Evaluate the quality of the Dimensionality Reduction.
 
         Parameters
@@ -74,7 +74,9 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         dict
             A dictionary containing the evaluation measures.
         """
-        t = trustworthiness(X, self.transform(X), n_neighbors=K)
+        if X_hat is None:
+            X_hat = self.transform(X)
+        t = trustworthiness(X, X_hat, n_neighbors=K)
         return {
             "trustworthiness": t,
         }

@@ -11,7 +11,7 @@ from drcomp.autoencoder.base import AbstractAutoEncoder
 
 
 class AutoEncoder(NeuralNet, DimensionalityReducer):
-    """Autoencoder Implementation using Skorch."""
+    """Autoencoder Implementation using Skorch to adhere to the DimensionalityReducer interface."""
 
     def __init__(
         self,
