@@ -1,8 +1,14 @@
-# Python repository for the comparison of dimensionality reduction techniques
+# Old but gold? - Statistics vs. Machine Learning in Dimensionality Reduction
 
 This repo contains the python code for my bachelor thesis on the topic of dimensionality reduction techniques.
 
 ## Installation
+Install the package via pip
+```bash
+pip3 install git+https://github.com/MoritzM00/bachelor-thesis-python
+```
+
+## Development
 
 Create a virtual environment first, for example by executing:
 
