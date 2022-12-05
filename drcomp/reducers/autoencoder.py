@@ -1,10 +1,12 @@
 """Autoencoder Implementation using Skorch."""
 
 import numpy as np
+import torch
 import torch.nn as nn
 import torch.optim as optim
 from skorch import NeuralNet
 from torch import from_numpy
+from torch.autograd.functional import jacobian
 
 from drcomp import DimensionalityReducer
 from drcomp.autoencoder.base import AbstractAutoEncoder
@@ -65,10 +67,14 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         optimizer=optim.Adam,
         device="cpu",
         callbacks=None,
+        contractive: bool = False,
+        contractive_lambda: float = 1e-4,
         **kwargs
     ):
         """Initialize the autoencoder."""
         self.supports_inverse_transform = True
+        self.contractive = contractive
+        self.contractive_lambda = contractive_lambda
         # skorch neural net provides a wrapper around pytorch, which includes training loop etc.
         super().__init__(
             AutoEncoderClass,
@@ -89,7 +95,13 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
     def get_loss(self, y_pred, y_true, *args, **kwargs):
         decoded, _ = y_pred
         reconstr_loss = super().get_loss(decoded, y_true, *args, **kwargs)
-        return reconstr_loss
+        if self.contractive:
+            contr_loss = torch.norm(
+                jacobian(self.module_.encoder, y_pred[0], create_graph=True)
+            )
+        else:
+            contr_loss = 0
+        return reconstr_loss + self.contractive_lambda * contr_loss
 
     def transform(self, X) -> np.ndarray:
         _, encoded = self.forward(X, training=False)
