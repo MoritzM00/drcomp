@@ -4,7 +4,7 @@ import torch.nn as nn
 from drcomp.autoencoder.base import AbstractAutoEncoder
 
 
-class FullyConnectedAutoencoder(AbstractAutoEncoder):
+class FullyConnectedAE(AbstractAutoEncoder):
     def __init__(
         self,
         input_size: int,
