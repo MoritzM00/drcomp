@@ -11,14 +11,60 @@ from drcomp.autoencoder.base import AbstractAutoEncoder
 
 
 class AutoEncoder(NeuralNet, DimensionalityReducer):
-    """Autoencoder Implementation using Skorch to adhere to the DimensionalityReducer interface."""
+    """Autoencoder Implementation using Skorch to adhere to the DimensionalityReducer interface.
+
+    Parameters
+    ----------
+    AutoEncoderClass : AbstractAutoEncoder
+        The autoencoder class to use. Must implement the AbstractAutoEncoder, i.e. it must
+        define an encoder and decoder. It can be the actual instance (already instantiated) or the class itself.
+        If the class itself is passed, you must pass the required parameters to instantiate it to this class via `module__<name>=<value>`.
+    criterion : torch criterion (class)
+        The uninitialized criterion (loss) used to optimize the
+        module.
+    optimizer : torch optim (class, default=torch.optim.SGD)
+        The uninitialized optimizer (update rule) used to optimize the
+        module.
+    lr : float (default=0.01)
+        Learning rate passed to the optimizer. You may use ``lr`` instead
+        of using ``optimizer__lr``, which would result in the same outcome.
+    max_epochs : int (default=10)
+        The number of epochs to train for each ``fit`` call. Note that you
+        may keyboard-interrupt training at any time.
+    batch_size : int (default=128)
+        Mini-batch size. Use this instead of setting
+        ``iterator_train__batch_size`` and ``iterator_test__batch_size``,
+        which would result in the same outcome. If ``batch_size`` is -1,
+        a single batch with all the data will be used during training
+        and validation.
+    callbacks : None, "disable", or list of Callback instances (default=None)
+        Which callbacks to enable. There are three possible values:
+        If ``callbacks=None``, only use default callbacks,
+        those returned by ``get_default_callbacks``.
+        If ``callbacks="disable"``, disable all callbacks, i.e. do not run
+        any of the callbacks, not even the default callbacks.
+        If ``callbacks`` is a list of callbacks, use those callbacks in
+        addition to the default callbacks. Each callback should be an
+        instance of :class:`.Callback`.
+    device : str, torch.device, or None (default='cpu')
+        The compute device to be used. If set to 'cuda' in order to use
+        GPU acceleration, data in torch tensors will be pushed to cuda
+        tensors before being sent to the module. If set to None, then
+        all compute devices will be left unmodified.
+    **kwargs
+        Additional keyword arguments that are passed to skorch.NeuralNet.
+    """
 
     def __init__(
         self,
         AutoEncoderClass: AbstractAutoEncoder,
-        lr: float = 1e-3,
-        max_epochs: int = 10,
         criterion=nn.MSELoss,
+        batch_size: int = 128,
+        max_epochs: int = 10,
+        lr: float = 1e-3,
+        optimizer=optim.Adam,
+        device="cpu",
+        callbacks=None,
         **kwargs
     ):
         """Initialize the autoencoder."""
@@ -27,9 +73,12 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         super().__init__(
             AutoEncoderClass,
             criterion=criterion,
-            optimizer=optim.Adam,
+            optimizer=optimizer,
             lr=lr,
             max_epochs=max_epochs,
+            batch_size=batch_size,
+            device=device,
+            callbacks=callbacks,
             **kwargs
         )
 
