@@ -10,7 +10,7 @@ class FullyConnectedAE(AbstractAutoEncoder):
         input_size: int,
         intrinsic_dim: int,
         hidden_layer_dims: list[int] = [],
-        act_fn: object = nn.ReLU,
+        act_fn: object = nn.Sigmoid,
     ):
         super().__init__()
         self.intrinsic_dim = intrinsic_dim
