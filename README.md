@@ -5,7 +5,7 @@ This repo contains the python code for my bachelor thesis on the topic of dimens
 ## Installation
 Install the package via pip
 ```bash
-pip3 install git+https://github.com/MoritzM00/bachelor-thesis-python
+pip3 install git+https://github.com/MoritzM00/drcomp
 ```
 
 ## Development
