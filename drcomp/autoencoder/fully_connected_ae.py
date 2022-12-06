@@ -11,6 +11,7 @@ class FullyConnectedAE(AbstractAutoEncoder):
         intrinsic_dim: int,
         hidden_layer_dims: list[int] = [],
         act_fn: object = nn.Sigmoid,
+        include_batch_norm: bool = False,
     ):
         super().__init__()
         self.intrinsic_dim = intrinsic_dim
@@ -21,11 +22,13 @@ class FullyConnectedAE(AbstractAutoEncoder):
         depth = len(layer_sizes) - 1
         for i in range(depth):
             encoder.append(nn.Linear(layer_sizes[i], layer_sizes[i + 1]))
+            encoder.append(nn.BatchNorm1d(layer_sizes[i + 1]))
             encoder.append(act_fn())
 
             decoder.append(
                 nn.Linear(layer_sizes[depth - i], layer_sizes[depth - i - 1])
             )
+            decoder.append(nn.BatchNorm1d(layer_sizes[depth - i - 1]))
             decoder.append(act_fn())
         self.encoder = nn.Sequential(*encoder)
         self.decoder = nn.Sequential(*decoder)
