@@ -5,11 +5,10 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from skorch import NeuralNet
-from torch import from_numpy
 from torch.autograd.functional import jacobian
 
 from drcomp import DimensionalityReducer
-from drcomp.autoencoder.base import AbstractAutoEncoder
+from drcomp.autoencoder import AbstractAutoEncoder
 
 
 class AutoEncoder(NeuralNet, DimensionalityReducer):
@@ -107,7 +106,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         _, encoded = self.forward(X, training=False)
         return encoded.detach().numpy()
 
-    def inverse_transform(self, X) -> np.ndarray:
-        X = from_numpy(X)
-        decoded = self.module_.decoder(X)
+    def inverse_transform(self, Y) -> np.ndarray:
+        Y = torch.from_numpy(Y)
+        decoded = self.module_.decoder(Y)
         return decoded.detach().numpy()

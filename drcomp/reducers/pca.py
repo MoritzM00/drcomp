@@ -19,5 +19,5 @@ class PCA(DimensionalityReducer):
     def transform(self, X):
         return self.pca.transform(X)
 
-    def inverse_transform(self, X):
-        return self.pca.inverse_transform(X)
+    def inverse_transform(self, Y):
+        return self.pca.inverse_transform(Y)

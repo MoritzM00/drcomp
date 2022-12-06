@@ -84,14 +84,14 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             "trustworthiness": t,
         }
 
-    def inverse_transform(self, X) -> np.ndarray:
+    def inverse_transform(self, Y) -> np.ndarray:
         """Transform data back to its original space, if it is supported by this dimensionality reducer.
 
         In other words, return an input `X_original` whose transform would be X.
 
         Parameters
         ----------
-        X : array-like of shape (n_samples, intrinsic_dim)
+        Y : array-like of shape (n_samples, intrinsic_dim)
             Transformed samples (i.e. the data in the latent space).
 
         Returns
