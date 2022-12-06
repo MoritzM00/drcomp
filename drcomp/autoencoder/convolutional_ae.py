@@ -8,15 +8,17 @@ class MnistConvAE(AbstractAutoEncoder):
         super().__init__()
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 128, 3, stride=2, padding=1),  # 1x28x28 -> 128x14x14
-            nn.BatchNorm2d(16),
+            nn.BatchNorm2d(128),
             nn.ReLU(),
             nn.Conv2d(128, 256, 3, stride=2, padding=1),  # 128x14x14 -> 256x7x7
-            nn.BatchNorm2d(32),
+            nn.BatchNorm2d(256),
             nn.ReLU(),
             nn.Conv2d(256, 512, 3, stride=2, padding=1),  # 256x7x7 -> 512x4x4
-            nn.BatchNorm2d(64),
+            nn.BatchNorm2d(512),
             nn.ReLU(),
             nn.Conv2d(512, 1024, 3, stride=2, padding=1),  # 512x4x4 -> 1024x2x2
+            nn.BatchNorm2d(1024),
+            nn.ReLU(),
             nn.Flatten(),
             nn.Linear(1024 * 2 * 2, intrinsic_dim),
         )
@@ -38,7 +40,7 @@ class MnistConvAE(AbstractAutoEncoder):
             nn.ConvTranspose2d(256, 128, 3, stride=2, padding=1, output_padding=1),
             nn.BatchNorm2d(128),
             nn.ReLU(),
-            nn.ConvTranspose2d(16, 1, 3, stride=2, padding=1, output_padding=1),
+            nn.ConvTranspose2d(128, 1, 3, stride=2, padding=1, output_padding=1),
         )
 
 
