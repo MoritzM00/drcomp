@@ -2,10 +2,11 @@
 
 from abc import ABCMeta, abstractmethod
 
+import matplotlib.pyplot as plt
 import numpy as np
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.manifold import trustworthiness
+from sklearn.manifold import TSNE, trustworthiness
 
 
 def estimate_intrinsic_dimension(X, K: int = 5) -> int:
@@ -90,9 +91,8 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
 
         Parameters
         ----------
-        X : array-like of shape (n_samples, n_components)
-            Samples, where `n_samples` is the number of samples
-            and `n_components` is the number of components.
+        X : array-like of shape (n_samples, intrinsic_dim)
+            Transformed samples (i.e. the data in the latent space).
 
         Returns
         -------
@@ -101,3 +101,43 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             and `n_features` is the number of features.
         """
         raise ValueError("Inverse transform is not supported for this reducer.")
+
+    def reconstruct(self, X) -> np.ndarray:
+        """Reconstruct the original data, if it is supported by this dimensionality reducer.
+
+        Convenience method that chains calls to `inverse_transform` and `transform`.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Samples.
+
+        Returns
+        -------
+        X_hat : array-like of shape (n_samples, n_features)
+            Reconstructed samples.
+        """
+        if not self.supports_inverse_transform:
+            raise ValueError("Inverse transform is not supported for this reducer.")
+        return self.inverse_transform(self.transform(X))
+
+    def visualize_2D_latent_space(self, X, y=None):
+        """Visualize the 2D latent space of the data.
+
+        If the intrinsic dimensionality is not 2, t-SNE will be used to project it to two dimensions.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Samples.
+        y : array-like of shape (n_samples,), optional
+            Labels for the samples. Will be used to color the scatter plot.
+        """
+        Y = self.transform(X)
+        if self.intrinsic_dim > 2:
+            Y = TSNE(n_components=2).fit_transform(Y)
+        elif self.intrinsic_dim < 2:
+            raise ValueError(
+                "Cannot visualize a latent space with less than 2 dimensions."
+            )
+        return plt.scatter(Y[:, 0], Y[:, 1], c=y)
