@@ -5,7 +5,7 @@ from drcomp.autoencoder.base import AbstractAutoEncoder
 
 class MnistConvAE(AbstractAutoEncoder):
     def __init__(self, intrinsic_dim: int = 16):
-        super().__init__()
+        super().__init__(intrinsic_dim=intrinsic_dim)
         self.encoder = nn.Sequential(
             nn.Conv2d(1, 128, 3, stride=2, padding=1),  # 1x28x28 -> 128x14x14
             nn.BatchNorm2d(128),
@@ -45,8 +45,8 @@ class MnistConvAE(AbstractAutoEncoder):
 
 
 class Cifar10ConvAE(AbstractAutoEncoder):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, intrinsic_dim: int = 64):
+        super().__init__(intrinsic_dim=intrinsic_dim)
         self.encoder = nn.Sequential(
             nn.Conv2d(3, 16, 3, stride=2, padding=1),  # b, 16, 16, 16
             nn.ReLU(),
@@ -56,10 +56,10 @@ class Cifar10ConvAE(AbstractAutoEncoder):
             nn.ReLU(),
             nn.Conv2d(64, 128, 3, stride=2, padding=1),  # b, 128, 2, 2
             nn.Flatten(),
-            nn.Linear(128 * 2 * 2, 64),
+            nn.Linear(128 * 2 * 2, intrinsic_dim),
         )
         self.decoder = nn.Sequential(
-            nn.Linear(64, 128 * 2 * 2),
+            nn.Linear(intrinsic_dim, 128 * 2 * 2),
             nn.ReLU(),
             nn.Unflatten(1, (128, 2, 2)),
             nn.ConvTranspose2d(
