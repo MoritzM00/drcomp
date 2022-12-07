@@ -28,12 +28,22 @@ class MnistConvAE(AbstractAutoEncoder):
             nn.ReLU(),
             nn.Unflatten(dim=1, unflattened_size=(1024, 2, 2)),
             nn.ConvTranspose2d(
-                1024, 512, 3, stride=2, padding=1, output_padding=1
+                1024,
+                512,
+                3,
+                stride=2,
+                padding=1,
+                output_padding=1,
             ),  # 1024x2x2 -> 512x4x4
             nn.BatchNorm2d(512),
             nn.ReLU(),
             nn.ConvTranspose2d(
-                512, 256, 3, stride=2, padding=1, output_padding=1
+                512,
+                256,
+                3,
+                stride=2,
+                padding=1,
+                output_padding=0,  # output padding zero here, otherwise we get an 8x8 image
             ),  # 512x4x4 -> 256x7x7
             nn.BatchNorm2d(256),
             nn.ReLU(),

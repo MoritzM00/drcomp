@@ -53,8 +53,8 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         tensors before being sent to the module. If set to None, then
         all compute devices will be left unmodified.
     contractive : bool (default=False)
-        Whether to use contractive autoencoder loss. Be aware that this is computationally expensive. On Large models,
-        this might be prohibitive.
+        Whether to use contractive autoencoder loss. Be aware that this is computationally expensive. Even on
+        small fully connected models with two hidden layers on MNIST Dataset, this can be prohibitive.
     contractive_lambda : float (default=1e-4)
         The lambda parameter for the contractive loss. Only used if contractive is True.
     **kwargs
