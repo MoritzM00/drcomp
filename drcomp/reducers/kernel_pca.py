@@ -14,10 +14,10 @@ class KernelPCA(DimensionalityReducer):
         kernel: str = "linear",
         fit_inverse_transform: bool = False,
     ):
-        """Initialize PCA."""
-        super().__init__()
-        self.supports_inverse_transform = fit_inverse_transform
-        self.intrinsic_dim = intrinsic_dim
+        super().__init__(
+            intrinsic_dim=intrinsic_dim,
+            supports_inverse_transform=fit_inverse_transform,
+        )
         self.kernel_pca = _KernelPCA(
             n_components=intrinsic_dim,
             kernel=kernel,
@@ -25,7 +25,6 @@ class KernelPCA(DimensionalityReducer):
         )
 
     def fit(self, X, y=None):
-        """Fit the model."""
         self.kernel_pca.fit(X, y)
         return self
 
@@ -33,8 +32,4 @@ class KernelPCA(DimensionalityReducer):
         return self.kernel_pca.transform(X)
 
     def inverse_transform(self, Y) -> np.ndarray:
-        return self.kernel_pca.inverse_transform(Y)
-
-    def reconstruct(self, X) -> np.ndarray:
-        Y = self.kernel_pca.transform(X)
         return self.kernel_pca.inverse_transform(Y)

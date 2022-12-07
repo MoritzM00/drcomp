@@ -8,8 +8,7 @@ class PCA(DimensionalityReducer):
     """Principal Component Analysis."""
 
     def __init__(self, intrinsic_dim=2):
-        super().__init__()
-        self.intrinsic_dim = intrinsic_dim
+        super().__init__(intrinsic_dim=intrinsic_dim, supports_inverse_transform=True)
         self.pca = _PCA(n_components=intrinsic_dim)
 
     def fit(self, X, y=None):

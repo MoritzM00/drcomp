@@ -21,10 +21,12 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     It specifies the interface that all dimensionality reducers should implement.
     """
 
-    def __init__(self) -> None:
+    def __init__(
+        self, intrinsic_dim: int = 2, supports_inverse_transform: bool = False
+    ) -> None:
         super().__init__()
-        self.supports_inverse_transform = False
-        self.intrinsic_dim = None
+        self.intrinsic_dim = intrinsic_dim
+        self.supports_inverse_transform = supports_inverse_transform
 
     @abstractmethod
     def fit(self, X, y=None):
