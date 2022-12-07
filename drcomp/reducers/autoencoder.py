@@ -52,6 +52,11 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         GPU acceleration, data in torch tensors will be pushed to cuda
         tensors before being sent to the module. If set to None, then
         all compute devices will be left unmodified.
+    contractive : bool (default=False)
+        Whether to use contractive autoencoder loss. Be aware that this is computationally expensive. On Large models,
+        this might be prohibitive.
+    contractive_lambda : float (default=1e-4)
+        The lambda parameter for the contractive loss. Only used if contractive is True.
     **kwargs
         Additional keyword arguments that are passed to skorch.NeuralNet.
     """
@@ -112,6 +117,6 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         return encoded.detach().numpy()
 
     def inverse_transform(self, Y) -> np.ndarray:
-        Y = torch.from_numpy(Y)
+        Y = torch.from_numpy(Y).to(self.device)
         decoded = self.module_.decoder(Y)
-        return decoded.detach().numpy()
+        return decoded.detach().cpu().numpy()

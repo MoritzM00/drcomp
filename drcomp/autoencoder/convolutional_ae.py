@@ -69,6 +69,7 @@ class Cifar10ConvAE(AbstractAutoEncoder):
             nn.ConvTranspose2d(
                 64, 32, 3, stride=2, padding=1, output_padding=1
             ),  # b, 32, 8, 8
+            nn.ReLU(),
             nn.ConvTranspose2d(
                 32, 16, 3, stride=2, padding=1, output_padding=1
             ),  # b, 16, 16, 16
