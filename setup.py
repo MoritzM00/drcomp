@@ -7,6 +7,7 @@ setup(
     author_email="moritz.mistol@gmail.com",
     description="Python package for the comparison of dimensionality reduction techniques",
     packages=find_packages(include=["drcomp", "drcomp.*"]),
+    python_requires=">=3.9",
     install_requires=[
         "numpy",
         "scikit-learn",
