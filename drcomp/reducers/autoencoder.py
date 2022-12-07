@@ -71,11 +71,16 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         **kwargs
     ):
         """Initialize the autoencoder."""
-        self.supports_inverse_transform = True
+        DimensionalityReducer.__init__(
+            self,
+            intrinsic_dim=AutoEncoderClass.intrinsic_dim,
+            supports_inverse_transform=True,
+        )
         self.contractive = contractive
         self.contractive_lambda = contractive_lambda
         # skorch neural net provides a wrapper around pytorch, which includes training loop etc.
-        super().__init__(
+        NeuralNet.__init__(
+            self,
             AutoEncoderClass,
             criterion=criterion,
             optimizer=optimizer,
