@@ -22,7 +22,6 @@ class FullyConnectedAE(AbstractAutoEncoder):
         self.include_batch_norm = include_batch_norm
         if not isinstance(act_fn, list):
             act_fn = [act_fn] * (len(hidden_layer_dims) + 1)
-            print(act_fn)
         assert (
             len(act_fn) == len(hidden_layer_dims) + 1
         ), "act_fn must be a list of length len(hidden_layer_dims) + 1"
