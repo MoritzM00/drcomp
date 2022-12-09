@@ -3,6 +3,8 @@ defaults:
   - reducer: pca
   - dataset: mnist
 
-data_dir: ../data/raw
-log_dir: ../logs/
-models_dir: ../models/
+
+root_dir: ./
+data_dir: data/raw
+log_dir: logs
+model_dir: models

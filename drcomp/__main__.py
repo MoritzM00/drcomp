@@ -4,7 +4,7 @@ import pickle
 
 import hydra
 import torchsummary
-from omegaconf import DictConfig, OmegaConf
+from omegaconf import DictConfig
 from torchvision import datasets, transforms
 
 from drcomp.reducers import AutoEncoder
@@ -24,15 +24,15 @@ def _load_mnist(cfg: DictConfig, flatten: bool = False):
 
 @hydra.main(version_base="1.3", config_path="conf", config_name="config")
 def main(cfg: DictConfig) -> None:
-    print(OmegaConf.to_yaml(cfg))
     reducer = hydra.utils.instantiate(
         cfg.reducer, batch_size=cfg.dataset.batch_size, _convert_="object"
     )
-    X_train = _load_mnist(cfg, flatten=False)
+    X_train = _load_mnist(cfg, flatten=cfg.reducer._flatten_)
     if isinstance(reducer, AutoEncoder):
         torchsummary.summary(reducer.module, input_size=X_train.shape[1:])
     reducer.fit(X_train)
-    with open(f"{cfg.model_dir}/{cfg.reducer._name_}.pkl", "wb") as f:
+    model_path = f"{cfg.root_dir}/{cfg.model_dir}/{cfg.reducer._name_}.pkl"
+    with open(model_path, "wb") as f:
         pickle.dump(reducer, f)
 
 

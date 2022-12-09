@@ -1,4 +1,6 @@
 _target_: drcomp.reducers.AutoEncoder
+_name_: MNIST_FC_AutoEncoder
+_flatten_: True
 AutoEncoderClass:
   _target_: drcomp.autoencoder.FullyConnectedAE
   input_size: 784

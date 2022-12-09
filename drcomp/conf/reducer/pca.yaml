@@ -1,2 +1,4 @@
 _target_: drcomp.reducers.PCA
+_name_: PCA
+_flatten_: True
 intrinsic_dim: 2

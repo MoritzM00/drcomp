@@ -1,5 +1,6 @@
 _target_: drcomp.reducers.AutoEncoder
-_name_: MNIST_Conv_AE
+_name_: MNIST_Conv_AutoEncoder
+_flatten_: False
 AutoEncoderClass:
   _target_: drcomp.autoencoder.MnistConvAE
   intrinsic_dim: 16

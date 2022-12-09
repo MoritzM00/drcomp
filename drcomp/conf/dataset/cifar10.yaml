@@ -1,2 +1,7 @@
 name: CIFAR10
+image_size:
+  - width: 32
+  - height: 32
+  - channels: 3
 intrinsic_dim: 64
+batch_size: 100
