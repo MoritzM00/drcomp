@@ -1,0 +1,10 @@
+_target_: drcomp.reducers.AutoEncoder
+_name_: MNIST_Conv_AE
+AutoEncoderClass:
+  _target_: drcomp.autoencoder.MnistConvAE
+  intrinsic_dim: 16
+criterion:
+  _target_: torch.nn.MSELoss
+  _partial_: True
+callbacks:
+  - _target_: skorch.callbacks.ProgressBar

@@ -13,7 +13,11 @@ class KernelPCA(DimensionalityReducer):
         intrinsic_dim: int = 2,
         kernel: str = "linear",
         fit_inverse_transform: bool = False,
+        **kwargs
     ):
+        # we need to store these parameters here as well, because of the hydra-instantiation via the cli
+        self.fit_inverse_transform = fit_inverse_transform
+        self.kernel = kernel
         super().__init__(
             intrinsic_dim=intrinsic_dim,
             supports_inverse_transform=fit_inverse_transform,

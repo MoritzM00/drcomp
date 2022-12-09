@@ -1,0 +1,13 @@
+_target_: drcomp.reducers.AutoEncoder
+AutoEncoderClass:
+  _target_: drcomp.autoencoder.FullyConnectedAE
+  input_size: 784
+  intrinsic_dim: 16
+  hidden_layer_dims: [256]
+  act_fn:
+    _target_: torch.nn.Sigmoid
+    _partial_: True
+  include_batch_norm: False
+criterion:
+  _target_: torch.nn.MSELoss
+  _partial_: True

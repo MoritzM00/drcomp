@@ -22,7 +22,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     """
 
     def __init__(
-        self, intrinsic_dim: int = 2, supports_inverse_transform: bool = False
+        self, intrinsic_dim: int = 2, supports_inverse_transform: bool = False, **kwargs
     ) -> None:
         super().__init__()
         self.intrinsic_dim = intrinsic_dim
