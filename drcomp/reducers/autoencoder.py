@@ -114,7 +114,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
 
     def transform(self, X) -> np.ndarray:
         _, encoded = self.forward(X, training=False)
-        return encoded.detach().numpy()
+        return encoded.detach().cpu().numpy()
 
     def inverse_transform(self, Y) -> np.ndarray:
         Y = torch.from_numpy(Y).to(self.device)
