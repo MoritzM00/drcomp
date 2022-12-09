@@ -1,0 +1,4 @@
+mnist:
+  name: MNIST
+  intrinsic_dim: 16
+  batch_size: 64

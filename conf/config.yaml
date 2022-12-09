@@ -1,0 +1,7 @@
+defaults:
+  - models: pca
+  - datasets: mnist
+
+data_dir: data/
+log_dir: logs/
+models_dir: models/
