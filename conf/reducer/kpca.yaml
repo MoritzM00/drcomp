@@ -1,0 +1,4 @@
+_target_: drcomp.reducers.KernelPCA
+intrinsic_dim: 2
+kernel: rbf
+fit_inverse_transform: True

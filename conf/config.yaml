@@ -1,6 +1,7 @@
 defaults:
-  - models: pca
-  - datasets: mnist
+  - _self_
+  - reducer: pca
+  - dataset: mnist
 
 data_dir: data/
 log_dir: logs/

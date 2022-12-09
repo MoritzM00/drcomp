@@ -3,6 +3,8 @@ data/
 
 # other
 models/
+outputs/
+
 **/wandb/
 
 # Byte-compiled / optimized / DLL files
