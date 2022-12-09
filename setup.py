@@ -8,6 +8,7 @@ setup(
     description="Python package for the comparison of dimensionality reduction techniques",
     packages=find_packages(include=["drcomp", "drcomp.*"]),
     python_requires=">=3.9",
+    entry_points={"console_scripts": ["drcomp=drcomp.__main__:main"]},
     install_requires=[
         "numpy",
         "scikit-learn",
@@ -15,5 +16,6 @@ setup(
         "torchvision",
         "scikit-dimension",
         "skorch",
+        "hydra-core",
     ],
 )
