@@ -8,6 +8,13 @@ Install the package via pip
 pip3 install git+https://github.com/MoritzM00/drcomp
 ```
 
+## Usage
+
+You can the cli tool to train and evaluate models. E.g. to train a PCA model on the MNIST Dataset, execute:
+
+```bash
+drcomp reducer=PCA dataset=MNIST
+```
 ## Development
 
 Create a virtual environment first, for example by executing:
