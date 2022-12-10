@@ -3,4 +3,4 @@ _name_: KernelPCA
 _flatten_: True
 intrinsic_dim: 2
 kernel: rbf
-fit_inverse_transform: True
+fit_inverse_transform: False

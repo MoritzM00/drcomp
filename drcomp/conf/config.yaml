@@ -4,7 +4,7 @@ defaults:
   - dataset: mnist
 
 
-root_dir: ./
-data_dir: data/raw
+root_dir: .
+data_dir: data
 log_dir: logs
 model_dir: models
