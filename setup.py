@@ -11,11 +11,14 @@ setup(
     entry_points={"console_scripts": ["drcomp=drcomp.__main__:main"]},
     install_requires=[
         "numpy",
+        "pandas",
         "scikit-learn",
         "torch",
         "torchvision",
+        "torchsummary",
         "scikit-dimension",
         "skorch",
+        "matplotlib",
         "hydra-core",
     ],
 )

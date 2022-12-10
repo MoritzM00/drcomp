@@ -1,0 +1,2 @@
+recursive-include drcomp *.py
+recursive-include drcomp *.yaml
