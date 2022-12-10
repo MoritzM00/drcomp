@@ -1,9 +1,11 @@
 # managed by dvc
 data/
 
-# other
+# hydra
 models/
 outputs/
+logs/
+multirun/
 
 **/wandb/
 
