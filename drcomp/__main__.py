@@ -49,7 +49,6 @@ def main(cfg: DictConfig) -> None:
     end = time.time()
     print(f"Training took {end - start:.2f} seconds.")
 
-    # save the model if training was successful
     print("Saving model...")
     save_model(reducer, cfg)
     print("Done.")
