@@ -3,7 +3,9 @@
 This repo contains the python code for my bachelor thesis on the topic of dimensionality reduction techniques.
 
 ## Installation
+
 Install the package via pip
+
 ```bash
 pip3 install git+https://github.com/MoritzM00/drcomp
 ```
@@ -13,8 +15,15 @@ pip3 install git+https://github.com/MoritzM00/drcomp
 You can the cli tool to train and evaluate models. E.g. to train a PCA model on the MNIST Dataset, execute:
 
 ```bash
-drcomp reducer=PCA dataset=MNIST
+drcomp reducer=pca dataset=mnist
 ```
+
+To train a model with different parameters, e.g. a PCA model on the mnist dataset with a intrinsic dimensionality of 10, execute:
+
+```bash
+drcomp reducer=pca dataset=mnist dataset.intrinsic_dim=10
+```
+
 ## Development
 
 Create a virtual environment first, for example by executing:
