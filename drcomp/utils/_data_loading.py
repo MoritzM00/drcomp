@@ -5,19 +5,22 @@ from torchvision import datasets, transforms
 
 def load_dataset_from_cfg(cfg: DictConfig):
     dataset = cfg.dataset
+    flatten = cfg.reducer._flatten_
     if dataset.name not in cfg.available_datasets:
         raise ValueError(
             f"Unknown dataset given: {dataset.name}. Must be one of {cfg.available_datasets}"
         )
     if dataset.name == cfg.available_datasets[0]:
         # MNIST
-        return load_mnist(cfg, flatten=dataset.flatten)
+        return load_mnist(cfg, flatten=flatten)
     elif dataset.name == cfg.available_datasets[1]:
         # CIFAR10
-        return load_cifar10(cfg, flatten=dataset.flatten)
+        return load_cifar10(cfg, flatten=flatten)
     elif dataset.name == cfg.available_datasets[2]:
         # Swiss roll
         return load_swiss_roll(n_samples=dataset.n_samples, noise=dataset.noise)
+    else:
+        raise ValueError("Unknown dataset given.")
 
 
 def load_mnist(cfg: DictConfig, flatten: bool = False):

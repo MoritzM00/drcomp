@@ -4,7 +4,6 @@ import logging
 import time
 
 import hydra
-import matplotlib.pyplot as plt
 import torch
 import torchsummary
 from omegaconf import DictConfig
@@ -32,7 +31,7 @@ def main(cfg: DictConfig) -> None:
 
     # load the data
     name = cfg.dataset.name
-    logger.info(f"Loading dataset {name} ...")
+    logger.info(f"Loading dataset: {name}")
     X_train = load_dataset_from_cfg(cfg)
 
     if isinstance(reducer, AutoEncoder):
@@ -49,11 +48,11 @@ def main(cfg: DictConfig) -> None:
     save_model_from_cfg(reducer, cfg)
 
     # evaluate the reducer
-    logger.info("Evaluating model...")
-    Y = reducer.transform(X_train)
-    Q = reducer.evaluate(X_train, Y, n_jobs=cfg.n_jobs)["coranking"]
-    plt.matshow(Q)
-    plt.show()
+    # logger.info("Evaluating model...")
+    # Y = reducer.transform(X_train)
+    # Q = reducer.evaluate(X_train, Y, n_jobs=cfg.n_jobs)["coranking"]
+    # plt.matshow(Q)
+    # plt.show()
     logger.info("Done.")
 
 
