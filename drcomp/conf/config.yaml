@@ -5,6 +5,11 @@ defaults:
 
 n_jobs: 1
 
+available_datasets:
+  - MNIST
+  - CIFAR10
+  - SwissRoll
+
 root_dir: .
 data_dir: data
 log_dir: logs

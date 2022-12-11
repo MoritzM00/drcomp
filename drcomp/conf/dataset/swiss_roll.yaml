@@ -1,0 +1,4 @@
+name: SwissRoll
+n_samples: 3000
+noise: 0.
+batch_size: 32

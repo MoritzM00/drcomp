@@ -6,15 +6,11 @@ Taken from https://timsainburg.com/coranking-matrix-python-numba.html
 import numba
 import numpy as np
 from joblib import Parallel, delayed
-from loguru import logger
 from sklearn.metrics import pairwise_distances_chunked
 from tqdm.autonotebook import tqdm
 
-logger.remove()
-logger.add(lambda msg: tqdm.write(msg, end=""), colorize=True)
 
-
-def _compute_ranking_matrix_parallel(D, n_jobs=None):
+def _compute_ranking_matrix_parallel(D, n_jobs=None, verbose=0):
     """Compute ranking matrix in parallel. Input (D) is distance matrix."""
     # if data is small, no need for parallel
     if n_jobs is None:
@@ -22,11 +18,11 @@ def _compute_ranking_matrix_parallel(D, n_jobs=None):
             n_jobs = 1
         else:
             n_jobs = -1
-    r1 = Parallel(n_jobs)(
+    r1 = Parallel(n_jobs, verbose=verbose)(
         delayed(np.argsort)(i)
         for i in tqdm(D.T, desc="computing rank matrix", leave=False)
     )
-    r2 = Parallel(n_jobs)(
+    r2 = Parallel(n_jobs, verbose=verbose)(
         delayed(np.argsort)(i)
         for i in tqdm(r1, desc="computing rank matrix", leave=False)
     )
