@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.manifold import TSNE, trustworthiness
+from sklearn.manifold import TSNE
+
+from drcomp.metrics import compute_coranking_matrix
 
 
 def estimate_intrinsic_dimension(X, K: int = 5) -> int:
@@ -62,7 +64,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             is the number of samples and `n_components` is the number of the components.
         """
 
-    def evaluate(self, X, Y=None, K: int = 5) -> dict:
+    def evaluate(self, X, Y=None, K: int = 5, n_jobs=None) -> dict:
         """Evaluate the quality of the Dimensionality Reduction.
 
         Parameters
@@ -81,9 +83,11 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         """
         if Y is None:
             Y = self.transform(X)
-        t = trustworthiness(X, Y, n_neighbors=K)
+        Q = compute_coranking_matrix(Y, X, n_jobs=n_jobs)
+        # t = trustworthiness(X, Y, n_neighbors=K)
         return {
-            "trustworthiness": t,
+            # "trustworthiness": t,
+            "coranking": Q,
         }
 
     def inverse_transform(self, Y) -> np.ndarray:

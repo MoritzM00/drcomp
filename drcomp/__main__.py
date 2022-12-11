@@ -5,8 +5,10 @@ import pickle
 import time
 
 import hydra
+import matplotlib.pyplot as plt
 import torch
 import torchsummary
+from loguru import logger
 from omegaconf import DictConfig
 
 from drcomp.reducers import AutoEncoder
@@ -25,9 +27,10 @@ def save_model(model, cfg: DictConfig):
 
 @hydra.main(version_base="1.3", config_path="conf", config_name="config")
 def main(cfg: DictConfig) -> None:
-
+    """Train and evaluate a model on a dataset."""
     # instantiate the reducer
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    logger.debug(f"Using device: {device}")
     reducer = hydra.utils.instantiate(
         cfg.reducer,
         batch_size=cfg.dataset.batch_size,
@@ -36,22 +39,27 @@ def main(cfg: DictConfig) -> None:
     )
 
     # load the data
-    print("Loading data...")
+    logger.info("Loading data...")
     X_train = _load_mnist(cfg, flatten=cfg.reducer._flatten_)
     if isinstance(reducer, AutoEncoder):
-        print("Summary of AutoEncoder model:")
+        logger.info("Summary of AutoEncoder model:")
         torchsummary.summary(reducer.module, input_size=X_train.shape[1:])
 
     # train the reducer
-    print("Training model...")
+    logger.info("Training model...")
     start = time.time()
     reducer.fit(X_train)
     end = time.time()
-    print(f"Training took {end - start:.2f} seconds.")
-
-    print("Saving model...")
+    logger.info(f"Training took {end - start:.2f} seconds.")
+    logger.info("Saving model...")
     save_model(reducer, cfg)
-    print("Done.")
+
+    # evaluate the reducer
+    logger.info("Evaluating model...")
+    Y = reducer.transform(X_train)
+    Q = reducer.evaluate(X_train, Y, n_jobs=cfg.n_jobs)["coranking"]
+    plt.matshow(Q)
+    logger.info("Done.")
 
 
 if __name__ == "__main__":

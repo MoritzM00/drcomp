@@ -3,6 +3,7 @@ defaults:
   - reducer: pca
   - dataset: mnist
 
+n_jobs: 1
 
 root_dir: .
 data_dir: data
