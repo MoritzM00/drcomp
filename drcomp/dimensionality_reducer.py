@@ -83,7 +83,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         """
         if Y is None:
             Y = self.transform(X)
-        Q = compute_coranking_matrix(Y, X, n_jobs=n_jobs)
+        Q = compute_coranking_matrix(X, Y, n_jobs=n_jobs)
         # t = trustworthiness(X, Y, n_neighbors=K)
         return {
             # "trustworthiness": t,

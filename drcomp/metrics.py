@@ -60,7 +60,7 @@ def iterate_compute_distances(X):
     return D
 
 
-def compute_coranking_matrix(Y, X=None, X_distances=None, n_jobs=None):
+def compute_coranking_matrix(X, Y, X_distances=None, n_jobs=None):
     """Compute the full coranking matrix."""
 
     # compute pairwise distances
