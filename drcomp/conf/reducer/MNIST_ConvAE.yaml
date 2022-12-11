@@ -1,5 +1,5 @@
 _target_: drcomp.reducers.AutoEncoder
-_name_: MNIST_Conv_AutoEncoder
+_name_: MNIST_ConvAE
 _flatten_: False
 AutoEncoderClass:
   _target_: drcomp.autoencoder.MnistConvAE
