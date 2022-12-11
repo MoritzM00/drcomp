@@ -18,11 +18,11 @@ def _compute_ranking_matrix_parallel(D, n_jobs=None, verbose=0):
             n_jobs = 1
         else:
             n_jobs = -1
-    r1 = Parallel(n_jobs, verbose=verbose)(
+    r1 = Parallel(n_jobs, prefer="threads", verbose=verbose)(
         delayed(np.argsort)(i)
         for i in tqdm(D.T, desc="computing rank matrix", leave=False)
     )
-    r2 = Parallel(n_jobs, verbose=verbose)(
+    r2 = Parallel(n_jobs, prefer="threads", verbose=verbose)(
         delayed(np.argsort)(i)
         for i in tqdm(r1, desc="computing rank matrix", leave=False)
     )
