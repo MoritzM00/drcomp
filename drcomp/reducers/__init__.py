@@ -1,6 +1,7 @@
 """Implementations of dimensionality reduction techniques."""
-from drcomp.reducers.autoencoder import AutoEncoder
-from drcomp.reducers.kernel_pca import KernelPCA
-from drcomp.reducers.pca import PCA
+from .autoencoder import AutoEncoder
+from .kernel_pca import KernelPCA
+from .mds import MDS
+from .pca import PCA
 
-__all__ = ["PCA", "KernelPCA", "AutoEncoder"]
+__all__ = ["PCA", "KernelPCA", "AutoEncoder", "MDS"]
