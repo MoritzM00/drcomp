@@ -4,6 +4,7 @@ data/
 # hydra
 models/
 outputs/
+metrics/
 logs/
 multirun/
 
