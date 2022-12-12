@@ -32,12 +32,10 @@ class MDS(DimensionalityReducer):
         initializations are used (``n_init``), each run of the algorithm is
         computed in parallel.
         ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
-        ``-1`` means using all processors. See :term:`Glossary <n_jobs>`
-        for more details.
+        ``-1`` means using all processors.
     random_state : int, RandomState instance or None, default=None
         Determines the random number generator used to initialize the centers.
         Pass an int for reproducible results across multiple function calls.
-        See :term:`Glossary <random_state>`.
     dissimilarity : {'euclidean', 'precomputed'}, default='euclidean'
         Dissimilarity measure to use:
         - 'euclidean':
@@ -61,7 +59,8 @@ class MDS(DimensionalityReducer):
         n_jobs=None,
         random_state=None,
         dissimilarity="euclidean",
-        normalized_stress="warn",
+        normalized_stress=False,
+        **kwargs
     ) -> None:
         super().__init__(intrinsic_dim, supports_inverse_transform=False)
         self._mds = _MDS(
