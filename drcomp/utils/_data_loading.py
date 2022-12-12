@@ -18,7 +18,9 @@ def load_dataset_from_cfg(cfg: DictConfig):
         return load_cifar10(cfg, flatten=flatten)
     elif dataset.name == cfg.available_datasets[2]:
         # Swiss roll
-        return load_swiss_roll(n_samples=dataset.n_samples, noise=dataset.noise)
+        return load_swiss_roll(n_samples=dataset.n_samples, noise=dataset.noise).astype(
+            "float32"
+        )
     else:
         raise ValueError("Unknown dataset given.")
 

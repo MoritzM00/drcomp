@@ -6,6 +6,9 @@ defaults:
 
 n_jobs: 1
 
+# this can be set to True in the dataset_reducer config group for a specific combination
+_skip_: False
+
 available_datasets:
   - MNIST
   - CIFAR10
@@ -14,6 +17,8 @@ available_datasets:
 reducer:
   callbacks:
     - _target_: skorch.callbacks.ProgressBar
+
+use_pretrained: False
 
 root_dir: .
 data_dir: data

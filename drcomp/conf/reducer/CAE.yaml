@@ -1,17 +1,17 @@
 _target_: drcomp.reducers.AutoEncoder
-_name_: AE
+_name_: CAE
 _flatten_: True
+contractive: True
+contractive_lambda: 0.001
 AutoEncoderClass:
   _target_: drcomp.autoencoder.FullyConnectedAE
   input_size: 3
-  contractive: True
-  contractive_lambda: 0.001
   intrinsic_dim: 2
   hidden_layer_dims: []
   act_fn:
     _target_: torch.nn.Sigmoid
     _partial_: True
-  include_batch_norm: True
+  include_batch_norm: False
 criterion:
   _target_: torch.nn.MSELoss
   _partial_: True
