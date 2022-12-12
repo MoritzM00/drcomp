@@ -6,3 +6,4 @@ image_size:
 flattened_size: 3072
 intrinsic_dim: 64
 batch_size: 100
+n_samples: 50000

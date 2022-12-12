@@ -78,16 +78,19 @@ def main(cfg: DictConfig) -> None:
         save_model_from_cfg(reducer, cfg)
 
     # evaluate the reducer
-    logger.info("Evaluating model...")
-    Y = reducer.transform(X_train)
-    start = time.time()
-    metrics = reducer.evaluate(X_train, Y)
-    end = time.time()
+    if cfg.evaluate:
+        logger.info("Evaluating model...")
+        Y = reducer.transform(X_train)
+        start = time.time()
+        metrics = reducer.evaluate(X_train, Y)
+        end = time.time()
 
-    pp = pprint.PrettyPrinter(indent=2, stream=logger)
-    logger.info(f"Evaluation took {end - start:.2f} seconds.")
-    logger.info(pp.pformat(metrics))
-    save_metrics_from_cfg(metrics, cfg)
+        pp = pprint.PrettyPrinter(indent=2, stream=logger)
+        logger.info(f"Evaluation took {end - start:.2f} seconds.")
+        logger.info(pp.pformat(metrics))
+        save_metrics_from_cfg(metrics, cfg)
+    else:
+        logger.info("Skipping evaluation because `evaluate` was set to False.")
     logger.info("Done.")
 
 
