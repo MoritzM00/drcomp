@@ -1,6 +1,8 @@
 from omegaconf import DictConfig
-from sklearn.datasets import make_swiss_roll
+from sklearn.datasets import fetch_lfw_people, make_swiss_roll
 from torchvision import datasets, transforms
+
+from drcomp.utils._pathing import get_data_dir
 
 
 def load_dataset_from_cfg(cfg: DictConfig):
@@ -18,16 +20,17 @@ def load_dataset_from_cfg(cfg: DictConfig):
         return load_cifar10(cfg, flatten=flatten)
     elif dataset.name == cfg.available_datasets[2]:
         # Swiss roll
-        return load_swiss_roll(n_samples=dataset.n_samples, noise=dataset.noise).astype(
-            "float32"
-        )
+        return load_swiss_roll(n_samples=dataset.n_samples, noise=dataset.noise)
+    elif dataset.name == cfg.available_datasets[3]:
+        # LFW People
+        return load_lfw_people(cfg, flatten=flatten)
     else:
         raise ValueError("Unknown dataset given.")
 
 
 def load_mnist(cfg: DictConfig, flatten: bool = False):
     mnist_train = datasets.MNIST(
-        root=cfg.data_dir, download=True, transform=transforms.ToTensor()
+        root=get_data_dir(cfg), download=True, transform=transforms.ToTensor()
     )
     X_train = mnist_train.data.numpy().astype("float32")
     if flatten:
@@ -39,7 +42,7 @@ def load_mnist(cfg: DictConfig, flatten: bool = False):
 
 def load_cifar10(cfg: DictConfig, flatten: bool = False):
     cifar_train = datasets.CIFAR10(
-        root=cfg.data_dir, download=True, transform=transforms.ToTensor()
+        root=get_data_dir(cfg), download=True, transform=transforms.ToTensor()
     )
     X_train = cifar_train.data.astype("float32")
     if flatten:
@@ -51,4 +54,13 @@ def load_cifar10(cfg: DictConfig, flatten: bool = False):
 
 def load_swiss_roll(n_samples: int = 3000, noise: float = 0.0):
     X, _ = make_swiss_roll(n_samples=n_samples, noise=noise)
-    return X
+    return X.astype("float32")
+
+
+def load_lfw_people(cfg: DictConfig):
+    lfw_people = fetch_lfw_people(
+        min_faces_per_person=cfg.min_faces_per_person,
+        data_home=get_data_dir(cfg),
+        return_X_y=cfg.return_X_y,
+    )
+    return lfw_people.data.astype("float32")

@@ -4,7 +4,6 @@ import logging
 import pickle
 import pprint
 import time
-from pathlib import Path
 
 import hydra
 import torch
@@ -13,16 +12,10 @@ from omegaconf import DictConfig, OmegaConf
 
 from drcomp.reducers import AutoEncoder
 from drcomp.utils._data_loading import load_dataset_from_cfg
+from drcomp.utils._pathing import get_model_path
 from drcomp.utils._saving import save_metrics_from_cfg, save_model_from_cfg
 
 logger = logging.getLogger(__name__)
-
-
-def get_model_path(cfg: DictConfig) -> str:
-    """Get the path to the model file."""
-    return Path(
-        cfg.root_dir, cfg.model_dir, cfg.dataset.name, cfg.reducer._name_
-    ).with_suffix(".pkl")
 
 
 @hydra.main(version_base="1.3", config_path="conf", config_name="config")
