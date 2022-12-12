@@ -1,0 +1,12 @@
+_target_: drcomp.reducers.MDS
+_name_: MDS
+_flatten_: True
+intrinsic_dim: 2
+metric: True
+n_init: 4
+max_iter: 300
+n_jobs: None
+verbose: 0
+random_state: None
+dissimilarity: euclidean
+normalized_stress: warn
