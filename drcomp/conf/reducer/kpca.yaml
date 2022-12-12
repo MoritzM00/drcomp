@@ -1,7 +1,6 @@
 _target_: drcomp.reducers.KernelPCA
 _name_: KernelPCA
 _flatten_: True
-intrinsic_dim: 2
 kernel: poly
 fit_inverse_transform: True
 gamma: null

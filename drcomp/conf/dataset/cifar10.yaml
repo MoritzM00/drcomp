@@ -3,5 +3,6 @@ image_size:
   - width: 32
   - height: 32
   - channels: 3
+flattened_size: 3072
 intrinsic_dim: 64
 batch_size: 100

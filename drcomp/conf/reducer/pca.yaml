@@ -1,7 +1,6 @@
 _target_: drcomp.reducers.PCA
 _name_: PCA
 _flatten_: True
-intrinsic_dim: 2
 copy: True
 whiten: False
 svd_solver: auto

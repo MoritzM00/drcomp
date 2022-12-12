@@ -1,0 +1,8 @@
+name: LfwPeople
+image_size:
+  - width: 62
+  - height: 47
+  - channels: 1
+flattened_size: 2914
+intrinsic_dim: 22
+batch_size: 16

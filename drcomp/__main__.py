@@ -9,7 +9,7 @@ from pathlib import Path
 import hydra
 import torch
 import torchsummary
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 
 from drcomp.reducers import AutoEncoder
 from drcomp.utils._data_loading import load_dataset_from_cfg
@@ -33,6 +33,8 @@ def main(cfg: DictConfig) -> None:
             "Skipping this run because this combination of reducer and dataset is not compatible."
         )
         return
+
+    logger.debug(OmegaConf.to_yaml(cfg, resolve=True))
 
     # instantiate the reducer
     device = "cuda" if torch.cuda.is_available() else "cpu"

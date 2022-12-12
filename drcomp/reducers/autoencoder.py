@@ -94,7 +94,6 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
             batch_size=batch_size,
             device=device,
             callbacks=callbacks,
-            **kwargs
         )
 
     def fit(self, X, y=None):

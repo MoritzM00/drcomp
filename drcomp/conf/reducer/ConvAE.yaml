@@ -3,7 +3,7 @@ _name_: ConvAE
 _flatten_: False
 AutoEncoderClass:
   _target_: drcomp.autoencoder.MnistConvAE
-  intrinsic_dim: 2
+  intrinsic_dim: ${dataset.intrinsic_dim}
 criterion:
   _target_: torch.nn.MSELoss
   _partial_: True
