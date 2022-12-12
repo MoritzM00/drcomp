@@ -7,7 +7,7 @@ This repo contains the python code for my bachelor thesis on the topic of dimens
 Install the package via pip
 
 ```bash
-pip3 install git+https://github.com/MoritzM00/drcomp
+pip3 install git+https://github.com/MoritzM00/drcomp.git
 ```
 
 ## Usage
@@ -15,13 +15,21 @@ pip3 install git+https://github.com/MoritzM00/drcomp
 You can the cli tool to train and evaluate models. E.g. to train a PCA model on the MNIST Dataset, execute:
 
 ```bash
-drcomp reducer=pca dataset=mnist
+drcomp reducer=PCA dataset=MNIST
 ```
 
 To train a model with different parameters, e.g. a PCA model on the mnist dataset with a intrinsic dimensionality of 10, execute:
 
 ```bash
-drcomp reducer=pca dataset=mnist dataset.intrinsic_dim=10
+drcomp reducer=PCA dataset=MNIST dataset.intrinsic_dim=10
+```
+
+### Sweeping over multiple datasets and reducers
+
+To sweep over multiple arguments for `reducer` or `dataset`, use the `--multirun` (`-m`) flag, e.g.:
+
+```bash
+drcomp --multirun reducer=PCA,kPCA,AE dataset=MNIST,SwissRoll
 ```
 
 ## Development
@@ -37,12 +45,23 @@ and then install the package `drcomp` locally with pip:
 
 ```bash
 pip3 install -r requirements.txt
+pip3 install -r requirements-dev.txt
 pip3 install -e .
 ```
 
-## Usage
+and install the pre-commit hooks by executing:
 
-TODO
+```bash
+pre-commit install
+```
+
+### Debugging the CLI
+
+To enable debug level logging, execute the `drcomp` command with
+
+```bash
+drcomp hydra.verbose=drcomp.__main__
+```
 
 ## Requirements
 
@@ -57,15 +76,3 @@ The main dependencies are:
 - jupyter
 
 ### Development
-
-To develop, you need to install the development dependencies:
-
-```bash
-pip3 install -r requirements-dev.txt
-```
-
-and install the pre-commit hooks by executing:
-
-```bash
-pre-commit install
-```
