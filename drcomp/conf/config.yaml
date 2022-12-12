@@ -1,7 +1,7 @@
 defaults:
   - _self_
-  - reducer: pca
-  - dataset: mnist
+  - reducer: PCA
+  - dataset: SwissRoll
 
 n_jobs: 1
 

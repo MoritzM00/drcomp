@@ -5,8 +5,8 @@ intrinsic_dim: 2
 metric: True
 n_init: 4
 max_iter: 300
-n_jobs: None
+eps: 0.0001
 verbose: 0
-random_state: None
+random_state: null # we have to use null instead of None here
 dissimilarity: euclidean
-normalized_stress: warn
+normalized_stress: False
