@@ -13,6 +13,7 @@ available_datasets:
   - MNIST
   - CIFAR10
   - SwissRoll
+  - LfwPeople
 
 reducer:
   intrinsic_dim: ${dataset.intrinsic_dim} # no need to specify this for each reducer

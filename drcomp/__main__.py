@@ -8,7 +8,7 @@ from pathlib import Path
 
 import hydra
 import torch
-import torchsummary
+import torchinfo
 from omegaconf import DictConfig, OmegaConf
 
 from drcomp.reducers import AutoEncoder
@@ -54,7 +54,7 @@ def main(cfg: DictConfig) -> None:
 
     if isinstance(reducer, AutoEncoder):
         logger.info("Summary of AutoEncoder model:")
-        torchsummary.summary(reducer.module, input_size=X_train.shape[1:])
+        torchinfo.summary(reducer.module, input_size=X_train.shape[1:])
 
     # train the reducer if use_pretrained is false
     failed = False

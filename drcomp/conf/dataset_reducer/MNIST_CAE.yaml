@@ -1,5 +1,0 @@
-# @package _global_
-reducer:
-  AutoEncoderClass:
-    input_size: 784
-    intrinsic_dim: 16

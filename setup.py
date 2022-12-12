@@ -16,7 +16,7 @@ setup(
         "scikit-learn",
         "torch",
         "torchvision",
-        "torchsummary",
+        "torchinfo",
         "scikit-dimension",
         "skorch",
         "matplotlib",
