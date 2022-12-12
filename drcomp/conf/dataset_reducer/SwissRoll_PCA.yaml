@@ -1,0 +1,4 @@
+# @package _global_
+
+reducer:
+  intrinsic_dim: 2

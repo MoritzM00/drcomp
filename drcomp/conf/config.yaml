@@ -1,7 +1,8 @@
 defaults:
-  - _self_
   - reducer: PCA
   - dataset: SwissRoll
+  - optional dataset_reducer: ${dataset}_${reducer}
+  - _self_
 
 n_jobs: 1
 
@@ -9,6 +10,10 @@ available_datasets:
   - MNIST
   - CIFAR10
   - SwissRoll
+
+reducer:
+  callbacks:
+    - _target_: skorch.callbacks.ProgressBar
 
 root_dir: .
 data_dir: data

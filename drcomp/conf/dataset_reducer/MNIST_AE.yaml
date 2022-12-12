@@ -1,0 +1,6 @@
+# @package _global_
+reducer:
+  AutoEncoderClass:
+    input_size: 784
+    intrinsic_dim: 16
+    hidden_layer_dims: [256]
