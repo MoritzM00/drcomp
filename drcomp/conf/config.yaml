@@ -21,6 +21,8 @@ reducer:
 use_pretrained: False
 
 root_dir: .
+# the following directories are relative to root_dir
 data_dir: data
 log_dir: logs
 model_dir: models
+metrics_dir: metrics

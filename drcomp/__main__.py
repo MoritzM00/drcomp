@@ -2,6 +2,7 @@
 
 import logging
 import pickle
+import pprint
 import time
 from pathlib import Path
 
@@ -12,7 +13,7 @@ from omegaconf import DictConfig
 
 from drcomp.reducers import AutoEncoder
 from drcomp.utils._data_loading import load_dataset_from_cfg
-from drcomp.utils.model_saving import save_model_from_cfg
+from drcomp.utils._saving import save_metrics_from_cfg, save_model_from_cfg
 
 logger = logging.getLogger(__name__)
 
@@ -75,11 +76,16 @@ def main(cfg: DictConfig) -> None:
         save_model_from_cfg(reducer, cfg)
 
     # evaluate the reducer
-    # logger.info("Evaluating model...")
-    # Y = reducer.transform(X_train)
-    # Q = reducer.evaluate(X_train, Y, n_jobs=cfg.n_jobs)["coranking"]
-    # plt.matshow(Q)
-    # plt.show()
+    logger.info("Evaluating model...")
+    Y = reducer.transform(X_train)
+    start = time.time()
+    metrics = reducer.evaluate(X_train, Y)
+    end = time.time()
+
+    pp = pprint.PrettyPrinter(indent=2, stream=logger)
+    logger.info(f"Evaluation took {end - start:.2f} seconds.")
+    logger.info(pp.pformat(metrics))
+    save_metrics_from_cfg(metrics, cfg)
     logger.info("Done.")
 
 
