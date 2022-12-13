@@ -4,9 +4,10 @@ from abc import ABCMeta, abstractmethod
 
 import matplotlib.pyplot as plt
 import numpy as np
+import umap
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.manifold import TSNE, trustworthiness
+from sklearn.manifold import trustworthiness
 
 
 def estimate_intrinsic_dimension(X, K: int = 5) -> int:
@@ -123,7 +124,9 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             raise ValueError("Inverse transform is not supported for this reducer.")
         return self.inverse_transform(self.transform(X))
 
-    def visualize_2D_latent_space(self, X, y=None):
+    def visualize_2D_latent_space(
+        self, X, y=None, umap_n_neighbors=15, umap_min_dist=0.1
+    ):
         """Visualize the 2D latent space of the data.
 
         If the intrinsic dimensionality is not 2, t-SNE will be used to project it to two dimensions.
@@ -137,7 +140,9 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         """
         Y = self.transform(X)
         if self.intrinsic_dim > 2:
-            Y = TSNE(n_components=2).fit_transform(Y)
+            Y = umap.UMAP(
+                n_components=2, n_neighbors=umap_n_neighbors, min_dist=umap_min_dist
+            ).fit_transform(Y)
         elif self.intrinsic_dim < 2:
             raise ValueError(
                 "Cannot visualize a latent space with less than 2 dimensions."
