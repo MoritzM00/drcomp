@@ -1,9 +1,0 @@
-name: MNIST
-image_size:
-  - width: 28
-  - height: 28
-  - channels: 1
-intrinsic_dim: 16
-batch_size: 64
-flattened_size: 784
-n_samples: 60000
