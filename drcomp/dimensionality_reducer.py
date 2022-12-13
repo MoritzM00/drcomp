@@ -1,5 +1,6 @@
 """Base class for dimensionality reduction algorithms."""
 
+import logging
 from abc import ABCMeta, abstractmethod
 
 import matplotlib.pyplot as plt
@@ -7,7 +8,10 @@ import numpy as np
 import umap
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.manifold import trustworthiness
+from sklearn.utils import resample
+from umap.validation import trustworthiness_vector
+
+logger = logging.getLogger(__name__)
 
 
 def estimate_intrinsic_dimension(X, K: int = 5) -> int:
@@ -63,7 +67,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             is the number of samples and `n_components` is the number of the components.
         """
 
-    def evaluate(self, X, Y=None, K: int = 5) -> dict:
+    def evaluate(self, X, K: int = 5) -> dict:
         """Evaluate the quality of the Dimensionality Reduction.
 
         Parameters
@@ -80,9 +84,14 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         dict
             A dictionary containing the evaluation measures.
         """
-        if Y is None:
-            Y = self.transform(X)
-        t = trustworthiness(X, Y, n_neighbors=K)
+        n_samples = X.shape[0]
+        if n_samples > 5000:
+            logging.info(
+                "Computing trustworthiness on a random subsample (5000) because the dataset is too large."
+            )
+            X = resample(X, n_samples=5000)
+        Y = self.transform(X)
+        t = trustworthiness_vector(X, Y, max_k=K, metric="euclidean")
         return {
             "trustworthiness": t,
         }
