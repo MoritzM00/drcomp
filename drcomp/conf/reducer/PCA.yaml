@@ -1,0 +1,11 @@
+_target_: drcomp.reducers.PCA
+_name_: PCA
+_flatten_: True
+copy: True
+whiten: False
+svd_solver: auto
+tol: 0.0
+iterated_power: auto
+n_oversamples: 10
+power_iteration_normalizer: auto
+random_state: null
