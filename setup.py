@@ -13,7 +13,7 @@ setup(
     install_requires=[
         "numpy",
         "pandas",
-        "scikit-learn",
+        "scikit-learn>=1.2.0",
         "torch",
         "torchvision",
         "torchinfo",
@@ -21,5 +21,6 @@ setup(
         "skorch",
         "matplotlib",
         "hydra-core>=1.3.0",
+        "umap-learn>0.5.3",
     ],
 )
