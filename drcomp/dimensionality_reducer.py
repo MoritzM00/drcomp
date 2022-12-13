@@ -3,13 +3,14 @@
 import logging
 from abc import ABCMeta, abstractmethod
 
+import coranking
 import matplotlib.pyplot as plt
 import numpy as np
 import umap
+from coranking.metrics import LCMC, continuity, trustworthiness
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils import resample
-from umap.validation import trustworthiness_vector
 
 logger = logging.getLogger(__name__)
 
@@ -67,7 +68,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             is the number of samples and `n_components` is the number of the components.
         """
 
-    def evaluate(self, X, K: int = 5) -> dict:
+    def evaluate(self, X, K: int = 5, as_builtin_list=False) -> dict:
         """Evaluate the quality of the Dimensionality Reduction.
 
         Parameters
@@ -91,9 +92,18 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             )
             X = resample(X, n_samples=5000)
         Y = self.transform(X)
-        t = trustworthiness_vector(X, Y, max_k=K, metric="euclidean")
+        Q = coranking.coranking_matrix(X, Y)
+        t = trustworthiness(Q, min_k=1, max_k=K)
+        c = continuity(Q, min_k=1, max_k=K)
+        lcmc = LCMC(Q, min_k=1, max_k=K)
+        if as_builtin_list:
+            t = t.tolist()
+            c = c.tolist()
+            lcmc = lcmc.tolist()
         return {
             "trustworthiness": t,
+            "continuity": c,
+            "lcmc": lcmc,
         }
 
     def inverse_transform(self, Y) -> np.ndarray:
