@@ -46,8 +46,10 @@ def main(cfg: DictConfig) -> None:
     X_train = load_dataset_from_cfg(cfg)
 
     if isinstance(reducer, AutoEncoder):
+        input_size = (cfg.dataset.batch_size, *X_train.shape[1:])
+        logger.debug(f"Input size of X_train (with Batch Size first): {input_size}")
         logger.info("Summary of AutoEncoder model:")
-        torchinfo.summary(reducer.module, input_size=X_train.shape[1:])
+        torchinfo.summary(reducer.module, input_size=input_size)
 
     # train the reducer if use_pretrained is false
     failed = False
