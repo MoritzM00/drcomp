@@ -27,6 +27,7 @@ def save_metrics_from_cfg(metrics: dict, cfg: DictConfig) -> None:
     metrics_dir = get_metrics_dir(cfg)
     metrics_dir.mkdir(parents=True, exist_ok=True)
     metrics_path = Path(metrics_dir, f"{cfg.dataset.name}_{cfg.reducer._name_}.json")
+    logger.info(f"Saved metrics to {metrics_path}")
     save_metrics(metrics, metrics_path)
 
 

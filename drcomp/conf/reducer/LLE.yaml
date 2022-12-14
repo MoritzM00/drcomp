@@ -1,0 +1,13 @@
+_target_: drcomp.reducers.LLE
+_name_: MDS
+_flatten_: True
+n_neighbors: 5
+reg: 1e-3
+eigen_solver: auto
+tol: 1e-6
+max_iter: 100
+hessian_tol: 1e-4
+modified_tol: 1e-12
+neighbors_algorithm: auto
+random_state: null
+n_jobs: null

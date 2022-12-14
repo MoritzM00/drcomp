@@ -2,7 +2,6 @@
 
 import logging
 import pickle
-import pprint
 import time
 
 import hydra
@@ -96,8 +95,5 @@ def evaluate(cfg, reducer, X_train):
     start = time.time()
     metrics = reducer.evaluate(X_train, as_builtin_list=True)
     end = time.time()
-
-    pp = pprint.PrettyPrinter(indent=2, stream=logger)
     logger.info(f"Evaluation took {end - start:.2f} seconds.")
-    pp.pprint(metrics)
     save_metrics_from_cfg(metrics, cfg)

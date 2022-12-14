@@ -1,8 +1,8 @@
 defaults:
+  - _self_
   - reducer: PCA
   - dataset: SwissRoll
   - optional dataset_reducer: ${dataset}_${reducer}
-  - _self_
 
 # Because the evaluation of the models is expensive, there is support to disable it.
 evaluate: False
