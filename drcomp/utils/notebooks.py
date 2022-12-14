@@ -14,7 +14,7 @@ def get_model_for_dataset(
     dataset: str = "SwissRoll",
     reducer: str = "PCA",
     root_dir: str = ".",
-    use_pretrained: bool = False,
+    from_pretrained: bool = False,
 ) -> DimensionalityReducer:
     """Get a model and dataset pair configured by hydra for use in a notebook."""
     model: DimensionalityReducer = None
@@ -27,7 +27,7 @@ def get_model_for_dataset(
                 f"root_dir={root_dir}",
             ],
         )
-        if use_pretrained:
+        if from_pretrained:
             try:
                 path = get_model_path(cfg)
                 model = pickle.load(open(path, "rb"))
