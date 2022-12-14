@@ -28,6 +28,34 @@ def main(cfg: DictConfig) -> None:
         return
     logger.debug(OmegaConf.to_yaml(cfg, resolve=True))
 
+    reducer = instantiate_reducer(cfg)
+
+    # load the data
+    logger.info(f"Loading dataset: {cfg.dataset.name}")
+    X_train = load_dataset_from_cfg(cfg)
+
+    if isinstance(reducer, AutoEncoder):
+        input_size = (cfg.dataset.batch_size, *X_train.shape[1:])
+        logger.debug(f"Input size of X_train (with Batch Size first): {input_size}")
+        logger.info("Summary of AutoEncoder model:")
+        torchinfo.summary(reducer.module, input_size=input_size)
+
+    # train the reducer if use_pretrained is false, else try to load the pretrained model
+    fit_reducer(cfg, reducer, X_train)
+
+    # evaluate the reducer
+    if cfg.evaluate:
+        evaluate(cfg, reducer, X_train)
+    else:
+        logger.info("Skipping evaluation because `evaluate` was set to False.")
+    logger.info("Done.")
+
+
+if __name__ == "__main__":
+    main()
+
+
+def instantiate_reducer(cfg):
     # instantiate the reducer
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.debug(f"Using device: {device}")
@@ -38,19 +66,10 @@ def main(cfg: DictConfig) -> None:
         device=device,
         _convert_="object",
     )
+    return reducer
 
-    # load the data
-    name = cfg.dataset.name
-    logger.info(f"Loading dataset: {name}")
-    X_train = load_dataset_from_cfg(cfg)
 
-    if isinstance(reducer, AutoEncoder):
-        input_size = (cfg.dataset.batch_size, *X_train.shape[1:])
-        logger.debug(f"Input size of X_train (with Batch Size first): {input_size}")
-        logger.info("Summary of AutoEncoder model:")
-        torchinfo.summary(reducer.module, input_size=input_size)
-
-    # train the reducer if use_pretrained is false
+def fit_reducer(cfg, reducer, X_train):
     failed = False
     if cfg.use_pretrained:
         logger.info(
@@ -71,21 +90,14 @@ def main(cfg: DictConfig) -> None:
         logger.info("Saving model...")
         save_model_from_cfg(reducer, cfg)
 
-    # evaluate the reducer
-    if cfg.evaluate:
-        logger.info("Evaluating model...")
-        start = time.time()
-        metrics = reducer.evaluate(X_train, as_builtin_list=True)
-        end = time.time()
 
-        pp = pprint.PrettyPrinter(indent=2, stream=logger)
-        logger.info(f"Evaluation took {end - start:.2f} seconds.")
-        pp.pprint(metrics)
-        save_metrics_from_cfg(metrics, cfg)
-    else:
-        logger.info("Skipping evaluation because `evaluate` was set to False.")
-    logger.info("Done.")
+def evaluate(cfg, reducer, X_train):
+    logger.info("Evaluating model...")
+    start = time.time()
+    metrics = reducer.evaluate(X_train, as_builtin_list=True)
+    end = time.time()
 
-
-if __name__ == "__main__":
-    main()
+    pp = pprint.PrettyPrinter(indent=2, stream=logger)
+    logger.info(f"Evaluation took {end - start:.2f} seconds.")
+    pp.pprint(metrics)
+    save_metrics_from_cfg(metrics, cfg)
