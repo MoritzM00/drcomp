@@ -57,10 +57,12 @@ def load_swiss_roll(n_samples: int = 3000, noise: float = 0.0):
     return X.astype("float32")
 
 
-def load_lfw_people(cfg: DictConfig):
-    lfw_people = fetch_lfw_people(
-        min_faces_per_person=cfg.min_faces_per_person,
+def load_lfw_people(cfg: DictConfig, flatten: bool = False):
+    X, _ = fetch_lfw_people(
+        min_faces_per_person=cfg.dataset.min_faces_per_person,
         data_home=get_data_dir(cfg),
-        return_X_y=cfg.return_X_y,
+        return_X_y=True,
     )
-    return lfw_people.data.astype("float32")
+    if flatten:
+        X = X.reshape((X.shape[0], -1))
+    return X

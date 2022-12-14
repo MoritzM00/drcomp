@@ -4,6 +4,7 @@ from omegaconf import DictConfig
 
 
 def get_model_dir(cfg: DictConfig, for_dataset=True) -> Path:
+    """Get the path to the model directory."""
     path = Path(cfg.root_dir, cfg.model_dir)
     if for_dataset:
         path = Path(path, cfg.dataset.name)
@@ -17,10 +18,12 @@ def get_model_path(cfg: DictConfig) -> str:
 
 
 def get_data_dir(cfg: DictConfig) -> Path:
+    """Get the path to the data directory."""
     return Path(cfg.root_dir, cfg.data_dir)
 
 
 def get_metrics_dir(cfg: DictConfig) -> Path:
+    """Get the path to the metrics directory."""
     return Path(
         cfg.root_dir,
         cfg.metrics_dir,
