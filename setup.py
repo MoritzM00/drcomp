@@ -21,6 +21,6 @@ setup(
         "skorch",
         "matplotlib",
         "hydra-core>=1.3.0",
-        "umap-learn>0.5.3",
+        "umap-learn>=0.5.3",
     ],
 )
