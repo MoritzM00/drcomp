@@ -26,7 +26,6 @@ def main(cfg: DictConfig) -> None:
             "Skipping this run because this combination of reducer and dataset is not compatible."
         )
         return
-
     logger.debug(OmegaConf.to_yaml(cfg, resolve=True))
 
     # instantiate the reducer
