@@ -4,9 +4,7 @@ import logging
 from abc import ABCMeta, abstractmethod
 
 import coranking
-import matplotlib.pyplot as plt
 import numpy as np
-import umap
 from coranking.metrics import LCMC, continuity, trustworthiness
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -142,28 +140,3 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         if not self.supports_inverse_transform:
             raise ValueError("Inverse transform is not supported for this reducer.")
         return self.inverse_transform(self.transform(X))
-
-    def visualize_2D_latent_space(
-        self, X, y=None, umap_n_neighbors=15, umap_min_dist=0.1
-    ):
-        """Visualize the 2D latent space of the data.
-
-        If the intrinsic dimensionality is not 2, t-SNE will be used to project it to two dimensions.
-
-        Parameters
-        ----------
-        X : array-like of shape (n_samples, n_features)
-            Samples.
-        y : array-like of shape (n_samples,), optional
-            Labels for the samples. Will be used to color the scatter plot.
-        """
-        Y = self.transform(X)
-        if self.intrinsic_dim > 2:
-            Y = umap.UMAP(
-                n_components=2, n_neighbors=umap_n_neighbors, min_dist=umap_min_dist
-            ).fit_transform(Y)
-        elif self.intrinsic_dim < 2:
-            raise ValueError(
-                "Cannot visualize a latent space with less than 2 dimensions."
-            )
-        return plt.scatter(Y[:, 0], Y[:, 1], c=y)
