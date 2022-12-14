@@ -1,5 +1,5 @@
 _target_: drcomp.reducers.LLE
-_name_: MDS
+_name_: LLE
 _flatten_: True
 n_neighbors: 5
 reg: 1e-3

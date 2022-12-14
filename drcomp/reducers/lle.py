@@ -102,7 +102,7 @@ class LLE(DimensionalityReducer):
         self._lle.fit(X)
         return self
 
-    def fit_transform(self, X, y=None, **fit_params):
+    def fit_transform(self, X, y=None):
         return self._lle.fit_transform(X)
 
     def transform(self, X) -> np.ndarray:
