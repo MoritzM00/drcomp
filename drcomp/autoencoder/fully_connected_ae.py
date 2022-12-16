@@ -56,25 +56,26 @@ class FullyConnectedAE(AbstractAutoEncoder):
         depth = len(layer_dims) - 1  # this is the depth of the encoder
         logger.debug(f"Depth of the encoder is {depth}")
         for i in range(depth):
-            encoder_layer = nn.Linear(layer_dims[i], layer_dims[i + 1])
-            encoder.append(encoder_layer)
+            encoder.append(nn.Linear(layer_dims[i], layer_dims[i + 1]))
             if include_batch_norm:
                 encoder.append(nn.BatchNorm1d(layer_dims[i + 1]))
             encoder.append(act_fn[i]())
 
-            decoder_layer = nn.Linear(layer_dims[depth - i], layer_dims[depth - i - 1])
-            if tied_weights:
-                # tie the weights by setting the decoder layer weight to be the transpose of the encoder layer weight.
-                logger.debug(
-                    f"Tying the weights of the encoder layer {i} and decoder layer {depth - i}."
-                )
-                layer_weight = torch.empty_like(encoder_layer.weight)
-                encoder_layer.weight = nn.Parameter(layer_weight)
-                decoder_layer.weight = nn.Parameter(layer_weight.t())
-            decoder.append(decoder_layer)
+            decoder.append(nn.Linear(layer_dims[depth - i], layer_dims[depth - i - 1]))
             if self.include_batch_norm:
                 decoder.append(nn.BatchNorm1d(layer_dims[depth - i - 1]))
             decoder.append(act_fn[depth - i - 1]())
 
+        if tied_weights:
+            encoder_layers = [
+                layer for layer in encoder if isinstance(layer, nn.Linear)
+            ]
+            decoder_layers = [
+                layer for layer in decoder if isinstance(layer, nn.Linear)
+            ]
+            for (enc, dec) in zip(encoder_layers, reversed(decoder_layers)):
+                weight = torch.empty_like(enc.weight)
+                enc.weight = nn.Parameter(weight)
+                dec.weight = nn.Parameter(weight.t())
         self.encoder = nn.Sequential(*encoder)
         self.decoder = nn.Sequential(*decoder)
