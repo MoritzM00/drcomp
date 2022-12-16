@@ -12,6 +12,7 @@ AutoEncoderClass:
     _target_: torch.nn.Sigmoid
     _partial_: True
   include_batch_norm: False
+  tied_weights: False
 criterion:
   _target_: torch.nn.MSELoss
   _partial_: True
