@@ -16,3 +16,4 @@ criterion:
   _partial_: True
 lr: 0.01
 optimizer__weight_decay: 0.01
+max_epochs: 10

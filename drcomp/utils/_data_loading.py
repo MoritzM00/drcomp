@@ -33,6 +33,7 @@ def load_mnist(cfg: DictConfig, flatten: bool = False):
         root=get_data_dir(cfg), download=True, transform=transforms.ToTensor()
     )
     X_train = mnist_train.data.numpy().astype("float32")
+    X_train = X_train / 255.0
     if flatten:
         X_train = X_train.reshape((X_train.shape[0], -1))
     else:
