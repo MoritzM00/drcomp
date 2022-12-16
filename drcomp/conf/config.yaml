@@ -22,6 +22,10 @@ reducer:
   intrinsic_dim: ${dataset.intrinsic_dim} # no need to specify this for each reducer
   callbacks:
     - _target_: skorch.callbacks.ProgressBar
+    - _target_: skorch.callbacks.LRScheduler
+      policy: ExponentialLR
+      monitor: valid_loss
+      gamma: 0.9
 
 use_pretrained: False
 

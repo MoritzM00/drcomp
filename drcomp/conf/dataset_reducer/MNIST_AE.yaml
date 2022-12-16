@@ -2,5 +2,8 @@
 reducer:
   AutoEncoderClass:
     hidden_layer_dims: [256]
-    include_batch_norm: False
+    include_batch_norm: True
     tied_weights: False
+  lr: 1
+  max_epochs: 100
+  optimizer__weight_decay: 0.01
