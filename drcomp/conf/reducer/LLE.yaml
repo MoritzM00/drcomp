@@ -10,4 +10,4 @@ hessian_tol: 1e-4
 modified_tol: 1e-12
 neighbors_algorithm: auto
 random_state: null
-n_jobs: null
+n_jobs: ${n_jobs}

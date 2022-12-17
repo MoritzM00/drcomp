@@ -39,11 +39,14 @@ def main(cfg: DictConfig) -> None:
 
     # preprocess the data
     preprocessor = hydra.utils.instantiate(cfg.preprocessor)
+    logger.info(f"Preprocessing data with {preprocessor.__class__.__name__}")
     X_train = preprocessor.fit_transform(X_train)
     save_preprocessor_from_cfg(preprocessor, cfg)
 
+    # data is flattened by default because most reducer expect it this way
+    # only convolutional autoencoders expect the data to be in the shape of an image
     if not cfg.reducer._flatten_:
-        X_train = X_train.reshape(X_train.shape[0], cfg.dataset.image_size)
+        X_train = X_train.reshape(X_train.shape[0], *cfg.dataset.image_size)
 
     if isinstance(reducer, AutoEncoder):
         input_size = (cfg.dataset.batch_size, *X_train.shape[1:])
