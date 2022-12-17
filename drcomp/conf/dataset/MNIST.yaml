@@ -1,8 +1,8 @@
 name: MNIST
 image_size:
-  - width: 28
-  - height: 28
-  - channels: 1
+  - 1
+  - 28
+  - 28
 intrinsic_dim: 16
 batch_size: 100
 flattened_size: 784

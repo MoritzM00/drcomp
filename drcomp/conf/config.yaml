@@ -27,6 +27,10 @@ reducer:
       monitor: valid_loss
       gamma: 0.9
 
+preprocessor:
+  _target_: sklearn.preprocessing.StandardScaler
+
+
 use_pretrained: False
 
 root_dir: .

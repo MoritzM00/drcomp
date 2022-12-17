@@ -4,8 +4,8 @@ import pickle
 from pathlib import Path
 
 from omegaconf import DictConfig
+from sklearn.base import BaseEstimator
 
-from drcomp import DimensionalityReducer
 from drcomp.utils._pathing import get_metrics_dir, get_model_dir, get_model_path
 
 logger = logging.getLogger(__name__)
@@ -19,7 +19,7 @@ def save_model_from_cfg(model, cfg: DictConfig) -> None:
     save_model(model, model_path)
 
 
-def save_model(model: DimensionalityReducer, path: Path) -> None:
+def save_model(model: BaseEstimator, path: Path) -> None:
     """Save a model to a file using pickle."""
     logger.debug(f"Saving model to {path}")
     with path.open("wb") as f:
@@ -39,3 +39,11 @@ def save_metrics(metrics: dict, path: Path) -> None:
     """Save metrics to a file using json."""
     logger.debug(f"Saving metrics to {path}")
     json.dump(metrics, path.open("w"), indent=4, sort_keys=True)
+
+
+def save_preprocessor_from_cfg(processor, cfg: DictConfig) -> None:
+    """Save a preprocessor to a file using a dict config object."""
+    base = Path(get_model_dir(cfg, for_dataset=False), "preprocessors")
+    base.mkdir(parents=True, exist_ok=True)
+    processor_path = Path(base, f"{cfg.dataset.name}.pkl")
+    save_model(processor, processor_path)

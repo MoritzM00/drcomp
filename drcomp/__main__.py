@@ -12,7 +12,11 @@ from omegaconf import DictConfig, OmegaConf
 from drcomp.reducers import AutoEncoder
 from drcomp.utils._data_loading import load_dataset_from_cfg
 from drcomp.utils._pathing import get_model_path
-from drcomp.utils._saving import save_metrics_from_cfg, save_model_from_cfg
+from drcomp.utils._saving import (
+    save_metrics_from_cfg,
+    save_model_from_cfg,
+    save_preprocessor_from_cfg,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +36,14 @@ def main(cfg: DictConfig) -> None:
     # load the data
     logger.info(f"Loading dataset: {cfg.dataset.name}")
     X_train = load_dataset_from_cfg(cfg)
+
+    # preprocess the data
+    preprocessor = hydra.utils.instantiate(cfg.preprocessor)
+    X_train = preprocessor.fit_transform(X_train)
+    save_preprocessor_from_cfg(preprocessor, cfg)
+
+    if not cfg.reducer._flatten_:
+        X_train = X_train.reshape(X_train.shape[0], cfg.dataset.image_size)
 
     if isinstance(reducer, AutoEncoder):
         input_size = (cfg.dataset.batch_size, *X_train.shape[1:])
