@@ -18,7 +18,9 @@ available_datasets:
   - SwissRoll
   - LfwPeople
 
+# some defaults for all reducers
 reducer:
+  _max_sample_size_: null # by default, use all samples
   intrinsic_dim: ${dataset.intrinsic_dim} # no need to specify this for each reducer
   callbacks:
     - _target_: skorch.callbacks.ProgressBar

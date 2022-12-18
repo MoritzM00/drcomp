@@ -1,6 +1,7 @@
 _target_: drcomp.reducers.KernelPCA
 _name_: KernelPCA
 _flatten_: True
+_max_sample_size_: 15000
 kernel: poly
 fit_inverse_transform: False
 gamma: null

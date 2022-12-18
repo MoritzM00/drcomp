@@ -8,6 +8,7 @@ import hydra
 import torch
 import torchinfo
 from omegaconf import DictConfig, OmegaConf
+from sklearn.utils import resample
 
 from drcomp import DimensionalityReducer
 from drcomp.reducers import AutoEncoder
@@ -43,6 +44,13 @@ def main(cfg: DictConfig) -> None:
     logger.info(f"Preprocessing data with {preprocessor.__class__.__name__}")
     X = preprocessor.fit_transform(X)
     save_preprocessor_from_cfg(preprocessor, cfg)
+
+    # sample subset of data if necessary
+    if cfg.reducer._max_sample_size_ is not None:
+        logger.info(
+            f"Sampling {cfg.reducer._max_sample_size_} samples from the dataset because of computational constraints of the reducer."
+        )
+        X = resample(X, n_samples=cfg.reducer._max_sample_size_)
 
     # data is flattened by default because most reducer expect it this way
     # only convolutional autoencoders expect the data to be in the shape of an image
