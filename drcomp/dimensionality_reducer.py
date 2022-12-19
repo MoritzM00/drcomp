@@ -86,9 +86,12 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             A dictionary containing the evaluation measures. Arrays are numpy arrays if as_builtin_list is False, otherwise builtin lists.
         """
         n_samples = X.shape[0]
+        if max_K is not None:
+            # max_K must be smaller than n_samples - 1
+            max_K = min(max_K, n_samples - 1)
         if n_samples > MAX_CORANKING_DIMENSION:
             logging.info(
-                f"Computing trustworthiness on a random subsample ({MAX_CORANKING_DIMENSION}) because the dataset is too large."
+                f"Computing Co-Ranking matrix on a random subsample ({MAX_CORANKING_DIMENSION}) because the dataset is too large."
             )
             X = resample(X, n_samples=MAX_CORANKING_DIMENSION)
         Y = self.transform(X)
