@@ -34,6 +34,7 @@ preprocessor:
 
 
 use_pretrained: False
+max_n_neighbors: 500
 
 root_dir: .
 # the following directories are relative to root_dir

@@ -80,7 +80,7 @@ def main(cfg: DictConfig) -> None:
 
     # evaluate the reducer
     if cfg.evaluate:
-        evaluate(cfg, reducer, X)
+        evaluate(cfg, reducer, X.reshape(X.shape[0], -1))
     else:
         logger.info("Skipping evaluation because `evaluate` was set to False.")
     logger.info("Done.")
@@ -130,7 +130,7 @@ def fit_reducer(cfg, reducer, X):
 def evaluate(cfg, reducer: DimensionalityReducer, X):
     logger.info("Evaluating model...")
     start = time.time()
-    metrics = reducer.evaluate(X, as_builtin_list=True)
+    metrics = reducer.evaluate(X, max_K=cfg.max_n_neighbors, as_builtin_list=True)
     end = time.time()
     logger.info(f"Evaluation took {end - start:.2f} seconds.")
     save_metrics_from_cfg(metrics, cfg)
