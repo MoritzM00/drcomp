@@ -46,7 +46,10 @@ def main(cfg: DictConfig) -> None:
     save_preprocessor_from_cfg(preprocessor, cfg)
 
     # sample subset of data if necessary
-    if cfg.reducer._max_sample_size_ is not None:
+    if (
+        cfg.reducer._max_sample_size_ is not None  # reducer has constraints
+        and X.shape[0] > cfg.reducer._max_sample_size_  # dataset too large
+    ):
         logger.info(
             f"Sampling {cfg.reducer._max_sample_size_} samples from the dataset because of computational constraints of the reducer."
         )
