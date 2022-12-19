@@ -1,5 +1,10 @@
 from omegaconf import DictConfig
-from sklearn.datasets import fetch_lfw_people, make_swiss_roll
+from sklearn.datasets import (
+    fetch_lfw_people,
+    fetch_olivetti_faces,
+    fetch_openml,
+    make_swiss_roll,
+)
 from torchvision import datasets, transforms
 
 from drcomp.utils._pathing import get_data_dir
@@ -34,6 +39,12 @@ def load_dataset_from_cfg(cfg: DictConfig):
     elif name == cfg.available_datasets[3]:
         # LFW People
         X, targets = load_lfw_people(data_dir, dataset_cfg)
+    elif name == cfg.available_datasets[4]:
+        # Dorothea
+        X, targets = load_dorothea(data_dir, dataset_cfg)
+    elif name == cfg.available_datasets[5]:
+        # Olivetti faces
+        X, targets = load_olivetti_faces(data_dir, dataset_cfg)
     else:
         raise ValueError(f"Unknown dataset {name} given.")
     return X, targets
@@ -88,4 +99,18 @@ def load_lfw_people(data_dir, dataset_cfg: DictConfig):
         color=False,
     )
     X = X.reshape((X.shape[0], -1))
+    return X, targets
+
+
+def load_dorothea(data_dir, dataset_cfg: DictConfig):
+    X, targets = fetch_openml(
+        "Dorothea", parser="auto", data_home=data_dir, return_X_y=True
+    )
+    return X, targets
+
+
+def load_olivetti_faces(data_dir, dataset_cfg: DictConfig):
+    X, targets = fetch_olivetti_faces(
+        data_home=data_dir, return_X_y=True, shuffle=False
+    )
     return X, targets

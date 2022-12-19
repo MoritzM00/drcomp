@@ -17,6 +17,8 @@ available_datasets:
   - CIFAR10
   - SwissRoll
   - LfwPeople
+  - Dorothea
+  - OlivettiFaces
 
 # some defaults for all reducers
 reducer:
@@ -28,6 +30,8 @@ reducer:
       policy: ExponentialLR
       monitor: valid_loss
       gamma: 0.9
+dataset:
+  intrinsic_dim: ??? # populated at runtime
 
 preprocessor:
   _target_: sklearn.preprocessing.StandardScaler

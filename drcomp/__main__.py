@@ -8,6 +8,7 @@ import hydra
 import torch
 import torchinfo
 from omegaconf import DictConfig, OmegaConf
+from omegaconf.errors import MissingMandatoryValue
 from sklearn.utils import resample
 
 from drcomp import DimensionalityReducer, estimate_intrinsic_dimension
@@ -31,28 +32,28 @@ def main(cfg: DictConfig) -> None:
             "Skipping this run because this combination of reducer and dataset is not compatible."
         )
         return
-    logger.debug(OmegaConf.to_yaml(cfg, resolve=True))
-
-    reducer = instantiate_reducer(cfg)
+        # check if the intrinsic dimensionality is specified in the config
 
     # load the data
     logger.info(f"Loading dataset: {cfg.dataset.name}")
     X, _ = load_dataset_from_cfg(cfg)
+    try:
+        cfg.dataset.intrinsic_dim
+    except MissingMandatoryValue:
+        # estimate intrinsic dimensionality
+        intrinsic_dim = estimate_intrinsic_dimension(X)
+        logger.info(f"ML Estimate of intrinsic dimensionality: {intrinsic_dim}")
+        cfg.dataset.intrinsic_dim = intrinsic_dim
+
+    logger.debug(f"Config: {OmegaConf.to_yaml(cfg, resolve=True)}")
+
+    reducer = instantiate_reducer(cfg)
 
     # preprocess the data
     preprocessor = hydra.utils.instantiate(cfg.preprocessor)
     logger.info(f"Preprocessing data with {preprocessor.__class__.__name__}.")
     X = preprocessor.fit_transform(X)
     save_preprocessor_from_cfg(preprocessor, cfg)
-
-    # check if the intrinsic dimensionality is specified in the config
-    try:
-        cfg.dataset.intrinsic_dim
-    except KeyError:
-        # estimate intrinsic dimensionality
-        intrinsic_dim = estimate_intrinsic_dimension(X)
-        logger.info(f"ML Estimate of intrinsic dimensionality: {intrinsic_dim}")
-        cfg.dataset.intrinsic_dim = intrinsic_dim
 
     # sample subset of data if necessary
     if (
