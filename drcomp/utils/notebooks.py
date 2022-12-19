@@ -53,5 +53,5 @@ def get_data_set(dataset: str, root_dir: str = "."):
             config_name="config.yaml",
             overrides=[f"dataset={dataset}", f"root_dir={root_dir}"],
         )
-        X = load_dataset_from_cfg(cfg)
-    return X
+        X, targets = load_dataset_from_cfg(cfg)
+    return X, targets

@@ -37,7 +37,7 @@ def main(cfg: DictConfig) -> None:
 
     # load the data
     logger.info(f"Loading dataset: {cfg.dataset.name}")
-    X = load_dataset_from_cfg(cfg)
+    X, targets = load_dataset_from_cfg(cfg)
 
     # preprocess the data
     preprocessor = hydra.utils.instantiate(cfg.preprocessor)
