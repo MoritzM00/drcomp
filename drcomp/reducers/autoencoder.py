@@ -98,6 +98,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
 
     def fit(self, X, y=None):
         super().fit(X, X)
+        self.fitted_ = True
         return self
 
     def get_loss(self, y_pred, y_true, *args, **kwargs):

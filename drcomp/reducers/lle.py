@@ -83,7 +83,7 @@ class LLE(DimensionalityReducer):
         **kwargs
     ) -> None:
         super().__init__(intrinsic_dim, supports_inverse_transform=False)
-        self._lle = LocallyLinearEmbedding(
+        self.lle = LocallyLinearEmbedding(
             n_components=intrinsic_dim,
             n_neighbors=n_neighbors,
             method="standard",
@@ -99,11 +99,12 @@ class LLE(DimensionalityReducer):
         )
 
     def fit(self, X, y=None):
-        self._lle.fit(X)
+        self.lle.fit(X)
+        self.fitted_ = True
         return self
 
     def fit_transform(self, X, y=None):
-        return self._lle.fit_transform(X)
+        return self.lle.fit_transform(X)
 
     def transform(self, X) -> np.ndarray:
-        return self._lle.transform(X)
+        return self.lle.transform(X)

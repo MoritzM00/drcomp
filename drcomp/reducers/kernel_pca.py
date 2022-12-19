@@ -155,6 +155,7 @@ class KernelPCA(DimensionalityReducer):
 
     def fit(self, X, y=None):
         self.kernel_pca.fit(X, y)
+        self.fitted_ = True
         return self
 
     def transform(self, X) -> np.ndarray:
