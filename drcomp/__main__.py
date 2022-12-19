@@ -76,7 +76,7 @@ def main(cfg: DictConfig) -> None:
         torchinfo.summary(reducer.module, input_size=input_size)
 
     # train the reducer if use_pretrained is false, else try to load the pretrained model
-    fit_reducer(cfg, reducer, X)
+    reducer = fit_reducer(cfg, reducer, X)
 
     # evaluate the reducer
     if cfg.evaluate:
@@ -124,6 +124,7 @@ def fit_reducer(cfg, reducer, X):
         logger.info(f"Training took {end - start:.2f} seconds.")
         logger.info("Saving model...")
         save_model_from_cfg(reducer, cfg)
+    return reducer
 
 
 def evaluate(cfg, reducer: DimensionalityReducer, X):

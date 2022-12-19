@@ -1,5 +1,6 @@
 """PCA implementation of the DimensionalityReducer interface."""
 from sklearn.decomposition import PCA as _PCA
+from sklearn.utils.validation import check_is_fitted
 
 from drcomp import DimensionalityReducer
 
@@ -99,10 +100,13 @@ class PCA(DimensionalityReducer):
 
     def fit(self, X, y=None):
         self.pca.fit(X, y)
+        self.fitted_ = True
         return self
 
     def transform(self, X):
+        check_is_fitted(self)
         return self.pca.transform(X)
 
     def inverse_transform(self, Y):
+        check_is_fitted(self)
         return self.pca.inverse_transform(Y)
