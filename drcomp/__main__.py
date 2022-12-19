@@ -10,7 +10,7 @@ import torchinfo
 from omegaconf import DictConfig, OmegaConf
 from sklearn.utils import resample
 
-from drcomp import DimensionalityReducer
+from drcomp import DimensionalityReducer, estimate_intrinsic_dimension
 from drcomp.reducers import AutoEncoder
 from drcomp.utils._data_loading import load_dataset_from_cfg
 from drcomp.utils._pathing import get_model_path
@@ -37,13 +37,22 @@ def main(cfg: DictConfig) -> None:
 
     # load the data
     logger.info(f"Loading dataset: {cfg.dataset.name}")
-    X, targets = load_dataset_from_cfg(cfg)
+    X, _ = load_dataset_from_cfg(cfg)
 
     # preprocess the data
     preprocessor = hydra.utils.instantiate(cfg.preprocessor)
-    logger.info(f"Preprocessing data with {preprocessor.__class__.__name__}")
+    logger.info(f"Preprocessing data with {preprocessor.__class__.__name__}.")
     X = preprocessor.fit_transform(X)
     save_preprocessor_from_cfg(preprocessor, cfg)
+
+    # check if the intrinsic dimensionality is specified in the config
+    try:
+        cfg.dataset.intrinsic_dim
+    except KeyError:
+        # estimate intrinsic dimensionality
+        intrinsic_dim = estimate_intrinsic_dimension(X)
+        logger.info(f"ML Estimate of intrinsic dimensionality: {intrinsic_dim}")
+        cfg.dataset.intrinsic_dim = intrinsic_dim
 
     # sample subset of data if necessary
     if (

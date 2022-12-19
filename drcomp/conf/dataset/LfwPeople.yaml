@@ -6,7 +6,7 @@ image_size:
 flattened_size: 2914
 intrinsic_dim: 22
 batch_size: 16
-n_samples: 1288 # this depends on arguments here, like min_faces_per_person
 resize: 0.5
+n_samples: ??? # depends on min_faces_per_person
 min_faces_per_person: 0
 color: False

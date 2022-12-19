@@ -12,6 +12,8 @@ from sklearn.utils import resample
 
 logger = logging.getLogger(__name__)
 
+MAX_CORANKING_DIMENSION: int = 5000
+
 
 def estimate_intrinsic_dimension(X, K: int = 5) -> int:
     """Estimate the intrinsic dimensionality of the data."""
@@ -66,7 +68,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             is the number of samples and `n_components` is the number of the components.
         """
 
-    def evaluate(self, X, K: int = 5, as_builtin_list=False) -> dict:
+    def evaluate(self, X, max_K: int = None, as_builtin_list=False) -> dict:
         """Evaluate the quality of the Dimensionality Reduction.
 
         Parameters
@@ -75,25 +77,25 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             Samples.
         Y : array-like of shape (n_samples, intrinsic_dim), optional
             The transformed samples in the latent space. If not provided, it will be computed with the `transform` method.
-        K : int, default=5
-            Number of nearest neighbors to consider for the evaluation measures.
+        max_K : int, default=5
+            The maximum Number of nearest neighbors to consider for the evaluation measures.
 
         Returns
         -------
         dict
-            A dictionary containing the evaluation measures.
+            A dictionary containing the evaluation measures. Arrays are numpy arrays if as_builtin_list is False, otherwise builtin lists.
         """
         n_samples = X.shape[0]
-        if n_samples > 5000:
+        if n_samples > MAX_CORANKING_DIMENSION:
             logging.info(
-                "Computing trustworthiness on a random subsample (5000) because the dataset is too large."
+                f"Computing trustworthiness on a random subsample ({MAX_CORANKING_DIMENSION}) because the dataset is too large."
             )
-            X = resample(X, n_samples=5000)
+            X = resample(X, n_samples=MAX_CORANKING_DIMENSION)
         Y = self.transform(X)
         Q = coranking.coranking_matrix(X, Y)
-        t = trustworthiness(Q, min_k=1, max_k=K)
-        c = continuity(Q, min_k=1, max_k=K)
-        lcmc = LCMC(Q, min_k=1, max_k=K)
+        t = trustworthiness(Q, min_k=1, max_k=max_K)
+        c = continuity(Q, min_k=1, max_k=max_K)
+        lcmc = LCMC(Q, min_k=1, max_k=max_K)
         if as_builtin_list:
             t = t.tolist()
             c = c.tolist()
