@@ -16,4 +16,3 @@ iterated_power: auto
 remove_zero_eig: False
 random_state: null
 copy_X: True
-n_jobs: null

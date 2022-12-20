@@ -24,6 +24,7 @@ available_datasets:
 reducer:
   _max_sample_size_: null # by default, use all samples
   intrinsic_dim: ${dataset.intrinsic_dim} # no need to specify this for each reducer
+  n_jobs: null
   callbacks:
     - _target_: skorch.callbacks.ProgressBar
     - _target_: skorch.callbacks.LRScheduler
