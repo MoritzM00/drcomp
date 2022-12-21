@@ -32,7 +32,7 @@ reducer:
       monitor: valid_loss
       gamma: 0.9
     - _target_: skorch.callbacks.EarlyStopping
-      monitor: valid_loss_best
+      monitor: valid_loss
       load_best: True
       patience: 20
 dataset:
