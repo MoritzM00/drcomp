@@ -41,7 +41,7 @@ dataset:
 preprocessor:
   _target_: sklearn.preprocessing.StandardScaler
 
-
+use_gpu: True
 use_pretrained: False
 max_n_neighbors: 100
 

@@ -93,7 +93,9 @@ if __name__ == "__main__":
 
 def instantiate_reducer(cfg):
     # instantiate the reducer
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "cpu"
+    if cfg.use_gpu and torch.cuda.is_available():
+        device = "cuda"
     logger.debug(f"Using device (GPU support only for Autoencoders): {device}")
     logger.info(f"Using dimensionality reducer: {cfg.reducer._name_}")
     reducer = hydra.utils.instantiate(
