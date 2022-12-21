@@ -4,4 +4,3 @@ reducer:
     hidden_layer_dims: [256]
     include_batch_norm: True
     tied_weights: False
-  max_epochs: 100

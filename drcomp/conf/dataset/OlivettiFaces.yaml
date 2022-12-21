@@ -3,3 +3,7 @@ flattened_size: 4096
 intrinsic_dim: ??? # populated at runtime
 batch_size: 8
 n_samples: 400
+image_size:
+  - 1
+  - 64
+  - 64
