@@ -95,6 +95,9 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             )
             X = resample(X, n_samples=MAX_CORANKING_DIMENSION)
         Y = self.transform(X)
+        if X.ndim > 2:
+            X = X.reshape(X.shape[0], -1)
+            Y = Y.reshape(Y.shape[0], -1)
         Q = coranking.coranking_matrix(X, Y)
         t = trustworthiness(Q, min_k=1, max_k=max_K)
         c = continuity(Q, min_k=1, max_k=max_K)

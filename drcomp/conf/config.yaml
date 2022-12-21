@@ -30,7 +30,7 @@ reducer:
       policy: ExponentialLR
       monitor: valid_loss
       gamma: 0.9
-    - _target_: skorch.callbacks.EarlyStopper
+    - _target_: skorch.callbacks.EarlyStopping
       monitor: valid_loss_best
       load_best: True
       patience: 20

@@ -81,7 +81,7 @@ def main(cfg: DictConfig) -> None:
 
     # evaluate the reducer
     if cfg.evaluate:
-        evaluate(cfg, reducer, X.reshape(X.shape[0], -1))
+        evaluate(cfg, reducer, X)
     else:
         logger.info("Skipping evaluation because `evaluate` was set to False.")
     logger.info("Done.")
