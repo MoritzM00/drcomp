@@ -17,7 +17,6 @@ available_datasets:
   - CIFAR10
   - SwissRoll
   - LfwPeople
-  - Dorothea
   - OlivettiFaces
 
 # some defaults for all reducers
@@ -31,6 +30,10 @@ reducer:
       policy: ExponentialLR
       monitor: valid_loss
       gamma: 0.9
+    - _target_: skorch.callbacks.EarlyStopper
+      monitor: valid_loss_best
+      load_best: True
+      patience: 20
 dataset:
   intrinsic_dim: ??? # populated at runtime
 
@@ -39,7 +42,7 @@ preprocessor:
 
 
 use_pretrained: False
-max_n_neighbors: 500
+max_n_neighbors: 100
 
 root_dir: .
 # the following directories are relative to root_dir
