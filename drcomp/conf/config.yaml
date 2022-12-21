@@ -18,6 +18,7 @@ available_datasets:
   - SwissRoll
   - LfwPeople
   - OlivettiFaces
+  - TwinPeaks
 
 # some defaults for all reducers
 reducer:

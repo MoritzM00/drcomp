@@ -7,6 +7,6 @@ flattened_size: 2914
 intrinsic_dim: ???
 batch_size: 16
 resize: 0.5
-n_samples: ??? # depends on min_faces_per_person
+n_samples: 4324 # depends on min_faces_per_person
 min_faces_per_person: 10
 color: False

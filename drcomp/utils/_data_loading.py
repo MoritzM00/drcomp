@@ -1,4 +1,5 @@
 from omegaconf import DictConfig
+from skdim.datasets import hyperTwinPeaks
 from sklearn.datasets import fetch_lfw_people  # fetch_openml,
 from sklearn.datasets import fetch_olivetti_faces, make_swiss_roll
 from torchvision import datasets, transforms
@@ -38,6 +39,9 @@ def load_dataset_from_cfg(cfg: DictConfig):
     elif name == cfg.available_datasets[4]:
         # Olivetti faces
         X, targets = load_olivetti_faces(data_dir, dataset_cfg)
+    elif name == cfg.available_datasets[5]:
+        # Twin Peaks
+        X, targets = load_twin_peaks(dataset_cfg)
     else:
         raise ValueError(f"Unknown dataset {name} given.")
     return X, targets
@@ -100,3 +104,14 @@ def load_olivetti_faces(data_dir, dataset_cfg: DictConfig):
         data_home=data_dir, return_X_y=True, shuffle=False
     )
     return X, targets
+
+
+def load_twin_peaks(dataset_cfg: DictConfig):
+    try:
+        n_samples = dataset_cfg.n_samples
+    except KeyError:
+        raise ValueError(
+            "Invalid dataset config. Twin peaks dataset requires `n_samples` to be set in the config."
+        )
+    X = hyperTwinPeaks(n=n_samples, d=2)
+    return X, None
