@@ -7,6 +7,8 @@ outputs/
 metrics/
 logs/
 multirun/
+metrics.zip
+models.zip
 
 **/wandb/
 
