@@ -22,7 +22,7 @@ available_datasets:
 
 available_reducers:
   - PCA
-  - KernelPCA
+  - kPCA
   - LLE
   - AE
   - ConvAE
