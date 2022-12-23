@@ -28,3 +28,11 @@ def get_metrics_dir(cfg: DictConfig) -> Path:
         cfg.root_dir,
         cfg.metrics_dir,
     )
+
+
+def get_figures_dir(cfg: DictConfig) -> Path:
+    """Get the path to the figure directory."""
+    return Path(
+        cfg.root_dir,
+        cfg.figures_dir,
+    )

@@ -20,6 +20,14 @@ available_datasets:
   - OlivettiFaces
   - TwinPeaks
 
+available_reducers:
+  - PCA
+  - KernelPCA
+  - LLE
+  - AE
+  - ConvAE
+  - CAE
+
 # some defaults for all reducers
 reducer:
   _max_sample_size_: null # by default, use all samples
@@ -51,3 +59,4 @@ data_dir: data
 log_dir: logs
 model_dir: models
 metrics_dir: metrics
+figures_dir: figures

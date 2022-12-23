@@ -1,3 +1,5 @@
+import pathlib
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
@@ -43,7 +45,10 @@ def save_fig(
         plt.style.use("science")
         fig.set_size_inches(w=width, h=height)
         fig.tight_layout()
-    fig.savefig(f"{dir}/{name}.{format}", format=format, backend=backend, **kwargs)
+    base = pathlib.Path(dir)
+    base.mkdir(parents=True, exist_ok=True)
+    path = pathlib.Path(base, f"{name}.{format}")
+    fig.savefig(path, format=format, backend=backend, **kwargs)
 
 
 def plot_metric(metric, label: str, ax=None) -> mpl.axes.Axes:
