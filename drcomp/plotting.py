@@ -51,7 +51,7 @@ def save_fig(
     fig.savefig(path, format=format, backend=backend, **kwargs)
 
 
-def plot_metric(metric, label: str, ax=None) -> mpl.axes.Axes:
+def plot_metric(metric, label: str, ylabel: str, ax=None) -> mpl.axes.Axes:
     """Plot a metric as a function of the number of neighbors.
 
     Parameters
@@ -73,6 +73,7 @@ def plot_metric(metric, label: str, ax=None) -> mpl.axes.Axes:
     k = len(metric)
     x = np.arange(1, k + 1)
     ax.plot(x, metric, label=label)
+    ax.set_ylabel(ylabel)
     ax.set_xlabel("$K$")
     ax.set_xlim(0, k + 2)
     ax.xaxis.set_major_locator(IndexLocator(20, offset=-1))
@@ -92,12 +93,12 @@ def compare_metrics(metrics: dict[str, MetricsDict], figsize=(8, 8)):
     ax2 = plt.subplot(223)
     ax3 = plt.subplot(122)
     for name, metric in metrics.items():
-        plot_metric(metric["trustworthiness"], label=name, ax=ax1)
-        ax1.set_title("$T(K)$")
-        plot_metric(metric["continuity"], label=name, ax=ax2)
-        ax2.set_title("$C(K)$")
-        plot_metric(metric["lcmc"], label=name, ax=ax3)
-        ax3.set_title("$LCMC(K)$")
+        plot_metric(metric["trustworthiness"], label=name, ylabel="$T(K)$", ax=ax1)
+        ax1.set_title("Trustworthiness")
+        plot_metric(metric["continuity"], label=name, ylabel="$C(K)$", ax=ax2)
+        ax2.set_title("Continuity")
+        plot_metric(metric["lcmc"], label=name, ylabel="$LCMC(K)$", ax=ax3)
+        ax3.set_title("LCMC")
     plt.legend(metrics.keys())
     plt.tight_layout()
     return fig, [ax1, ax2, ax3]
