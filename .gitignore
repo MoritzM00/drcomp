@@ -5,6 +5,7 @@ data/
 models/
 outputs/
 metrics/
+figures/
 logs/
 multirun/
 metrics.zip
