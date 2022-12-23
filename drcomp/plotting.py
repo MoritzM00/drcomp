@@ -1,9 +1,101 @@
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import umap
 from matplotlib.ticker import IndexLocator
 
-from drcomp import DimensionalityReducer
+from drcomp import DimensionalityReducer, MetricsDict
+
+
+def save_fig(
+    dir,
+    fig: mpl.figure.Figure,
+    name: str,
+    latex: bool = True,
+    width=5.91,
+    height=4.8,
+    **kwargs,
+) -> None:
+    """Save a figure to a file in the given directory.
+
+    Parameters
+    ----------
+    dir : str
+        Directory where the figure will be saved.
+    fig : matplotlib.figure.Figure
+        The Figure to save.
+    name : str
+        Name of the file.
+    latex : bool, default=True
+        Whether to save the figure in a format suitable for LaTeX. If True, then use the `pgf` backend.
+    width : float, default=5.91
+        Width of the figure in inches.
+    height : float, default=4.8
+        Height of the figure in inches.
+    **kwargs
+        Additional keyword arguments to pass to `matplotlib.figure.Figure.savefig`.
+    """
+    format = "png"
+    backend = None
+    if latex:
+        format = "pgf"
+        backend = "pgf"
+        plt.style.use("science")
+        fig.set_size_inches(w=width, h=height)
+        fig.tight_layout()
+    fig.savefig(f"{dir}/{name}.{format}", format=format, backend=backend, **kwargs)
+
+
+def plot_metric(metric, label: str, ax=None) -> mpl.axes.Axes:
+    """Plot a metric as a function of the number of neighbors.
+
+    Parameters
+    ----------
+    metric : array-like of shape (n_neighbors,)
+        Values for the metric.
+    label : str
+        The label for the metric, e.g. the name of the dimensionality reduction method.
+    ax : matplotlib.axes.Axes, optional
+        The axes to plot on. If None, then create a new axes.
+
+    Returns
+    -------
+    matplotlib.axes.Axes
+        The axes on which the metric was plotted.
+    """
+    if ax is None:
+        ax = plt.axes()
+    k = len(metric)
+    x = np.arange(1, k + 1)
+    ax.plot(x, metric, label=label)
+    ax.set_xlabel("$K$")
+    ax.set_xlim(0, k + 2)
+    ax.xaxis.set_major_locator(IndexLocator(20, offset=-1))
+    return ax
+
+
+def compare_metrics(metrics: dict[str, MetricsDict], figsize=(8, 8)):
+    """Compare the metrics of different dimensionality reduction methods.
+
+    Parameters
+    ----------
+    metrics: dict
+        A dictionary mapping the name of a dimensionality reduction method to a dictionary containing the metrics.
+    """
+    fig = plt.figure(figsize=figsize)
+    ax1 = plt.subplot(221)
+    ax2 = plt.subplot(223)
+    ax3 = plt.subplot(122)
+    for name, metric in metrics.items():
+        plot_metric(metric["trustworthiness"], label=name, ax=ax1)
+        ax1.set_title("$T(K)$")
+        plot_metric(metric["continuity"], label=name, ax=ax2)
+        ax2.set_title("$C(K)$")
+        plot_metric(metric["lcmc"], label=name, ax=ax3)
+        ax3.set_title("$LCMC(K)$")
+    plt.legend(metrics.keys())
+    plt.tight_layout()
+    return fig, [ax1, ax2, ax3]
 
 
 def plot_trustworthiness_continuity(t, c, ax=None):

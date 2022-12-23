@@ -2,6 +2,7 @@
 
 import logging
 from abc import ABCMeta, abstractmethod
+from typing import Sequence, TypedDict
 
 import coranking
 import numpy as np
@@ -13,6 +14,24 @@ from sklearn.utils import resample
 logger = logging.getLogger(__name__)
 
 MAX_CORANKING_DIMENSION: int = 5000
+
+
+class MetricsDict(TypedDict):
+    """A dictionary containing the metrics of a dimensionality reduction method.
+
+    Attributes
+    ----------
+    trustworthiness : array-like of shape (n_neighbors,)
+        The trustworthiness of the dimensionality reduction.
+    continuity : array-like of shape (n_neighbors,)
+        The continuity of the dimensionality reduction.
+    lcmc : array-like of shape (n_neighbors,)
+        The Local Contuinuity Meta Criterion of the dimensionality reduction.
+    """
+
+    trustworthiness: Sequence[float]
+    continuity: Sequence[float]
+    lcmc: Sequence[float]
 
 
 def estimate_intrinsic_dimension(X, K: int = 5) -> int:
@@ -68,7 +87,9 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
             is the number of samples and `n_components` is the number of the components.
         """
 
-    def evaluate(self, X, max_K: int = None, as_builtin_list=False) -> dict:
+    def evaluate(
+        self, X, max_K: int = None, as_builtin_list: bool = False
+    ) -> MetricsDict:
         """Evaluate the quality of the Dimensionality Reduction.
 
         Parameters
