@@ -86,21 +86,28 @@ def get_dataset(dataset: str, root_dir: str = "."):
     return X, targets
 
 
-def get_preprocessor(dataset: str, root_dir=".") -> BaseEstimator:
-    """Get the fitted preprocessor for a dataset."""
+def get_preprocessor(dataset: str, root_dir=".", from_pretrained=True) -> BaseEstimator:
+    """Get the preprocessor for a dataset.
+
+    Parameters
+    ----------
+    dataset : str
+        The name of the dataset to get the preprocessor for.
+    root_dir : str, default="."
+        The root directory where the project is located.
+    from_pretrained : bool, default=True
+        Whether to load the pretrained preprocessor or instantiate a new one. If True, attempt to load the pretrained model from the preprocessor directory."""
     preprocessor: BaseEstimator
     with initialize_config_module(version_base="1.3", config_module="drcomp.conf"):
         cfg = compose(
             config_name="config.yaml",
             overrides=[f"dataset={dataset}", f"root_dir={root_dir}"],
         )
-        try:
+        if from_pretrained:
             path = get_preprocessor_path(cfg)
             preprocessor = load_from_pretrained(path)
-        except FileNotFoundError:
-            X, _ = load_dataset_from_cfg(cfg)
+        else:
             preprocessor = instantiate(cfg.preprocessor, _convert_="object")
-            preprocessor.fit(X)
     return preprocessor
 
 
