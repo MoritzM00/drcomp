@@ -16,9 +16,13 @@ logger = logging.getLogger(__name__)
 
 
 @click.command()
-@click.argument("dataset", default="SwissRoll")
-@click.argument("reducers", nargs=-1)
-@click.option("--n_images", default=5)
+@click.argument("dataset", default="MNIST", help="The (image) dataset to use.")
+@click.argument(
+    "reducers",
+    nargs=-1,
+    help="The reducers to compare. Must support inverse transform (like PCA, Autoencoder)",
+)
+@click.option("--n_images", default=5, help="Number of images to plot.")
 @click.option("--save", default=False, is_flag=True, help="Save the plot to a file.")
 @click.option(
     "--latex",
@@ -71,6 +75,7 @@ def reconstruct(
             fig=fig,
             name=f"{dataset}_reconstructions",
             latex=latex,
+            height=len(models) + 1,
         )
     else:
         plt.show()

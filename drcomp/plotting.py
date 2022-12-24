@@ -143,10 +143,12 @@ def plot_reconstructions(
     height: int,
     channels: int,
     cmap="gray",
-    figsize=(10, 2),
+    figsize=None,
 ):
     """Plot the reconstructions of the samples by the given models compared to the original images."""
     n_images = len(images)
+    if figsize is None:
+        figsize = (n_images, len(models) + 1)
     fig, axs = plt.subplots(len(models) + 1, n_images, figsize=figsize)
     flattened_size = width * height * channels
     assert np.shape(images) == (n_images, flattened_size)
