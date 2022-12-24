@@ -11,10 +11,16 @@ def get_model_dir(cfg: DictConfig, for_dataset=True) -> Path:
     return path
 
 
-def get_model_path(cfg: DictConfig) -> str:
+def get_model_path(cfg: DictConfig) -> Path:
     """Get the path to the model file."""
     base = get_model_dir(cfg, for_dataset=True)
     return Path(base, cfg.reducer._name_).with_suffix(".pkl")
+
+
+def get_preprocessor_path(cfg: DictConfig) -> Path:
+    """Get the path to the preprocessor model for a dataset specified in the config."""
+    base = get_model_dir(cfg, for_dataset=False)
+    return Path(base, "preprocessors", cfg.dataset.name).with_suffix(".pkl")
 
 
 def get_data_dir(cfg: DictConfig) -> Path:
