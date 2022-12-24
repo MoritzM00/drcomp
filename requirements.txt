@@ -13,3 +13,4 @@ hydra-core>=1.3.0
 numba>=0.56.4
 umap-learn>=0.5.3
 git+https://github.com/samueljackson92/coranking.git
+SciencePlots>=2.0.1

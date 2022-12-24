@@ -16,14 +16,13 @@ logger = logging.getLogger(__name__)
 
 
 @click.command()
-@click.argument("dataset", default="MNIST", help="The (image) dataset to use.")
+@click.argument("dataset", default="MNIST")
 @click.argument(
     "reducers",
     nargs=-1,
-    help="The reducers to compare. Must support inverse transform (like PCA, Autoencoder)",
 )
-@click.option("--n_images", default=5, help="Number of images to plot.")
-@click.option("--save", default=False, is_flag=True, help="Save the plot to a file.")
+@click.option("--n_images", default=5)
+@click.option("--save", default=False, is_flag=True)
 @click.option(
     "--latex",
     default=False,
