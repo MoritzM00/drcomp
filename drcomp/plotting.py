@@ -135,6 +135,48 @@ def plot_lcmc(lcmc, ax=None):
     return ax
 
 
+def plot_reconstructions(
+    models: dict[str, DimensionalityReducer],
+    images,
+    preprocessor,
+    width: int,
+    height: int,
+    channels: int,
+    cmap="gray",
+    figsize=(10, 2),
+):
+    """Plot the reconstructions of the samples by the given models compared to the original images."""
+    n_images = len(images)
+    fig, axs = plt.subplots(len(models) + 1, n_images, figsize=figsize)
+    flattened_size = width * height * channels
+    assert np.shape(images) == (n_images, flattened_size)
+    ground_truth = images.reshape(
+        -1, width, height, channels
+    )  # matplotlib expects channels last
+    processed_images = preprocessor.transform(images)
+    reconstructions = []
+    for i, model in enumerate(models.values()):
+        try:
+            X_hat = model.reconstruct(processed_images)
+        except ValueError:
+            # Convolutional autoencoder expects images in channels first format
+            X_hat = model.reconstruct(
+                processed_images.reshape(-1, channels, width, height)
+            )
+            X_hat = X_hat.reshape(-1, flattened_size)
+        X_hat = preprocessor.inverse_transform(X_hat)
+        X_hat = X_hat.reshape(-1, width, height, channels)
+        reconstructions.append(X_hat)
+    for i in range(n_images):
+        axs[0, i].imshow(ground_truth[i], cmap=cmap)
+        axs[0, i].axis("off")
+        for j in range(len(models)):
+            axs[j + 1, i].imshow(reconstructions[j][i], cmap=cmap)
+            axs[j + 1, i].axis("off")
+    plt.tight_layout()
+    return fig, axs
+
+
 def visualize_2D_latent_space(
     reducer: DimensionalityReducer,
     X,
