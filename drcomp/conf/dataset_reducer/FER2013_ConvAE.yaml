@@ -1,2 +1,6 @@
 # @package _global_
+# reducer:
+#   AutoEncoderClass:
+#     _target_: drcomp.autoencoder.Fer2013ConvAE
+#     intrinsic_dim: ${dataset.intrinsic_dim}
 _skip_: True
