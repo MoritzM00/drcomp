@@ -125,7 +125,7 @@ def load_twin_peaks(dataset_cfg: DictConfig):
 
 def load_fer_2013(data_dir, dataset_cfg: DictConfig, train=True):
     dir = Path(data_dir, "fer2013")
-    path = Path(dir, "train" if train else "test").with_suffix("csv")
+    path = Path(dir, "train" if train else "test").with_suffix(".csv")
     if not dir.exists():
         raise FileNotFoundError(
             "Fer2013 dataset not found. Please download it from https://www.kaggle.com/competitions/challenges-in-representation-learning-facial-expression-recognition-challenge."

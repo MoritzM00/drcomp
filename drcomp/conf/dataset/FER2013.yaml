@@ -1,6 +1,6 @@
 name: FER2013
 n_samples: 28709
-intrinsic_dim: ???
+intrinsic_dim: 26
 image_size:
   - 1
   - 48
