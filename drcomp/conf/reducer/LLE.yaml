@@ -2,7 +2,7 @@ _target_: drcomp.reducers.LLE
 _name_: LLE
 _flatten_: True
 _max_sample_size_: 20000
-n_neighbors: 5
+n_neighbors: 10
 reg: 1e-3
 eigen_solver: auto
 tol: 1e-6
