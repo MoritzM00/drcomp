@@ -4,7 +4,12 @@ import numpy as np
 import pandas as pd
 from omegaconf import DictConfig
 from skdim.datasets import hyperTwinPeaks
-from sklearn.datasets import fetch_lfw_people, fetch_olivetti_faces, make_swiss_roll
+from sklearn.datasets import (
+    fetch_20newsgroups_vectorized,
+    fetch_lfw_people,
+    fetch_olivetti_faces,
+    make_swiss_roll,
+)
 from torchvision import datasets, transforms
 
 from drcomp.utils._pathing import get_data_dir
@@ -48,6 +53,9 @@ def load_dataset_from_cfg(cfg: DictConfig):
     elif name == cfg.available_datasets[6]:
         # FER2013
         X, targets = load_fer_2013(data_dir, dataset_cfg)
+    elif name == cfg.available_datasets[7]:
+        # 20 Newsgroups
+        X, targets = load_20newsgroups(data_dir, dataset_cfg)
     else:
         raise ValueError(f"Unknown dataset {name} given.")
     return X, targets
@@ -134,4 +142,16 @@ def load_fer_2013(data_dir, dataset_cfg: DictConfig, train=True):
     X = fer2013["pixels"].str.split(" ").tolist()
     X = np.array(X, dtype="float32")
     targets = fer2013["emotion"].values.astype("int64")
+    return X, targets
+
+
+def load_20newsgroups(data_dir, dataset_cfg: DictConfig, train=True):
+    news20 = fetch_20newsgroups_vectorized(
+        subset="train" if train else "test",
+        download_if_missing=True,
+        data_home=data_dir,
+        remove=("headers", "footers", "quotes"),
+    )
+    X = np.array(news20.data.todense(), dtype="float32")
+    targets = news20.target
     return X, targets

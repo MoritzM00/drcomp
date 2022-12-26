@@ -20,6 +20,7 @@ available_datasets:
   - OlivettiFaces
   - TwinPeaks
   - FER2013
+  - 20News
 
 available_reducers:
   - PCA
