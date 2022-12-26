@@ -83,6 +83,8 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         )
         self.contractive = contractive
         self.contractive_lambda = contractive_lambda
+        if self.contractive:
+            device = "cpu"  # contractive loss is not supported on GPU
         # skorch neural net provides a wrapper around pytorch, which includes training loop etc.
         NeuralNet.__init__(
             self,
