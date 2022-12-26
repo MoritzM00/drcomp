@@ -19,6 +19,7 @@ available_datasets:
   - LfwPeople
   - OlivettiFaces
   - TwinPeaks
+  - FER2013
 
 available_reducers:
   - PCA

@@ -1,3 +1,7 @@
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
 from omegaconf import DictConfig
 from skdim.datasets import hyperTwinPeaks
 from sklearn.datasets import fetch_lfw_people, fetch_olivetti_faces, make_swiss_roll
@@ -41,14 +45,17 @@ def load_dataset_from_cfg(cfg: DictConfig):
     elif name == cfg.available_datasets[5]:
         # Twin Peaks
         X, targets = load_twin_peaks(dataset_cfg)
+    elif name == cfg.available_datasets[6]:
+        # FER2013
+        X, targets = load_fer_2013(data_dir, dataset_cfg)
     else:
         raise ValueError(f"Unknown dataset {name} given.")
     return X, targets
 
 
-def load_mnist(data_dir, dataset_cfg: DictConfig):
+def load_mnist(data_dir, dataset_cfg: DictConfig, train=True):
     mnist_train = datasets.MNIST(
-        root=data_dir, download=True, transform=transforms.ToTensor()
+        root=data_dir, download=True, train=train, transform=transforms.ToTensor()
     )
     X_train = mnist_train.data.numpy().astype("float32")
     X_train = X_train.reshape((X_train.shape[0], -1))
@@ -56,9 +63,9 @@ def load_mnist(data_dir, dataset_cfg: DictConfig):
     return X_train, targets
 
 
-def load_cifar10(data_dir, dataset_cfg: DictConfig):
+def load_cifar10(data_dir, dataset_cfg: DictConfig, train=True):
     cifar_train = datasets.CIFAR10(
-        root=data_dir, download=True, transform=transforms.ToTensor()
+        root=data_dir, train=train, download=True, transform=transforms.ToTensor()
     )
     X_train = cifar_train.data.numpy().astype("float32")
     X_train = X_train.reshape((X_train.shape[0], -1))
@@ -114,3 +121,17 @@ def load_twin_peaks(dataset_cfg: DictConfig):
         )
     X = hyperTwinPeaks(n=n_samples, d=2).astype("float32")
     return X, None
+
+
+def load_fer_2013(data_dir, dataset_cfg: DictConfig, train=True):
+    dir = Path(data_dir, "fer2013")
+    path = Path(dir, "train" if train else "test").with_suffix("csv")
+    if not dir.exists():
+        raise FileNotFoundError(
+            "Fer2013 dataset not found. Please download it from https://www.kaggle.com/competitions/challenges-in-representation-learning-facial-expression-recognition-challenge."
+        )
+    fer2013 = pd.read_csv(path)
+    X = fer2013["pixels"].str.split(" ").tolist()
+    X = np.array(X, dtype="float32")
+    targets = fer2013["emotion"].values.astype("int64")
+    return X, targets

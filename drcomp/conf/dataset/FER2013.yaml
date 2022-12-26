@@ -1,0 +1,9 @@
+name: FER2013
+n_samples: 28709
+intrinsic_dim: ???
+image_size:
+  - 1
+  - 48
+  - 48
+batch_size: 100
+flattened_size: 2304
