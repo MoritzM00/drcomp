@@ -1,0 +1,4 @@
+# @package _global_
+AutoEncoderClass:
+  _target_: drcomp.autoencoder.Cifar10ConvAE
+  intrinsic_dim: ${dataset.intrinsic_dim}

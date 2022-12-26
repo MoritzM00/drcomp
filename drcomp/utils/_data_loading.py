@@ -75,9 +75,9 @@ def load_cifar10(data_dir, dataset_cfg: DictConfig, train=True):
     cifar_train = datasets.CIFAR10(
         root=data_dir, train=train, download=True, transform=transforms.ToTensor()
     )
-    X_train = cifar_train.data.numpy().astype("float32")
+    X_train = cifar_train.data.astype("float32")
     X_train = X_train.reshape((X_train.shape[0], -1))
-    targets = cifar_train.targets.numpy().astype("int64")
+    targets = np.array(cifar_train.targets, dtype="int64")
     return X_train, targets
 
 
