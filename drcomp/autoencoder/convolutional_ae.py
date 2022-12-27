@@ -131,8 +131,38 @@ class Fer2013ConvAE(AbstractAutoEncoder):
 class LfwPeopleConvAE(AbstractAutoEncoder):
     def __init__(self, intrinsic_dim: int = 2):
         super().__init__(intrinsic_dim)
-        self.encoder = nn.Sequential()
-        self.decoder = nn.Sequential()
+        self.encoder = nn.Sequential(
+            nn.Conv2d(1, 32, (4, 3), stride=2, padding=(0, 1)),  # 1x62x47 -> 32x30x24
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.Conv2d(32, 64, (4, 4), stride=2, padding=(0, 1)),  # 32x30x24 -> 64x14x12
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Conv2d(64, 64, 4, stride=2, padding=(0, 1)),  # 64x14x12 -> 64x6x6
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.Flatten(),
+            nn.Linear(64 * 6 * 6, intrinsic_dim),
+        )
+        self.decoder = nn.Sequential(
+            nn.Linear(intrinsic_dim, 64 * 6 * 6),
+            nn.BatchNorm1d(64 * 6 * 6),
+            nn.ReLU(),
+            nn.Unflatten(dim=1, unflattened_size=(64, 6, 6)),
+            nn.ConvTranspose2d(
+                64, 64, 4, stride=2, padding=(0, 1)
+            ),  # 64x6x6 -> 64x14x12
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            nn.ConvTranspose2d(
+                64, 32, (4, 4), stride=2, padding=(0, 1)
+            ),  # 64x14x12 -> 32x30x24
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+            nn.ConvTranspose2d(
+                32, 1, (5, 3), stride=2, padding=1, output_padding=(1, 0)
+            ),
+        )
 
 
 class OlivettiFacesConvAE(AbstractAutoEncoder):

@@ -1,2 +1,5 @@
 # @package _global_
-_skip_: True
+reducer:
+  AutoEncoderClass:
+    _target_: drcomp.autoencoder.LfwPeopleConvAE
+    intrinsic_dim: ${dataset.intrinsic_dim}
