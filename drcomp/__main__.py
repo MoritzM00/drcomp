@@ -12,7 +12,7 @@ from omegaconf.errors import MissingMandatoryValue
 from sklearn.utils import resample
 
 from drcomp import DimensionalityReducer, estimate_intrinsic_dimension
-from drcomp.reducers import AutoEncoder
+from drcomp.reducers import LLE, AutoEncoder
 from drcomp.utils._data_loading import load_dataset_from_cfg
 from drcomp.utils._pathing import get_model_path
 from drcomp.utils._saving import (
@@ -132,8 +132,13 @@ def fit_reducer(cfg, reducer, X):
 
 def evaluate(cfg, reducer: DimensionalityReducer, X):
     logger.info("Evaluating model...")
+    Y = None
+    if isinstance(reducer, LLE):
+        Y = reducer.lle.embedding_
     start = time.time()
-    metrics = reducer.evaluate(X, max_K=cfg.max_n_neighbors, as_builtin_list=True)
+    metrics = reducer.evaluate(
+        X=X, Y=Y, max_K=cfg.max_n_neighbors, as_builtin_list=True
+    )
     end = time.time()
     logger.info(f"Evaluation took {end - start:.2f} seconds.")
     save_metrics_from_cfg(metrics, cfg)
