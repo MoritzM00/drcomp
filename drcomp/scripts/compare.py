@@ -36,10 +36,9 @@ def compare(datasets: list[str], save: bool, latex: bool, root_dir: str):
     for dataset in datasets:
         if dataset not in cfg.available_datasets:
             raise ValueError(f"Dataset {dataset} not available.")
-    reducers = cfg.available_reducers
     for dataset in datasets:
         metrics = load_all_metrics_for(
-            dataset, reducers, throw_on_missing=False, dir=get_metrics_dir(cfg)
+            dataset, throw_on_missing=False, dir=get_metrics_dir(cfg)
         )
         plt.style.use("science")
         fig, _ = compare_metrics(metrics)
