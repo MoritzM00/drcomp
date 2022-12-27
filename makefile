@@ -1,7 +1,14 @@
 setup:
 	git pull
 	pip3 install -r requirements.txt
+	pip3 install .
+
+setup_dev:
+	git pull
+	pip3 install -r requirements.txt
+	pip3 install -r requirements-dev.txt
 	pip3 install -e .
+	pre-commit install
 
 train:
 	drcomp -m evaluate=False dataset=$(dataset) reducer=AE,CAE,kPCA,LLE,ConvAE,PCA
