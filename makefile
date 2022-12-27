@@ -3,7 +3,7 @@ setup:
 	pip3 install -r requirements.txt
 	pip3 install .
 
-setup_dev:
+setup-dev:
 	git pull
 	pip3 install -r requirements.txt
 	pip3 install -r requirements-dev.txt
@@ -16,7 +16,7 @@ train:
 evaluate:
 	drcomp -m evaluate=True dataset=$(dataset) reducer=AE,CAE,kPCA,LLE,ConvAE,PCA use_pretrained=True
 
-train_all:
+train-all:
 	make train dataset=MNIST && \
 	make train dataset=LfwPeople && \
 	make train dataset=SwissRoll && \
@@ -25,7 +25,7 @@ train_all:
 	make train dataset=OlivettiFaces && \
 	make train dataset=20News
 
-evaluate_all:
+evaluate-all:
 	make evaluate dataset=MNIST && \
 	make evaluate dataset=LfwPeople && \
 	make evaluate dataset=SwissRoll && \
@@ -33,3 +33,11 @@ evaluate_all:
 	make evaluate dataset=FER2013 && \
 	make evaluate dataset=OlivettiFaces && \
 	make evaluate dataset=20News
+
+zip-results:
+	zip -r models.zip models && \
+	zip -r metrics.zip metrics
+
+
+zip-model-for:
+	zip -r $(dataset)-models.zip models/$(dataset)
