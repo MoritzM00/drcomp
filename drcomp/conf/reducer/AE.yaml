@@ -15,5 +15,5 @@ criterion:
   _target_: torch.nn.MSELoss
   _partial_: True
 lr: 0.1
-optimizer__weight_decay: 0.01
+weight_decay: 0.01
 max_epochs: 100
