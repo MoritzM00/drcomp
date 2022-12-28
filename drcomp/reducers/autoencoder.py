@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from skorch import NeuralNet
+from skorch.utils import to_tensor
 from torch.autograd.functional import jacobian
 
 from drcomp import DimensionalityReducer
@@ -72,7 +73,8 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         device="cpu",
         callbacks=None,
         contractive: bool = False,
-        contractive_lambda: float = 1e-4,
+        contractive_lambda: float = 1e-4,  #
+        weight_decay: float = 0.0,
         **kwargs
     ):
         """Initialize the autoencoder."""
@@ -83,8 +85,6 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         )
         self.contractive = contractive
         self.contractive_lambda = contractive_lambda
-        if self.contractive:
-            device = "cpu"  # contractive loss is not supported on GPU
         # skorch neural net provides a wrapper around pytorch, which includes training loop etc.
         NeuralNet.__init__(
             self,
@@ -96,6 +96,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
             batch_size=batch_size,
             device=device,
             callbacks=callbacks,
+            optimizer__weight_decay=weight_decay,
         )
 
     def fit(self, X, y=None):
@@ -103,12 +104,13 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         self.fitted_ = True
         return self
 
-    def get_loss(self, y_pred, y_true, *args, **kwargs):
+    def get_loss(self, y_pred, y_true, X, *args, **kwargs):
         decoded, _ = y_pred
-        reconstr_loss = super().get_loss(decoded, y_true, *args, **kwargs)
+        reconstr_loss = super().get_loss(decoded, y_true, X, *args, **kwargs)
         if self.contractive:
+            X = to_tensor(X, device=self.device)
             contr_loss = torch.norm(
-                jacobian(self.module_.encoder, y_true, create_graph=True)
+                jacobian(self.module_.encoder, X, create_graph=True)
             )
         else:
             contr_loss = 0
