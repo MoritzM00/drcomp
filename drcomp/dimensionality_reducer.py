@@ -88,7 +88,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         """
 
     def evaluate(
-        self, X, Y, max_K: int = None, as_builtin_list: bool = False
+        self, X, Y=None, max_K: int = None, as_builtin_list: bool = False
     ) -> MetricsDict:
         """Evaluate the quality of the Dimensionality Reduction.
 

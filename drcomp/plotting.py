@@ -3,7 +3,6 @@ import pathlib
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-import umap
 from matplotlib.ticker import IndexLocator
 
 from drcomp import DimensionalityReducer, MetricsDict
@@ -153,7 +152,7 @@ def plot_reconstructions(
     flattened_size = width * height * channels
     assert np.shape(images) == (n_images, flattened_size)
     ground_truth = images.reshape(
-        -1, width, height, channels
+        -1, height, width, channels
     )  # matplotlib expects channels last
     processed_images = preprocessor.transform(images)
     reconstructions = []
@@ -163,11 +162,11 @@ def plot_reconstructions(
         except ValueError:
             # Convolutional autoencoder expects images in channels first format
             X_hat = model.reconstruct(
-                processed_images.reshape(-1, channels, width, height)
+                processed_images.reshape(-1, channels, height, width)
             )
             X_hat = X_hat.reshape(-1, flattened_size)
         X_hat = preprocessor.inverse_transform(X_hat)
-        X_hat = X_hat.reshape(-1, width, height, channels)
+        X_hat = X_hat.reshape(-1, height, width, channels)
         reconstructions.append(X_hat)
     for i in range(n_images):
         axs[0, i].imshow(ground_truth[i], cmap=cmap)
@@ -182,14 +181,13 @@ def plot_reconstructions(
 def visualize_2D_latent_space(
     reducer: DimensionalityReducer,
     X,
+    title: str,
     y=None,
     umap_n_neighbors=15,
     umap_min_dist=0.1,
     ax=None,
 ):
-    """Visualize the 2D latent space of the data.
-
-    If the intrinsic dimensionality is not 2, UMAP will be used to project it to two dimensions.
+    """Visualize the 2D latent space of the data. The reducer must be fitted with an intrinsic dimension of less than two.
 
     Parameters
     ----------
@@ -198,14 +196,16 @@ def visualize_2D_latent_space(
     y : array-like of shape (n_samples,), optional
         Labels for the samples. Will be used to color the scatter plot.
     """
-    Y = reducer.transform(X)
-    if reducer.intrinsic_dim > 2:
-        Y = umap.UMAP(
-            n_components=2, n_neighbors=umap_n_neighbors, min_dist=umap_min_dist
-        ).fit_transform(Y)
-    elif reducer.intrinsic_dim < 2:
-        raise ValueError("Cannot visualize a latent space with less than 2 dimensions.")
     if ax is None:
         ax = plt.axes()
-    ax.scatter(Y[:, 0], Y[:, 1], c=y)
+    Y = reducer.transform(X)
+    if reducer.intrinsic_dim == 1:
+        ax.plot(Y, c=y)
+    if reducer.intrinsic_dim == 2:
+        ax.scatter(Y[:, 0], Y[:, 1], c=y)
+    elif reducer.intrinsic_dim < 2:
+        raise ValueError(
+            "Cannot visualize a latent space with more than two dimensions."
+        )
+    ax.set_title(title)
     return ax

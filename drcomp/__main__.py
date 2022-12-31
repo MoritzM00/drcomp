@@ -29,10 +29,9 @@ def main(cfg: DictConfig) -> None:
     """Train and evaluate a model on a dataset."""
     if cfg._skip_:
         logger.info(
-            "Skipping this run because this combination of reducer and dataset is not compatible."
+            f"Skipping run {cfg.dataset.name} - {cfg.reducer._name_} because this combination of reducer and dataset is not compatible."
         )
         return
-        # check if the intrinsic dimensionality is specified in the config
 
     # load the data
     logger.info(f"Loading dataset: {cfg.dataset.name}")
