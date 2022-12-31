@@ -118,7 +118,7 @@ def fit_reducer(cfg, reducer, X):
             reducer = pickle.load(open(path, "rb"))
         except FileNotFoundError:
             failed = True
-            logger.error(f"Could not find pretrained model at {path}.")
+            logger.warning(f"Could not find pretrained model at {path}.")
     if not cfg.use_pretrained or failed:
         logger.info("Training model...")
         start = time.time()

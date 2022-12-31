@@ -1,0 +1,6 @@
+# @package _global_
+reducer:
+  AutoEncoderClass:
+    tied_weights: True
+    hidden_layer_dims: [256]
+    #include_batch_norm: False
