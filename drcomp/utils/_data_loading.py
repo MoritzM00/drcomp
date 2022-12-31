@@ -56,6 +56,9 @@ def load_dataset_from_cfg(cfg: DictConfig):
     elif name == cfg.available_datasets[7]:
         # 20 Newsgroups
         X, targets = load_20newsgroups(data_dir, dataset_cfg)
+    elif name == cfg.available_datasets[8]:
+        # ICMR Dataset
+        X, targets = load_icmr(data_dir, dataset_cfg)
     else:
         raise ValueError(f"Unknown dataset {name} given.")
     return X, targets
@@ -154,4 +157,18 @@ def load_20newsgroups(data_dir, dataset_cfg: DictConfig, train=True):
     )
     X = np.array(news20.data.todense(), dtype="float32")
     targets = news20.target
+    return X, targets
+
+
+def load_icmr(data_dir, dataset_cfg: DictConfig):
+    path = Path(data_dir, "icmr", "data.csv")
+    if not path.exists():
+        raise RuntimeError(
+            f"Could not find ICMR Dataset: {path}. Please download it from https://www.kaggle.com/datasets/shibumohapatra/icmr-data?select=labels.csv"
+        )
+    X = pd.read_csv(path, sep=",", header=0, index_col=0)
+    X = X.values.astype("float32")
+    targets = pd.read_csv(
+        Path(data_dir, "icmr", "labels.csv"), sep=",", header=0, index_col=0
+    ).to_numpy()
     return X, targets

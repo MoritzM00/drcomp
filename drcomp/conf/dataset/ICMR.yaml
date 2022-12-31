@@ -1,0 +1,5 @@
+name: ICMR
+n_samples: 801
+flattened_size: 20531
+batch_size: 8
+intrinsic_dim: ???

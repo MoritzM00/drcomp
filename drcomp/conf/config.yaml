@@ -21,6 +21,7 @@ available_datasets:
   - TwinPeaks
   - FER2013
   - 20News
+  - ICMR
 
 available_reducers:
   - PCA
