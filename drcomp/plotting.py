@@ -3,6 +3,7 @@ import pathlib
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
+import scienceplots  # noqa: F401
 from matplotlib.ticker import IndexLocator
 
 from drcomp import DimensionalityReducer, MetricsDict
@@ -182,9 +183,7 @@ def visualize_2D_latent_space(
     reducer: DimensionalityReducer,
     X,
     title: str,
-    y=None,
-    umap_n_neighbors=15,
-    umap_min_dist=0.1,
+    color=None,
     ax=None,
 ):
     """Visualize the 2D latent space of the data. The reducer must be fitted with an intrinsic dimension of less than two.
@@ -200,9 +199,9 @@ def visualize_2D_latent_space(
         ax = plt.axes()
     Y = reducer.transform(X)
     if reducer.intrinsic_dim == 1:
-        ax.plot(Y, c=y)
+        ax.plot(Y, c=color)
     if reducer.intrinsic_dim == 2:
-        ax.scatter(Y[:, 0], Y[:, 1], c=y)
+        ax.scatter(Y[:, 0], Y[:, 1], c=color)
     elif reducer.intrinsic_dim < 2:
         raise ValueError(
             "Cannot visualize a latent space with more than two dimensions."
