@@ -6,9 +6,10 @@ AutoEncoderClass:
   input_size: ${dataset.flattened_size}
   intrinsic_dim: ${dataset.intrinsic_dim}
   hidden_layer_dims: []
-  act_fn:
+  encoder_act_fn:
     _target_: torch.nn.Sigmoid
     _partial_: True
+  decoder_act_fn: null # the same as the encoder activations
   include_batch_norm: True
   tied_weights: False
 criterion:
