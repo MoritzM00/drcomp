@@ -32,38 +32,45 @@ class FullyConnectedAE(AbstractAutoEncoder):
         input_size: int,
         intrinsic_dim: int,
         hidden_layer_dims: list[int] = [],
-        act_fn: Union[object, list[object]] = nn.Sigmoid,
+        encoder_act_fn: Union[object, list[object]] = nn.Sigmoid,
+        decoder_act_fn: Union[object, list[object]] = None,
         include_batch_norm: bool = False,
         tied_weights: bool = False,
     ):
         super().__init__(intrinsic_dim=intrinsic_dim)
         self.input_size = input_size
         self.hidden_layer_dims = hidden_layer_dims
-        self.act_fn = act_fn
         self.include_batch_norm = include_batch_norm
-        if not isinstance(act_fn, list):
-            act_fn = [act_fn] * (len(hidden_layer_dims) + 1)
+        if not isinstance(encoder_act_fn, list):
+            encoder_act_fn = [encoder_act_fn] * (len(hidden_layer_dims) + 1)
         assert (
-            len(act_fn) == len(hidden_layer_dims) + 1
-        ), "act_fn must be a list of length len(hidden_layer_dims) + 1"
+            len(encoder_act_fn) == len(hidden_layer_dims) + 1
+        ), "encoder_act_fn must be a list of length len(hidden_layer_dims) + 1"
+        self.encoder_act_fn = encoder_act_fn
+        if decoder_act_fn is None:
+            decoder_act_fn = list(reversed(encoder_act_fn))
+        elif not isinstance(decoder_act_fn, list):
+            decoder_act_fn = [decoder_act_fn] * (len(hidden_layer_dims) + 1)
+        assert (
+            len(decoder_act_fn) == len(hidden_layer_dims) + 1
+        ), "decoder_act_fn must be a list of length len(hidden_layer_dims) + 1"
+        self.decoder_act_fn = decoder_act_fn
 
         # build encoder and decoder
         layer_dims = [input_size, *hidden_layer_dims, intrinsic_dim]
-        logger.debug(f"The encoder layer dimensions are {layer_dims}")
         encoder = nn.ModuleList()
         decoder = nn.ModuleList()
         depth = len(layer_dims) - 1  # this is the depth of the encoder
-        logger.debug(f"Depth of the encoder is {depth}")
         for i in range(depth):
             encoder.append(nn.Linear(layer_dims[i], layer_dims[i + 1]))
             if include_batch_norm:
                 encoder.append(nn.BatchNorm1d(layer_dims[i + 1]))
-            encoder.append(act_fn[i]())
+            encoder.append(encoder_act_fn[i]())
 
             decoder.append(nn.Linear(layer_dims[depth - i], layer_dims[depth - i - 1]))
             if self.include_batch_norm:
                 decoder.append(nn.BatchNorm1d(layer_dims[depth - i - 1]))
-            decoder.append(act_fn[depth - i - 1]())
+            decoder.append(decoder_act_fn[i]())
 
         if tied_weights:
             encoder_layers = [
