@@ -19,9 +19,8 @@ jobs:
         with:
           options: --check
           jupyter: true
-      - uses: isort/isort-action@master
-        with:
-          args: --check-only --profile black
+      - name: isort
+        run: isort --check-only --diff --profile black .
   build:
     needs: lint
     runs-on: ubuntu-latest
