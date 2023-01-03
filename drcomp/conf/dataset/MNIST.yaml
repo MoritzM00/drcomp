@@ -3,7 +3,7 @@ image_size:
   - 1
   - 28
   - 28
-intrinsic_dim: 16
+intrinsic_dim: 15 #(ML) -- or 10 for 10 digits
 batch_size: 100
 flattened_size: 784
 n_samples: 60000

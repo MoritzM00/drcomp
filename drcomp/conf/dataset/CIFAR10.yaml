@@ -4,6 +4,6 @@ image_size: # size of image with channels first, then height, then width
   - 32
   - 32
 flattened_size: 3072
-intrinsic_dim: 64
+intrinsic_dim: 33 #(ML estimate)
 batch_size: 100
 n_samples: 50000
