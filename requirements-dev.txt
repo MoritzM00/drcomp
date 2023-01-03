@@ -1,5 +1,4 @@
 pre-commit>=2.20.0
-dvc>=2.33.0
 black
 nbstripout
 flake8
