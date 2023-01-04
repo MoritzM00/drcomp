@@ -1,6 +1,11 @@
 # Old but gold? - Statistics vs. Machine Learning in Dimensionality Reduction
 
-This repo contains the python code for my bachelor thesis on the topic of dimensionality reduction techniques.
+This repository contains the python code for my bachelor thesis on the topic of dimensionality reduction techniques. It compares statistical dimensionality reduction techniques like PCA, Kernel PCA and LLE with newer machine learning methods for dimensionality reduction like Autoencoders. Specifically, fully connected as well as convolutional autoencoders and contractive autoencoders are studied. 
+
+The Repository structure is as follows:
+...
+
+The configuration specifications can be found in the drcomp/conf directory. for the parameter settings for the dimensionality reduction techniques can be found 
 
 ## Installation
 
