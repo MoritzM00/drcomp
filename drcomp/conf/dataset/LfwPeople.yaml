@@ -5,7 +5,7 @@ image_size:
   - 47
 flattened_size: 2914
 intrinsic_dim: 21
-batch_size: 16
+batch_size: 64
 resize: 0.5
 n_samples: 2370 # depends on min_faces_per_person
 min_faces_per_person: 30
