@@ -8,6 +8,23 @@ The dimensionality reducers are compared via the trustworthiness, continuity and
 
 ## Installation
 
+`drcomp` requires Python 3.9 or higher and the following dependencies:
+
+- matplotlib
+- numpy
+- pandas
+- scikit-learn
+- scikit-dimension
+- torch
+- skorch
+- torchvision
+- torchinfo
+- hydra-core
+- git+<https://github.com/samueljackson92/coranking.git>
+- SciencePlots
+
+### Install
+
 Install the package via pip
 
 ```bash
@@ -16,7 +33,7 @@ pip3 install git+https://github.com/MoritzM00/drcomp.git
 
 ## Usage
 
-You can the cli tool to train and evaluate models. E.g. to train a PCA model on the MNIST Dataset, execute:
+You can the use CLI to train and evaluate models. E.g. to train a PCA model on the MNIST Dataset, execute:
 
 ```bash
 drcomp reducer=PCA dataset=MNIST
@@ -28,6 +45,29 @@ To train a model with different parameters, e.g. a PCA model on the mnist datase
 drcomp reducer=PCA dataset=MNIST dataset.intrinsic_dim=10
 ```
 
+Note that for some parameters it is cumbersome to change them on the command line. In this case, refer to the Development section below, and edit the configuration files directly.
+
+Also, note that the CLI tool is case-sensitive for the arguments. E.g. `dataset=MNIST` is correct, but `dataset=mnist` is not. This is a limitation of the Hydra-CLI that is used to build the training script.
+
+### Available datasets
+
+The available datasets are:
+
+- Swiss Roll (artificial) via `SwissRoll`
+- Twin Peaks (artificial) via `TwinPeaks`
+- MNIST via `MNIST`
+- Labeled Faces in the Wild via `LfwPeople`
+- Olivetti Faces via `OlivettiFaces`
+- Facial Emotion Recognition (FER) of 2013 via `FER2013`
+- ICMR via `ICMR`
+- 20 News Groups via `News20`
+- CIFAR10 via `CIFAR10`
+
+All datasets except for ICMR and FER2013 can be downloaded automatically. For ICMR and FER2013, you need to download the datasets manually and place them in the `data` folder.
+
+- Download ICMR from <https://www.kaggle.com/datasets/shibumohapatra/icmr-data?select=labels.csv> and place `.csv` files in `data/icmr`
+- Download FER2013 from <https://www.kaggle.com/competitions/challenges-in-representation-learning-facial-expression-recognition-challenge> and place the files in `data/fer2013`
+
 ### Sweeping over multiple datasets and reducers
 
 To sweep over multiple arguments for `reducer` or `dataset`, use the `--multirun` (`-m`) flag, e.g.:
@@ -35,6 +75,37 @@ To sweep over multiple arguments for `reducer` or `dataset`, use the `--multirun
 ```bash
 drcomp --multirun reducer=PCA,kPCA,AE dataset=MNIST,SwissRoll
 ```
+
+### Common tasks
+
+Common tasks are simplified via the `makefile`.
+To train all available models on a given dataset, invoke:
+
+```bash
+make train dataset=<dataset_name>
+```
+
+which will not evaluate the models. To evaluate the models, invoke:
+
+```bash
+make evaluate dataset=<dataset_name>
+```
+
+This will use pretrained models if available (otherwise it trains them first) and evaluates the models.
+
+To train all models on all datasets, invoke:
+
+```bash
+make train-all
+```
+
+or alternatively:
+
+```bash
+make evaluate-all
+```
+
+Note that the last command can take a long time to execute, especially if there are no pretrained models available. This is because of the expensive evaluation of the models.
 
 ## Development
 
@@ -58,6 +129,8 @@ and install the pre-commit hooks by executing:
 ```bash
 pre-commit install
 ```
+
+Alternatively, use `make setup && make install-dev` to execute the above commands.
 
 ### Repository Structure
 
@@ -95,19 +168,5 @@ The configuration specifications can be found in the `drcomp/conf` directory. Th
 To enable debug level logging, execute the `drcomp` command with
 
 ```bash
-drcomp hydra.verbose=drcomp.__main__
+drcomp hydra.verbose=True
 ```
-
-## Requirements
-
-Python 3.9 or higher
-
-The main dependencies are:
-
-- numpy
-- scikit-learn
-- matplotlib
-- pandas
-- jupyter
-
-### Development
