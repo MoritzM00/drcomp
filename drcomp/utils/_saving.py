@@ -38,7 +38,7 @@ def save_metrics_from_cfg(metrics: dict, cfg: DictConfig) -> None:
 def save_metrics(metrics: dict, path: Path) -> None:
     """Save metrics to a file using json."""
     logger.debug(f"Saving metrics to {path}")
-    json.dump(metrics, path.open("w"), indent=4, sort_keys=True)
+    json.dump(metrics, path.open("w"), indent=4, sort_keys=False)
 
 
 def save_preprocessor_from_cfg(processor, cfg: DictConfig) -> None:
