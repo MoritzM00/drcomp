@@ -33,7 +33,7 @@ pip3 install git+https://github.com/MoritzM00/drcomp.git
 
 ## Usage
 
-You can the use CLI to train and evaluate models. E.g. to train a PCA model on the MNIST Dataset, execute:
+You can use the CLI to train and evaluate models. E.g. to train a PCA model on the MNIST Dataset, execute:
 
 ```bash
 drcomp reducer=PCA dataset=MNIST
