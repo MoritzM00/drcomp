@@ -1,9 +1,13 @@
 setup:
+	python3 -m venv .venv
+	source .venv/bin/activate
+
+install:
 	git pull
 	pip3 install -r requirements.txt
 	pip3 install .
 
-setup-dev:
+install-dev:
 	git pull
 	pip3 install -r requirements.txt
 	pip3 install -r requirements-dev.txt
@@ -23,7 +27,7 @@ train-all:
 	make train dataset=TwinPeaks && \
 	make train dataset=FER2013 && \
 	make train dataset=OlivettiFaces && \
-	make train dataset=20News
+	make train dataset=ICMR
 
 evaluate-all:
 	make evaluate dataset=MNIST && \
@@ -32,7 +36,7 @@ evaluate-all:
 	make evaluate dataset=TwinPeaks && \
 	make evaluate dataset=FER2013 && \
 	make evaluate dataset=OlivettiFaces && \
-	make evaluate dataset=20News
+	make evaluate dataset=ICMR
 
 zip-results:
 	zip -r models.zip models && \
