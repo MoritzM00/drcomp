@@ -1,4 +1,3 @@
-# managed by dvc
 data/
 
 # hydra
@@ -12,6 +11,11 @@ metrics.zip
 models.zip
 
 **/wandb/
+
+# images for the readme
+!figures/
+figures/*
+!figures/readme
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
