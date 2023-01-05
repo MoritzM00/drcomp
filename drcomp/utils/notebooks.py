@@ -8,18 +8,43 @@ from hydra import compose, initialize_config_module
 from hydra.utils import instantiate
 from sklearn.base import BaseEstimator
 
-from drcomp import DimensionalityReducer
+from drcomp import DimensionalityReducer, MetricsDict
 from drcomp.utils._data_loading import load_dataset_from_cfg
 from drcomp.utils._pathing import get_model_path, get_preprocessor_path
 
 
-def load_metrics(dataset: str, reducer: str, dir="../metrics"):
+def load_metrics(
+    dataset: str, reducer: str, dir="../metrics", reduce_metric=None
+) -> MetricsDict:
+    """Load the metrics for a given dataset and reducer.
+
+    Parameters
+    ----------
+    dataset : str
+        The name of the dataset.
+    reducer : str
+        The name of the reducer.
+    dir : str, default="../metrics"
+        The directory to load the metrics from.
+    reduction : str, default=None
+        If not None, then reduce the metric by this function. Else, no reduction is applied.
+        This must be a function, that maps an array of floats to a single scalar, for example, mean or max.
+
+    Returns
+    -------
+    metrics : dict
+        The metrics for the given dataset and reducer.
+    """
     filename = f"{dataset}_{reducer}.json"
     path = pathlib.Path(dir, filename)
+    metrics: MetricsDict
     if not path.exists():
         raise FileNotFoundError(f"File {path} not found.")
     with path.open("r") as f:
-        return json.load(f)
+        metrics = json.load(f)
+    if reduce_metric is not None:
+        metrics = {k: reduce_metric(v) for k, v in metrics.items()}
+    return metrics
 
 
 def load_all_metrics_for(
@@ -27,13 +52,32 @@ def load_all_metrics_for(
     reducers: list[str] = None,
     throw_on_missing: bool = True,
     dir: str = "../metrics",
+    reduce_metric: str = None,
 ):
+    """Load all metrics for a given dataset and for the given reducers with optional reduction (e.g. mean)
+
+    Parameters
+    ----------
+    dataset : str
+        The name of the dataset.
+    reducers : list[str], default=None
+        The list of reducers to load. If None, then all available reducers are loaded.
+    throw_on_missing : bool, default=True
+        If True, then raise a FileNotFoundError if the metric for a reducer is missing.
+    dir : str, default="../metrics"
+        The directory to load the metrics from.
+    reduce_metric : str, default=None
+        If not None, then reduce the metric by this function. Else, no reduction is applied.
+        This must be a function, that maps an array of floats to a single scalar, for example, "np.mean" or "np.max".
+    """
     if reducers is None:
         reducers = ["ConvAE", "PCA", "KernelPCA", "AE", "LLE", "CAE"]
     metrics: dict[str, dict] = {}
     for reducer in reducers:
         try:
-            metric = load_metrics(dataset, reducer, dir=dir)
+            metric = load_metrics(
+                dataset, reducer, dir=dir, reduce_metric=reduce_metric
+            )
         except FileNotFoundError:
             if throw_on_missing:
                 raise
