@@ -80,13 +80,20 @@ def plot_metric(metric, label: str, ylabel: str, ax=None) -> mpl.axes.Axes:
     return ax
 
 
-def compare_metrics(metrics: dict[str, MetricsDict], figsize=(8, 8)):
+def compare_metrics(metrics: dict[str, MetricsDict], figsize: tuple[int, int] = (8, 8)):
     """Compare the metrics of different dimensionality reduction methods.
 
     Parameters
     ----------
-    metrics: dict
+    metrics: dict[str, MetricsDict]
         A dictionary mapping the name of a dimensionality reduction method to a dictionary containing the metrics.
+    figsize : tuple[int, int], default=(8, 8)
+        The size of the figure.
+
+    Returns
+    -------
+    tuple of matplotlib.figure.Figure and list of matplotlib.axes.Axes
+        The figure and the axes on which the metrics were plotted.
     """
     fig = plt.figure(figsize=figsize)
     ax1 = plt.subplot(221)
@@ -94,10 +101,10 @@ def compare_metrics(metrics: dict[str, MetricsDict], figsize=(8, 8)):
     ax3 = plt.subplot(122)
     for name, metric in metrics.items():
         plot_metric(metric["trustworthiness"], label=name, ylabel="$T(K)$", ax=ax1)
-        ax1.set_title("Trustworthiness")
+        ax1.set_title("Vertrauenswürdigkeit")
         plot_metric(metric["continuity"], label=name, ylabel="$C(K)$", ax=ax2)
-        ax2.set_title("Continuity")
-        plot_metric(metric["lcmc"], label=name, ylabel="$LCMC(K)$", ax=ax3)
+        ax2.set_title("Koninuität")
+        plot_metric(metric["lcmc"], label=name, ylabel="LCMC$(K)$", ax=ax3)
         ax3.set_title("LCMC")
     plt.legend(metrics.keys())
     plt.tight_layout()
