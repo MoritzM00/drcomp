@@ -99,7 +99,6 @@ class PCA(DimensionalityReducer):
             n_oversamples=n_oversamples,
             power_iteration_normalizer=power_iteration_normalizer,
             random_state=random_state,
-            n_jobs=n_jobs,
         )
 
     def fit(self, X, y=None):

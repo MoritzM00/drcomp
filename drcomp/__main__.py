@@ -134,6 +134,13 @@ def evaluate(cfg, reducer: DimensionalityReducer, X):
     Y = None
     if isinstance(reducer, LLE):
         Y = reducer.lle.embedding_
+    else:
+        Y = reducer.transform(X)
+    if X.shape[0] > cfg.max_evaluation_samples:
+        logger.info(
+            f"Sampling {cfg.max_evaluation_samples} samples from the dataset because of computational constraints of the evaluation."
+        )
+        X = resample(X, Y, n_samples=cfg.max_evaluation_samples)
     start = time.time()
     metrics = reducer.evaluate(
         X=X, Y=Y, max_K=cfg.max_n_neighbors, as_builtin_list=True
