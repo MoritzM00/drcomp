@@ -1,3 +1,7 @@
+"""Convolutional autoencoder models for MNIST, CIFAR10, and FER2013, Olivetti Faces and LfwPeople.
+
+All encoders consist of a series of convolutional, batch normalization, and ReLU layers, followed by a Flatten layer and a Linear layer. The decoders unflattens the output of the encoder back to the image shape (before the flatten operation happened) and then applies a single linear layer and then a series of transpose convolutional, batch normalization, and ReLU layers to get back to the original image shape.
+"""
 import torch.nn as nn
 
 from drcomp.autoencoder.base import AbstractAutoEncoder

@@ -58,8 +58,8 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         small fully connected models with two hidden layers on MNIST Dataset, this can be prohibitive.
     contractive_lambda : float (default=1e-4)
         The lambda parameter for the contractive loss. Only used if contractive is True.
-    **kwargs
-        Additional keyword arguments that are passed to skorch.NeuralNet.
+    weight_decay : float (default=0.0)
+        The weight decay parameter for the optimizer.
     """
 
     def __init__(
