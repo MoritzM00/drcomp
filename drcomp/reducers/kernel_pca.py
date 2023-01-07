@@ -133,6 +133,7 @@ class KernelPCA(DimensionalityReducer):
         super().__init__(
             intrinsic_dim=intrinsic_dim,
             supports_inverse_transform=fit_inverse_transform,
+            n_jobs=n_jobs,
         )
         self.kernel_pca = _KernelPCA(
             n_components=intrinsic_dim,

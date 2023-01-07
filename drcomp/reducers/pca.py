@@ -83,9 +83,12 @@ class PCA(DimensionalityReducer):
         n_oversamples=10,
         power_iteration_normalizer="auto",
         random_state=None,
+        n_jobs=None,
         **kwargs
     ):
-        super().__init__(intrinsic_dim=intrinsic_dim, supports_inverse_transform=True)
+        super().__init__(
+            intrinsic_dim=intrinsic_dim, supports_inverse_transform=True, n_jobs=n_jobs
+        )
         self.pca = _PCA(
             n_components=intrinsic_dim,
             copy=copy,
@@ -96,6 +99,7 @@ class PCA(DimensionalityReducer):
             n_oversamples=n_oversamples,
             power_iteration_normalizer=power_iteration_normalizer,
             random_state=random_state,
+            n_jobs=n_jobs,
         )
 
     def fit(self, X, y=None):

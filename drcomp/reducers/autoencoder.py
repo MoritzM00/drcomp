@@ -60,6 +60,8 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         The lambda parameter for the contractive loss. Only used if contractive is True.
     weight_decay : float (default=0.0)
         The weight decay parameter for the optimizer.
+    n_jobs : int or None (default=None)
+        The number of jobs to use for the computation. If None, only one core is used.
     """
 
     def __init__(
@@ -75,13 +77,15 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         contractive: bool = False,
         contractive_lambda: float = 1e-4,  #
         weight_decay: float = 0.0,
-        **kwargs
+        n_jobs=None,
+        **kwargs,
     ):
         """Initialize the autoencoder."""
         DimensionalityReducer.__init__(
             self,
             intrinsic_dim=AutoEncoderClass.intrinsic_dim,
             supports_inverse_transform=True,
+            n_jobs=n_jobs,
         )
         self.contractive = contractive
         self.contractive_lambda = contractive_lambda

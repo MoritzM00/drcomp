@@ -35,7 +35,7 @@ available_reducers:
 reducer:
   _max_sample_size_: null # by default, use all samples
   intrinsic_dim: ${dataset.intrinsic_dim} # no need to specify this for each reducer
-  n_jobs: null
+  n_jobs: 1 # by default no parallelization
   callbacks:
     - _target_: skorch.callbacks.ProgressBar
     - _target_: skorch.callbacks.LRScheduler
@@ -46,8 +46,6 @@ reducer:
       monitor: valid_loss
       load_best: True
       patience: 20
-dataset:
-  intrinsic_dim: ??? # populated at runtime
 
 preprocessor:
   _target_: sklearn.preprocessing.StandardScaler

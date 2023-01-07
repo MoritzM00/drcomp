@@ -82,7 +82,7 @@ class LLE(DimensionalityReducer):
         n_jobs=None,
         **kwargs
     ) -> None:
-        super().__init__(intrinsic_dim, supports_inverse_transform=False)
+        super().__init__(intrinsic_dim, supports_inverse_transform=False, n_jobs=n_jobs)
         self.lle = LocallyLinearEmbedding(
             n_components=intrinsic_dim,
             n_neighbors=n_neighbors,
