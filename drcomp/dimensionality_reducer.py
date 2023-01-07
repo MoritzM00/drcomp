@@ -2,36 +2,18 @@
 
 import logging
 from abc import ABCMeta, abstractmethod
-from typing import Sequence, TypedDict
 
-import coranking
 import numpy as np
-from coranking.metrics import LCMC, continuity, trustworthiness
 from skdim.id import MLE
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils import resample
+
+from drcomp.metrics import (
+    MetricsDict,
+    compute_coranking_matrix,
+    compute_quality_criteria,
+)
 
 logger = logging.getLogger(__name__)
-
-MAX_CORANKING_DIMENSION: int = 5000
-
-
-class MetricsDict(TypedDict):
-    """A dictionary containing the metrics of a dimensionality reduction method.
-
-    Attributes
-    ----------
-    trustworthiness : array-like of shape (n_neighbors,)
-        The trustworthiness of the dimensionality reduction.
-    continuity : array-like of shape (n_neighbors,)
-        The continuity of the dimensionality reduction.
-    lcmc : array-like of shape (n_neighbors,)
-        The Local Contuinuity Meta Criterion of the dimensionality reduction.
-    """
-
-    trustworthiness: Sequence[float]
-    continuity: Sequence[float]
-    lcmc: Sequence[float]
 
 
 def estimate_intrinsic_dimension(X, K: int = 5) -> int:
@@ -47,11 +29,16 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     """
 
     def __init__(
-        self, intrinsic_dim: int = 2, supports_inverse_transform: bool = False, **kwargs
+        self,
+        intrinsic_dim: int = 2,
+        supports_inverse_transform: bool = False,
+        n_jobs: int = None,
+        **kwargs,
     ) -> None:
         super().__init__()
         self.intrinsic_dim = intrinsic_dim
         self.supports_inverse_transform = supports_inverse_transform
+        self.n_jobs = n_jobs
 
     @abstractmethod
     def fit(self, X, y=None):
@@ -110,28 +97,19 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         if max_K is not None:
             # max_K must be smaller than n_samples - 1
             max_K = min(max_K, n_samples - 1)
-        if n_samples > MAX_CORANKING_DIMENSION:
-            logging.info(
-                f"Computing Co-Ranking matrix on a random subsample ({MAX_CORANKING_DIMENSION}) because the dataset is too large."
+        if n_samples > 5000:
+            logger.warning(
+                f"Computing the evaluation measures for {n_samples} samples may take up a long time and RAM. Consider downsampling the data to less than 5000 samples."
             )
-            X = resample(X, n_samples=MAX_CORANKING_DIMENSION)
         Y = self.transform(X)
         if X.ndim > 2:
             X = X.reshape(X.shape[0], -1)
             Y = Y.reshape(Y.shape[0], -1)
-        Q = coranking.coranking_matrix(X, Y)
-        t = trustworthiness(Q, min_k=1, max_k=max_K)
-        c = continuity(Q, min_k=1, max_k=max_K)
-        lcmc = LCMC(Q, min_k=1, max_k=max_K)
+        Q = compute_coranking_matrix(X, Y, n_jobs=self.n_jobs)
+        metrics = compute_quality_criteria(Q, max_K=max_K)
         if as_builtin_list:
-            t = t.tolist()
-            c = c.tolist()
-            lcmc = lcmc.tolist()
-        return {
-            "trustworthiness": t,
-            "continuity": c,
-            "lcmc": lcmc,
-        }
+            metrics = {k: v.tolist() for k, v in metrics.items()}
+        return metrics
 
     def inverse_transform(self, Y) -> np.ndarray:
         """Transform data back to its original space, if it is supported by this dimensionality reducer.

@@ -1,3 +1,5 @@
+from typing import Sequence, TypedDict
+
 import numba
 import numpy as np
 from joblib import Parallel, delayed
@@ -11,7 +13,25 @@ and https://github.com/zhangys11/pyDRMetrics
 """
 
 
-def compute_quality_criteria(Q, max_K: int = None):
+class MetricsDict(TypedDict):
+    """A dictionary containing the metrics of a dimensionality reduction method.
+
+    Attributes
+    ----------
+    trustworthiness : array-like of shape (n_neighbors,)
+        The trustworthiness of the dimensionality reduction.
+    continuity : array-like of shape (n_neighbors,)
+        The continuity of the dimensionality reduction.
+    lcmc : array-like of shape (n_neighbors,)
+        The Local Contuinuity Meta Criterion of the dimensionality reduction.
+    """
+
+    trustworthiness: Sequence[float]
+    continuity: Sequence[float]
+    lcmc: Sequence[float]
+
+
+def compute_quality_criteria(Q, max_K: int = None) -> MetricsDict:
     """Compute the quality criteria from the coranking matrix.
 
     Taken and adapted from the package pyDRMetrics [1], which is licensed
@@ -69,11 +89,11 @@ def compute_quality_criteria(Q, max_K: int = None):
         )  # Q[0,0] is always m. 0-th nearest neighbor is always the point itself. Exclude Q[0,0]
         LCMC[k] = QNN[k] - (k + 1) / (m - 1)
 
-    return (
-        T,
-        C,
-        LCMC,
-    )
+    return {
+        "trustworthiness": T,
+        "continuity": C,
+        "lcmc": LCMC,
+    }
 
 
 """
@@ -92,10 +112,7 @@ def _compute_ranking_matrix_parallel(D, n_jobs=None):
         Number of jobs to use for parallel computation. If None, then use 1 if the number of data points is less than 1000, otherwise use all available cores."""
     # if data is small, no need for parallel
     if n_jobs is None:
-        if len(D) > 1000:
-            n_jobs = -1
-        else:
-            n_jobs = 1
+        n_jobs = 1
 
     r1 = Parallel(n_jobs, prefer="threads")(
         delayed(np.argsort)(i)
@@ -130,13 +147,10 @@ def _iterate_compute_distances(data, n_jobs=None):
     data : np.ndarray
         Data matrix.
     n_jobs : int, default=None
-        Number of jobs to use for parallel computation. If None, then use 1 if the number of data points is less than 1000, otherwise use all available cores.
+        Number of jobs to use for parallel computation. If None, then only use one core. -1 means use all available cores.
     """
     if n_jobs is None:
-        if len(data) > 1000:
-            n_jobs = -1
-        else:
-            n_jobs = 1
+        n_jobs = 1
     n = len(data)
     D = np.zeros((n, n), dtype="float32")
     col = 0
@@ -162,7 +176,7 @@ def compute_coranking_matrix(X, Y, n_jobs=None):
     Y : np.ndarray of shape (n_samples, n_features)
         Low dimensional data.
     n_jobs : int, default=None
-        Number of jobs to use for parallel computation. If None, then use all available cores if the dataset has more than 1000 samples, else n_jobs is set to 1.
+        Number of jobs to use for parallel computation. If None, then only use one core. -1 means use all available cores.
     """
     D_hd = _iterate_compute_distances(X)
     D_ld = _iterate_compute_distances(Y)
