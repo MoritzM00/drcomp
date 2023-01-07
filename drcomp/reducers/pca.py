@@ -57,7 +57,6 @@ class PCA(DimensionalityReducer):
         svd_solver == 'randomized'.
         Must be of range [0, infinity).
 
-
     n_oversamples : int, default=10
         This parameter is only relevant when `svd_solver="randomized"`.
         It corresponds to the additional number of random vectors to sample the
