@@ -20,11 +20,22 @@ class FullyConnectedAE(AbstractAutoEncoder):
         The intrinsic dimensionality determines the size of the bottleneck layer.
     hidden_layer_dims : list[int], default=[]
         List of hidden layer dimensions of the Encoder, by default []. Then a shallow autoencoder with one hidden layer is created.
-    act_fn : Union[object, list[object]], default=nn.Sigmoid
+    encoder_act_fn : Union[object, list[object]], default=nn.Sigmoid
         Activation function for the hidden layers, by default nn.Sigmoid. If a list is provided,
         then each element of the list is used for the corresponding hidden layer.
+    decoder_act_fn : Union[object, list[object]], default=None
+        Activation function for the hidden layers of the decoder, by default (None), use the same activation functions as the encoder.
     include_batch_norm : bool, default=False
         Whether to include batch normalization, by default False.
+    tied_weights : bool, default=False
+        Whether to tie the weights of the encoder and decoder, by default False. If True, then the decoder weight matrices are the transpose of the encoder weight matrices.
+
+    Examples
+    --------
+    >>> from drcomp.autoencoder import FullyConnectedAE
+    >>> from torch import nn
+    >>> # create a linear shallow autoencoder with one hidden layer (i.e. only the bottleneck)
+    >>> ae = FullyConnectedAE(input_size=10, intrinsic_dim=2, encoder_act_fn=nn.Identity)
     """
 
     def __init__(
