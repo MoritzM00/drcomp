@@ -71,7 +71,7 @@ def load_all_metrics_for(
         This must be a function, that maps an array of floats to a single scalar, for example, "np.mean" or "np.max".
     """
     if reducers is None:
-        reducers = ["ConvAE", "PCA", "KernelPCA", "AE", "LLE", "CAE"]
+        reducers = ["PCA", "KernelPCA", "LLE", "AE", "CAE", "ConvAE"]
     metrics: dict[str, dict] = {}
     for reducer in reducers:
         try:
