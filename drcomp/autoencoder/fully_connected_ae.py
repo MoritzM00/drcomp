@@ -52,6 +52,7 @@ class FullyConnectedAE(AbstractAutoEncoder):
         self.input_size = input_size
         self.hidden_layer_dims = hidden_layer_dims
         self.include_batch_norm = include_batch_norm
+        self.tied_weights = tied_weights
         if not isinstance(encoder_act_fn, list):
             encoder_act_fn = [encoder_act_fn] * (len(hidden_layer_dims) + 1)
         assert (
