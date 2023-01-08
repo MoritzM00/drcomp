@@ -83,6 +83,17 @@ class LLE(DimensionalityReducer):
         **kwargs
     ) -> None:
         super().__init__(intrinsic_dim, supports_inverse_transform=False, n_jobs=n_jobs)
+        self.n_components = intrinsic_dim
+        self.n_neighbors = n_neighbors
+        self.method = "standard"
+        self.reg = reg
+        self.eigen_solver = eigen_solver
+        self.tol = tol
+        self.max_iter = max_iter
+        self.hessian_tol = hessian_tol
+        self.modified_tol = modified_tol
+        self.neighbors_algorithm = neighbors_algorithm
+        self.random_state = random_state
         self.lle = LocallyLinearEmbedding(
             n_components=intrinsic_dim,
             n_neighbors=n_neighbors,

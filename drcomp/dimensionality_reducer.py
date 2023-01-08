@@ -105,6 +105,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
         if X.ndim > 2:
             X = X.reshape(X.shape[0], -1)
             Y = Y.reshape(Y.shape[0], -1)
+        logger.debug(f"Using {self.n_jobs} jobs to calculate the coranking matrix.")
         Q = compute_coranking_matrix(X, Y, n_jobs=self.n_jobs)
         metrics = compute_quality_criteria(Q, max_K=max_K)
         if as_builtin_list:

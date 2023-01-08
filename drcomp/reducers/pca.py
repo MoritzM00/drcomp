@@ -88,6 +88,16 @@ class PCA(DimensionalityReducer):
         super().__init__(
             intrinsic_dim=intrinsic_dim, supports_inverse_transform=True, n_jobs=n_jobs
         )
+        self.intrinsic_dim = intrinsic_dim
+        self.copy = copy
+        self.whiten = whiten
+        self.svd_solver = svd_solver
+        self.tol = tol
+        self.iterated_power = iterated_power
+        self.n_oversamples = n_oversamples
+        self.power_iteration_normalizer = power_iteration_normalizer
+        self.random_state = random_state
+
         self.pca = _PCA(
             n_components=intrinsic_dim,
             copy=copy,

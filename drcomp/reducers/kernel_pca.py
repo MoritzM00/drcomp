@@ -135,6 +135,21 @@ class KernelPCA(DimensionalityReducer):
             supports_inverse_transform=fit_inverse_transform,
             n_jobs=n_jobs,
         )
+        self.kernel = kernel
+        self.n_components = intrinsic_dim
+        self.fit_inverse_transform = fit_inverse_transform
+        self.gamma = gamma
+        self.degree = degree
+        self.coef0 = coef0
+        self.kernel_params = kernel_params
+        self.alpha = alpha
+        self.eigen_solver = eigen_solver
+        self.tol = tol
+        self.max_iter = max_iter
+        self.iterated_power = iterated_power
+        self.remove_zero_eig = remove_zero_eig
+        self.random_state = random_state
+        self.copy_X = copy_X
         self.kernel_pca = _KernelPCA(
             n_components=intrinsic_dim,
             kernel=kernel,

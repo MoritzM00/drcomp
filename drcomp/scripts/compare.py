@@ -65,6 +65,7 @@ def compare(datasets: list[str], k: int, save: bool, latex: bool, root_dir: str)
                 fig=fig,
                 name=f"{dataset}_comparison",
                 latex=latex,
+                height=4,
             )
         else:
             plt.show()
