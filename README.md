@@ -20,8 +20,9 @@ The dimensionality reducers are compared via the trustworthiness, continuity and
 - torchvision
 - torchinfo
 - hydra-core
-- git+<https://github.com/samueljackson92/coranking.git>
 - SciencePlots
+- numba
+- joblib
 
 ### Install
 
@@ -106,6 +107,55 @@ make evaluate-all
 ```
 
 Note that the last command can take a long time to execute, especially if there are no pretrained models available. This is because of the expensive evaluation of the models.
+
+### Example Output
+
+Example Output of the training and evaluation of a Convolutional Autoencoder on the MNIST dataset:
+
+```
+drcomp evaluate=True use_pretrained=True reducer=ConvAE dataset=MNIST
+```
+
+Output:
+
+```
+[2023-01-08 12:45:03,071][drcomp.__main__][INFO] - Loading dataset: MNIST
+[2023-01-08 12:45:03,122][drcomp.__main__][INFO] - Using dimensionality reducer: ConvAE
+[2023-01-08 12:45:03,187][drcomp.__main__][INFO] - Preprocessing data with StandardScaler.
+[2023-01-08 12:45:03,911][drcomp.__main__][INFO] - Summary of AutoEncoder model:
+[2023-01-08 12:45:04,339][drcomp.__main__][INFO] -
+==========================================================================================
+Layer (type:depth-idx) Output Shape Param #
+==========================================================================================
+
+MnistConvAE [100, 1, 28, 28] --
+... <layer summary>
+==========================================================================================
+
+Total params: 12,532,240
+Trainable params: 12,532,240
+Non-trainable params: 0
+Total mult-adds (G): 24.47
+==========================================================================================
+
+Input size (MB): 0.31
+Forward/backward pass size (MB): 160.38
+Params size (MB): 50.13
+Estimated Total Size (MB): 210.83
+==========================================================================================
+
+[2023-01-08 12:45:04,342][drcomp.__main__][INFO] - Loading pretrained model because `use_pretrained` was set to True.
+[2023-01-08 12:45:04,344][drcomp.__main__][WARNING] - Could not find pretrained model at models/MNIST/ConvAE.pkl.
+[2023-01-08 12:45:04,346][drcomp.__main__][INFO] - Training model...
+[2023-01-08 12:52:14,981][drcomp.__main__][INFO] - Training took 430.63 seconds.
+[2023-01-08 12:52:14,985][drcomp.__main__][INFO] - Saving model...
+[2023-01-08 12:52:17,094][drcomp.__main__][INFO] - Evaluating model...
+[2023-01-08 12:52:19,388][drcomp.__main__][INFO] - Sampling 5000 samples from the dataset because of computational constraints of the evaluation.
+[2023-01-08 12:52:27,140][drcomp.__main__][INFO] - Evaluation took 7.75 seconds.
+[2023-01-08 12:52:27,142][drcomp.utils._saving][INFO] - Saved metrics to metrics/MNIST_ConvAE.json
+[2023-01-08 12:52:27,149][drcomp.__main__][INFO] - Finished in 444.08 seconds.
+
+```
 
 ## Development
 
