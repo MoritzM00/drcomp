@@ -32,7 +32,18 @@ def main(cfg: DictConfig) -> None:
             f"Skipping run {cfg.dataset.name} - {cfg.reducer._name_} because this combination of reducer and dataset is not compatible."
         )
         return
+    try:
+        train(cfg)
+    except Exception:
+        logger.exception("An exception occurred during training. Exiting.")
 
+
+if __name__ == "__main__":
+    main()
+
+
+def train(cfg: DictConfig):
+    """Train a model on a dataset."""
     # load the data
     logger.info(f"Loading dataset: {cfg.dataset.name}")
     X, _ = load_dataset_from_cfg(cfg)
@@ -84,10 +95,6 @@ def main(cfg: DictConfig) -> None:
     else:
         logger.info("Skipping evaluation because `evaluate` was set to False.")
     logger.info("Done.")
-
-
-if __name__ == "__main__":
-    main()
 
 
 def instantiate_reducer(cfg):
