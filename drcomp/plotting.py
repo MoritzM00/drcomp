@@ -167,7 +167,7 @@ def plot_reconstructions(
     for i, model in enumerate(models.values()):
         try:
             X_hat = model.reconstruct(processed_images)
-        except ValueError:
+        except RuntimeError:
             # Convolutional autoencoder expects images in channels first format
             X_hat = model.reconstruct(
                 processed_images.reshape(-1, channels, height, width)
