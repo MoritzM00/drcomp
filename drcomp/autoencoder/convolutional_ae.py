@@ -99,36 +99,36 @@ class Fer2013ConvAE(AbstractAutoEncoder):
     def __init__(self, intrinsic_dim: int = 2):
         super().__init__(intrinsic_dim)
         self.encoder = nn.Sequential(
-            nn.Conv2d(1, 32, 4, stride=2, padding=1),  # 1x48x48 -> 32x24x24
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.Conv2d(32, 64, 4, stride=2, padding=1),  # 32x24x24 -> 64x12x12
+            nn.Conv2d(1, 64, 4, stride=2, padding=1),  # 1x48x48 -> 64x24x24
             nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.Conv2d(64, 64, 4, stride=2, padding=1),  # 32x12x12 -> 64x6x6
-            nn.BatchNorm2d(64),
+            nn.Conv2d(64, 128, 4, stride=2, padding=1),  # 64x24x24 -> 128x12x12
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.Conv2d(128, 256, 4, stride=2, padding=1),  # 128x12x12 -> 256x6x6
+            nn.BatchNorm2d(256),
             nn.ReLU(),
             nn.Flatten(),
-            nn.Linear(64 * 6 * 6, intrinsic_dim),
+            nn.Linear(256 * 6 * 6, intrinsic_dim),
         )
         self.decoder = nn.Sequential(
-            nn.Linear(intrinsic_dim, 64 * 6 * 6),
-            nn.BatchNorm1d(64 * 6 * 6),
+            nn.Linear(intrinsic_dim, 256 * 6 * 6),
+            nn.BatchNorm1d(256 * 6 * 6),
             nn.ReLU(),
-            nn.Unflatten(dim=1, unflattened_size=(64, 6, 6)),
+            nn.Unflatten(dim=1, unflattened_size=(256, 6, 6)),
             nn.ConvTranspose2d(
-                64, 64, 3, stride=2, padding=1, output_padding=1
-            ),  # 64x6x6 -> 64x12x12
+                256, 128, 3, stride=2, padding=1, output_padding=1
+            ),  # 256x6x6 -> 128x12x12
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            nn.ConvTranspose2d(
+                128, 64, 3, stride=2, padding=1, output_padding=1
+            ),  # 128x12x12 -> 64x24x24
             nn.BatchNorm2d(64),
             nn.ReLU(),
             nn.ConvTranspose2d(
-                64, 32, 3, stride=2, padding=1, output_padding=1
-            ),  # 64x12x12 -> 32x24x24
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-            nn.ConvTranspose2d(
-                32, 1, 3, stride=2, padding=1, output_padding=1
-            ),  # 32x24x24 -> 1x48x48
+                64, 1, 3, stride=2, padding=1, output_padding=1
+            ),  # 64x24x24 -> 1x48x48
         )
 
 
