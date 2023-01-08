@@ -45,6 +45,7 @@ if __name__ == "__main__":
 def train(cfg: DictConfig):
     """Train a model on a dataset."""
     # load the data
+    train_time_start = time.time()
     logger.info(f"Loading dataset: {cfg.dataset.name}")
     X, _ = load_dataset_from_cfg(cfg)
     try:
@@ -84,7 +85,8 @@ def train(cfg: DictConfig):
         input_size = (cfg.dataset.batch_size, *X.shape[1:])
         logger.debug(f"Input size of X_train (with Batch Size first): {input_size}")
         logger.info("Summary of AutoEncoder model:")
-        torchinfo.summary(reducer.module, input_size=input_size)
+        stats = torchinfo.summary(reducer.module, input_size=input_size, verbose=0)
+        logger.info(stats)
 
     # train the reducer if use_pretrained is false, else try to load the pretrained model
     reducer = fit_reducer(cfg, reducer, X)
@@ -94,7 +96,7 @@ def train(cfg: DictConfig):
         evaluate(cfg, reducer, X)
     else:
         logger.info("Skipping evaluation because `evaluate` was set to False.")
-    logger.info("Done.")
+    logger.info(f"Finished in {time.time() - train_time_start:.2f} seconds.")
 
 
 def instantiate_reducer(cfg):
