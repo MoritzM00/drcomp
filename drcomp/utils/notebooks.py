@@ -111,6 +111,8 @@ def get_model_for_dataset(
     """
     model: DimensionalityReducer = None
     with initialize_config_module(version_base="1.3", config_module="drcomp.conf"):
+        if params_override is None:
+            params_override = {}
         overrides = [
             f"reducer={reducer}",
             f"dataset={dataset}",

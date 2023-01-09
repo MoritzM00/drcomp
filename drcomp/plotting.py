@@ -187,9 +187,8 @@ def plot_reconstructions(
 
 
 def visualize_2D_latent_space(
-    reducer: DimensionalityReducer,
-    X,
-    title: str,
+    latent_space,
+    title: str = None,
     color=None,
     ax=None,
 ):
@@ -197,21 +196,16 @@ def visualize_2D_latent_space(
 
     Parameters
     ----------
-    X : array-like of shape (n_samples, n_features)
-        Samples.
-    y : array-like of shape (n_samples,), optional
-        Labels for the samples. Will be used to color the scatter plot.
+    latent_space : array-like of shape (n_samples, 2)
+        Latent Space.
+    color : array-like of shape (n_samples,), optional
+        Color for the points in the latent space.
     """
     if ax is None:
         ax = plt.axes()
-    Y = reducer.transform(X)
-    if reducer.intrinsic_dim == 1:
-        ax.plot(Y, c=color)
-    if reducer.intrinsic_dim == 2:
-        ax.scatter(Y[:, 0], Y[:, 1], c=color)
-    elif reducer.intrinsic_dim < 2:
-        raise ValueError(
-            "Cannot visualize a latent space with more than two dimensions."
-        )
+    if not np.ndim(latent_space) == 2:
+        raise ValueError("Latent space must be 2D.")
+
+    ax.scatter(latent_space[:, 0], latent_space[:, 1], c=color)
     ax.set_title(title)
     return ax
