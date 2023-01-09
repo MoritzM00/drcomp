@@ -103,7 +103,7 @@ def compare_metrics(metrics: dict[str, MetricsDict], figsize: tuple[int, int] = 
         plot_metric(metric["trustworthiness"], label=name, ylabel="$T(K)$", ax=ax1)
         ax1.set_title("Vertrauenswürdigkeit")
         plot_metric(metric["continuity"], label=name, ylabel="$C(K)$", ax=ax2)
-        ax2.set_title("Koninuität")
+        ax2.set_title("Kontinuität")
         plot_metric(metric["lcmc"], label=name, ylabel="LCMC$(K)$", ax=ax3)
         ax3.set_title("LCMC")
     plt.legend(metrics.keys())
