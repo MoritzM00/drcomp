@@ -1,7 +1,7 @@
 name: OlivettiFaces
 flattened_size: 4096
 intrinsic_dim: 9  # ML Estimate
-batch_size: 8
+batch_size: 32
 n_samples: 400
 image_size:
   - 1
