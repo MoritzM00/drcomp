@@ -10,8 +10,6 @@ evaluate: False
 # this can be set to True in the dataset_reducer config group for a specific combination
 _skip_: False
 
-# WANDB_API_KEY: ${oc.env:WANDB_API_KEY}
-
 available_datasets:
   - MNIST
   - CIFAR10
