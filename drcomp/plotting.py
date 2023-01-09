@@ -187,10 +187,7 @@ def plot_reconstructions(
 
 
 def visualize_2D_latent_space(
-    latent_space,
-    title: str = None,
-    color=None,
-    ax=None,
+    latent_space, color=None, title: str = None, ax=None, **kwargs
 ):
     """Visualize the 2D latent space of the data. The reducer must be fitted with an intrinsic dimension of less than two.
 
@@ -200,12 +197,16 @@ def visualize_2D_latent_space(
         Latent Space.
     color : array-like of shape (n_samples,), optional
         Color for the points in the latent space.
+    title : str, optional
+        Title of the plot.
+    **kwargs
+        Additional keyword arguments passed to `matplotlib.pyplot.scatter`.
     """
     if ax is None:
         ax = plt.axes()
     if not np.ndim(latent_space) == 2:
         raise ValueError("Latent space must be 2D.")
 
-    ax.scatter(latent_space[:, 0], latent_space[:, 1], c=color)
+    ax.scatter(latent_space[:, 0], latent_space[:, 1], c=color, **kwargs)
     ax.set_title(title)
     return ax
