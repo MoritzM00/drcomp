@@ -5,5 +5,5 @@ image_size:
   - 1
   - 48
   - 48
-batch_size: 100
+batch_size: 128
 flattened_size: 2304

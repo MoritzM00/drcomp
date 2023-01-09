@@ -1,5 +1,5 @@
 name: TwinPeaks
 flattened_size: 3
 intrinsic_dim: 2
-batch_size: 32
+batch_size: 64
 n_samples: 5000

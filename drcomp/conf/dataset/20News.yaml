@@ -1,5 +1,5 @@
 name: 20News
 n_samples: 11314
 intrinsic_dim: 20
-batch_size: 64
+batch_size: 128
 flattened_size: 101631
