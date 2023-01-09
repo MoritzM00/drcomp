@@ -91,18 +91,35 @@ def get_model_for_dataset(
     dataset: str = "SwissRoll",
     reducer: str = "PCA",
     root_dir: str = ".",
-    from_pretrained: bool = False,
+    from_pretrained: bool = True,
+    params_override: dict[str, any] = None,
 ) -> DimensionalityReducer:
-    """Get a model and dataset pair configured by hydra for use in a notebook."""
+    """Get a model and dataset pair configured by hydra for use in a notebook.
+
+    Parameters
+    ----------
+    dataset : str, default="SwissRoll"
+        The name of the dataset to get the model for.
+    reducer : str, default="PCA"
+        The name of the reducer to get the model for.
+    root_dir: str, default="."
+        Root dir of the project.
+    from_pretrained : bool, default=True
+        If True, then load the model from the pretrained model path.
+    params_override : dict[str, any], default=None
+        Additional overrides for the model, to change parameters for example.
+    """
     model: DimensionalityReducer = None
     with initialize_config_module(version_base="1.3", config_module="drcomp.conf"):
+        overrides = [
+            f"reducer={reducer}",
+            f"dataset={dataset}",
+            f"root_dir={root_dir}",
+            *[f"{k}={v}" for k, v in params_override.items()],
+        ]
         cfg = compose(
             config_name="config.yaml",
-            overrides=[
-                f"reducer={reducer}",
-                f"dataset={dataset}",
-                f"root_dir={root_dir}",
-            ],
+            overrides=overrides,
         )
         if from_pretrained:
             path = get_model_path(cfg)
