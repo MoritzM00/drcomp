@@ -110,51 +110,55 @@ Note that the last command can take a long time to execute, especially if there 
 
 ### Example Output
 
-Example Output of the training and evaluation of a Convolutional Autoencoder on the MNIST dataset:
+Example Output of the training and evaluation of a fully connected Autoencoder on the LFW-People dataset:
 
 ```
-drcomp evaluate=True use_pretrained=True reducer=ConvAE dataset=MNIST
+drcomp evaluate=True use_pretrained=True reducer=AE dataset=LfwPeople
 ```
 
 Output:
 
 ```
-[2023-01-08 12:45:03,071][drcomp.__main__][INFO] - Loading dataset: MNIST
-[2023-01-08 12:45:03,122][drcomp.__main__][INFO] - Using dimensionality reducer: ConvAE
-[2023-01-08 12:45:03,187][drcomp.__main__][INFO] - Preprocessing data with StandardScaler.
-[2023-01-08 12:45:03,911][drcomp.__main__][INFO] - Summary of AutoEncoder model:
-[2023-01-08 12:45:04,339][drcomp.__main__][INFO] -
+[2023-01-09 18:50:27,507][drcomp.__main__][INFO] - Loading dataset: LfwPeople
+[2023-01-09 18:50:27,765][drcomp.__main__][INFO] - Using dimensionality reducer: AE
+[2023-01-09 18:50:27,778][drcomp.__main__][INFO] - Preprocessing data with StandardScaler.
+[2023-01-09 18:50:27,892][drcomp.__main__][INFO] - Summary of AutoEncoder model:
+[2023-01-09 18:50:30,615][drcomp.__main__][INFO] -
 ==========================================================================================
-Layer (type:depth-idx) Output Shape Param #
+Layer (type:depth-idx)                   Output Shape              Param #
 ==========================================================================================
-
-MnistConvAE [100, 1, 28, 28] --
-... <layer summary>
+FullyConnectedAE                         [64, 2914]                --
+├─Sequential: 1-1                        [64, 21]                  --
+│    └─Linear: 2-1                       [64, 21]                  61,215
+│    └─BatchNorm1d: 2-2                  [64, 21]                  42
+│    └─Sigmoid: 2-3                      [64, 21]                  --
+├─Sequential: 1-2                        [64, 2914]                --
+│    └─Linear: 2-4                       [64, 2914]                64,108
+│    └─BatchNorm1d: 2-5                  [64, 2914]                5,828
+│    └─Sigmoid: 2-6                      [64, 2914]                --
 ==========================================================================================
-
-Total params: 12,532,240
-Trainable params: 12,532,240
+Total params: 131,193
+Trainable params: 131,193
 Non-trainable params: 0
-Total mult-adds (G): 24.47
+Total mult-adds (M): 8.40
 ==========================================================================================
-
-Input size (MB): 0.31
-Forward/backward pass size (MB): 160.38
-Params size (MB): 50.13
-Estimated Total Size (MB): 210.83
+Input size (MB): 0.75
+Forward/backward pass size (MB): 3.01
+Params size (MB): 0.52
+Estimated Total Size (MB): 4.28
 ==========================================================================================
-
-[2023-01-08 12:45:04,342][drcomp.__main__][INFO] - Loading pretrained model because `use_pretrained` was set to True.
-[2023-01-08 12:45:04,344][drcomp.__main__][WARNING] - Could not find pretrained model at models/MNIST/ConvAE.pkl.
-[2023-01-08 12:45:04,346][drcomp.__main__][INFO] - Training model...
-[2023-01-08 12:52:14,981][drcomp.__main__][INFO] - Training took 430.63 seconds.
-[2023-01-08 12:52:14,985][drcomp.__main__][INFO] - Saving model...
-[2023-01-08 12:52:17,094][drcomp.__main__][INFO] - Evaluating model...
-[2023-01-08 12:52:19,388][drcomp.__main__][INFO] - Sampling 5000 samples from the dataset because of computational constraints of the evaluation.
-[2023-01-08 12:52:27,140][drcomp.__main__][INFO] - Evaluation took 7.75 seconds.
-[2023-01-08 12:52:27,142][drcomp.utils._saving][INFO] - Saved metrics to metrics/MNIST_ConvAE.json
-[2023-01-08 12:52:27,149][drcomp.__main__][INFO] - Finished in 444.08 seconds.
-
+[2023-01-09 18:50:30,617][drcomp.__main__][INFO] - Loading pretrained model because `use_pretrained` was set to True.
+[2023-01-09 18:50:30,619][drcomp.__main__][WARNING] - Could not find pretrained model at models/LfwPeople/AE.pkl.
+[2023-01-09 18:50:30,621][drcomp.__main__][INFO] - Training model...
+[2023-01-09 18:50:42,679][drcomp.__main__][INFO] - Training took 12.06 seconds.
+[2023-01-09 18:50:42,681][drcomp.__main__][INFO] - Saving model...
+[2023-01-09 18:50:42,750][drcomp.__main__][INFO] - Evaluating model...
+[2023-01-09 18:50:45,783][drcomp.__main__][INFO] - Mean Trustworthiness: 0.98
+[2023-01-09 18:50:45,786][drcomp.__main__][INFO] - Mean Continuity: 0.99
+[2023-01-09 18:50:45,788][drcomp.__main__][INFO] - Max LCMC: 0.59
+[2023-01-09 18:50:45,789][drcomp.__main__][INFO] - Evaluation took 2.94 seconds.
+[2023-01-09 18:50:45,791][drcomp.utils._saving][INFO] - Saved metrics to metrics/LfwPeople_AE.json
+[2023-01-09 18:50:45,798][drcomp.__main__][INFO] - Finished in 18.29 seconds.
 ```
 
 ## Development
