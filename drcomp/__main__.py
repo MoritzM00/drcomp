@@ -87,7 +87,7 @@ def train(cfg: DictConfig):
         logger.debug(f"Input size of X_train (with Batch Size first): {input_size}")
         logger.info("Summary of AutoEncoder model:")
         stats = torchinfo.summary(reducer.module, input_size=input_size, verbose=0)
-        logger.info(stats)
+        logger.info("\n" + str(stats))
 
     # train the reducer if use_pretrained is false, else try to load the pretrained model
     reducer = fit_reducer(cfg, reducer, X)
