@@ -155,9 +155,9 @@ def evaluate(cfg, reducer: DimensionalityReducer, X):
     metrics = reducer.evaluate(
         X=X, Y=Y, max_K=cfg.max_n_neighbors, as_builtin_list=True
     )
-    logger.info(f"Mean Trustworthiness: {np.mean(metrics['trustworthiness']):.2f}")
-    logger.info(f"Mean Continuity: {np.mean(metrics['continuity']):.2f}")
-    logger.info(f"Max LCMC: {np.max(metrics['lcmc']):.2f}")
+    logger.info(f"Mean Trustworthiness: {np.mean(metrics['trustworthiness']):.4f}")
+    logger.info(f"Mean Continuity: {np.mean(metrics['continuity']):.4f}")
+    logger.info(f"Max LCMC: {np.max(metrics['lcmc']):.4f}")
     end = time.time()
     logger.info(f"Evaluation took {end - start:.2f} seconds.")
     save_metrics_from_cfg(metrics, cfg)
