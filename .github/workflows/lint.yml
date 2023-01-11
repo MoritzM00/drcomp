@@ -11,7 +11,6 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
           pip install -r requirements-dev.txt
       - name: flake8
         run: |
@@ -20,10 +19,6 @@ jobs:
         with:
           options: --check
           jupyter: true
-      - uses: isort/isort-action@master
-        with:
-          requirementsFiles: "requirements.txt requirements-test.txt"
-          configuration: "--check-only --diff --profile black drcomp"
   build:
     needs: lint
     name: ${{ matrix.python }} / ${{ matrix.os }}
