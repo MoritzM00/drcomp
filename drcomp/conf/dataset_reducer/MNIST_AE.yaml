@@ -3,4 +3,4 @@ reducer:
   AutoEncoderClass:
     hidden_layer_dims: [1024, 256]
     include_batch_norm: True
-    tied_weights: True
+    tied_weights: False

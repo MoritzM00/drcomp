@@ -5,6 +5,7 @@ import pickle
 import time
 
 import hydra
+import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torchinfo
@@ -12,7 +13,9 @@ from omegaconf import DictConfig, OmegaConf
 from omegaconf.errors import MissingMandatoryValue
 from sklearn.utils import resample
 
+import wandb
 from drcomp import DimensionalityReducer, estimate_intrinsic_dimension
+from drcomp.plotting import compare_metrics
 from drcomp.reducers import LLE, AutoEncoder
 from drcomp.utils._data_loading import load_dataset_from_cfg
 from drcomp.utils._pathing import get_model_path
@@ -33,10 +36,18 @@ def main(cfg: DictConfig) -> None:
             f"Skipping run {cfg.dataset.name} - {cfg.reducer._name_} because this combination of reducer and dataset is not compatible."
         )
         return
+    wandb.login()
+    wandb.init(
+        project=cfg.wandb.project,
+        group=f"{cfg.dataset.name} - {cfg.reducer._name_}",
+        config=OmegaConf.to_container(cfg, resolve=True),
+    )
     try:
         train(cfg)
     except Exception:
         logger.exception("An exception occurred during training. Exiting.")
+    finally:
+        wandb.finish()
 
 
 if __name__ == "__main__":
@@ -133,7 +144,9 @@ def fit_reducer(cfg, reducer, X):
         start = time.time()
         reducer.fit(X)
         end = time.time()
-        logger.info(f"Training took {end - start:.2f} seconds.")
+        time_seconds = end - start
+        wandb.log({"training time (s)": time_seconds})
+        logger.info(f"Training took {time_seconds:.2f} seconds.")
         logger.info("Saving model...")
         save_model_from_cfg(reducer, cfg)
     return reducer
@@ -155,9 +168,25 @@ def evaluate(cfg, reducer: DimensionalityReducer, X):
     metrics = reducer.evaluate(
         X=X, Y=Y, max_K=cfg.max_n_neighbors, as_builtin_list=True
     )
-    logger.info(f"Mean Trustworthiness: {np.mean(metrics['trustworthiness']):.4f}")
-    logger.info(f"Mean Continuity: {np.mean(metrics['continuity']):.4f}")
-    logger.info(f"Max LCMC: {np.max(metrics['lcmc']):.4f}")
+    mean_T = np.mean(metrics["trustworthiness"])
+    mean_C = np.mean(metrics["continuity"])
+    max_LCMC = np.max(metrics["lcmc"])
+    wandb.log(
+        {
+            "Mean Trustworthiness": mean_T,
+            "Mean Continuity": mean_C,
+            "Max LCMC": max_LCMC,
+        }
+    )
+
+    logger.info(f"Mean Trustworthiness: {mean_T:.4f}")
+    logger.info(f"Mean Continuity: {mean_C:.4f}")
+    logger.info(f"Max LCMC: {max_LCMC:.4f}")
     end = time.time()
     logger.info(f"Evaluation took {end - start:.2f} seconds.")
     save_metrics_from_cfg(metrics, cfg)
+
+    # log the plots to wandb
+    plt.style.use(["science", "no-latex"])
+    fig, _ = compare_metrics({cfg.reducer._name_: metrics})
+    wandb.log({"metrics": fig})
