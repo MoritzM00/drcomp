@@ -12,3 +12,4 @@ SciencePlots>=2.0.1
 numba>=0.56.4
 joblib>=1.2.0
 tqdm>=4.64.1
+wandb>=0.13.8

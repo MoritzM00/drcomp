@@ -48,4 +48,7 @@ zip-model-for:
 
 
 tune-kpca:
-	drcomp -m evaluate=True reducer=kPCA dataset=MNIST,FER2013,SwissRoll,TwinPeaks,OlivettiFaces,ICMR reducer.gamma=0.01,0.05,0.1,0.2,0.5,0.7,1,2
+	drcomp -m evaluate=True reducer=kPCA dataset=MNIST,FER2013,SwissRoll,TwinPeaks,OlivettiFaces,ICMR,LfwPeople reducer.gamma=0.01,0.05,0.1,0.2,0.5,0.7,1,2
+
+tune-autoencoder:
+	drcomp -m evaluate=True reducer=AE dataset=MNIST,FER2013,SwissRoll,TwinPeaks,OlivettiFaces,ICMR,LfwPeople reducer.lr=0.5,0.1,0.05,0.01,0.005

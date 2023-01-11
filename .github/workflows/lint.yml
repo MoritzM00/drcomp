@@ -20,7 +20,7 @@ jobs:
           options: --check
           jupyter: true
       - name: isort
-        run: isort --check-only --diff --profile black .
+        run: isort --check --diff --profile "black" drcomp
   build:
     needs: lint
     name: ${{ matrix.python }} / ${{ matrix.os }}
