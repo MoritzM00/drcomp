@@ -8,7 +8,7 @@ import scienceplots  # noqa: F401
 from omegaconf import DictConfig
 
 from drcomp import MetricsDict
-from drcomp.plotting import compare_metrics, save_fig
+from drcomp.plotting import compare_metrics
 from drcomp.utils._pathing import get_figures_dir, get_metrics_dir
 from drcomp.utils.notebooks import load_all_metrics_for
 
@@ -57,16 +57,21 @@ def compare(datasets: list[str], k: int, save: bool, latex: bool, root_dir: str)
             print(specific_K)
             print(50 * "=")
         plt.style.use("science")
-        fig, _ = compare_metrics(metrics)
+
+        figsize = (5.91, 4.8)
+        fig, _ = compare_metrics(metrics, figsize=figsize)
         if save:
-            logger.info(f"Saving figure for {dataset}.")
-            save_fig(
-                dir=get_figures_dir(cfg),
-                fig=fig,
-                name=f"{dataset}_comparison",
-                latex=latex,
-                height=4,
+            fig.savefig(
+                str(get_figures_dir(cfg)) + f"/{dataset}_comparison.pdf",
+                bbox_inches="tight",
             )
+            # save_fig(
+            #     dir=get_figures_dir(cfg),
+            #     fig=fig,
+            #     name=f"{dataset}_comparison",
+            #     latex=latex,
+            #     height=4,
+            # )
         else:
             plt.show()
 

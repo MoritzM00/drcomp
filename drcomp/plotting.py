@@ -80,14 +80,16 @@ def plot_metric(metric, label: str, ylabel: str, ax=None) -> mpl.axes.Axes:
     return ax
 
 
-def compare_metrics(metrics: dict[str, MetricsDict], figsize: tuple[int, int] = (8, 8)):
+def compare_metrics(
+    metrics: dict[str, MetricsDict], figsize: tuple[int, int] = (5.91, 4.8)
+):
     """Compare the metrics of different dimensionality reduction methods.
 
     Parameters
     ----------
     metrics: dict[str, MetricsDict]
         A dictionary mapping the name of a dimensionality reduction method to a dictionary containing the metrics.
-    figsize : tuple[int, int], default=(8, 8)
+    figsize : tuple[int, int], default=(5.91, 4.8)
         The size of the figure.
 
     Returns
@@ -99,17 +101,24 @@ def compare_metrics(metrics: dict[str, MetricsDict], figsize: tuple[int, int] = 
     ax1 = plt.subplot(221)
     ax2 = plt.subplot(223)
     ax3 = plt.subplot(122)
+    fontsize = 11
     for name, metric in metrics.items():
         plot_metric(metric["trustworthiness"], label=name, ylabel="$T(K)$", ax=ax1)
-        ax1.set_title("Vertrauenswürdigkeit")
+        ax1.set_title("Vertrauenswürdigkeit", fontsize=fontsize)
         plot_metric(metric["continuity"], label=name, ylabel="$C(K)$", ax=ax2)
-        ax2.set_title("Kontinuität")
+        ax2.set_title("Kontinuität", fontsize=fontsize)
         plot_metric(metric["lcmc"], label=name, ylabel="LCMC$(K)$", ax=ax3)
-        ax3.set_title("LCMC")
+        ax3.set_title("LCMC", fontsize=fontsize)
     keys = list(metrics.keys())
     plt.tight_layout()
-    plt.legend(keys, ncol=len(keys), loc="upper center", bbox_to_anchor=(-0.2, -0.05))
-    plt.subplots_adjust(bottom=0.1)
+    plt.legend(
+        keys,
+        ncol=len(keys),
+        loc="upper center",
+        bbox_to_anchor=(-0.25, -0.1),
+        fontsize=11,
+    )
+    plt.subplots_adjust(bottom=0.15)
     return fig, [ax1, ax2, ax3]
 
 
