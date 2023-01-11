@@ -4,7 +4,7 @@ This repository contains the python code for my bachelor thesis on the topic of 
 
 The dimensionality reducers are compared via the trustworthiness, continuity and the local continuity meta-criterion (LCMC) on several datasets including artifical and real-world datasets. For an example, see below.
 
-<img src="figures/readme/MNIST_comparison.png" alt="Comparison of DR Techniques on the MNIST dataset"/>
+<img src="figures/readme/SwissRoll_comparison.png" alt="Comparison of DR Techniques on the SwissRoll dataset"/>
 
 ## Installation
 
