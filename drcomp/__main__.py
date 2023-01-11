@@ -5,7 +5,6 @@ import pickle
 import time
 
 import hydra
-import matplotlib.pyplot as plt
 import numpy as np
 import torch
 import torchinfo
@@ -15,7 +14,6 @@ from sklearn.utils import resample
 
 import wandb
 from drcomp import DimensionalityReducer, estimate_intrinsic_dimension
-from drcomp.plotting import compare_metrics
 from drcomp.reducers import LLE, AutoEncoder
 from drcomp.utils._data_loading import load_dataset_from_cfg
 from drcomp.utils._pathing import get_model_path
@@ -187,6 +185,8 @@ def evaluate(cfg, reducer: DimensionalityReducer, X):
     save_metrics_from_cfg(metrics, cfg)
 
     # log the plots to wandb
-    plt.style.use(["science", "no-latex"])
-    fig, _ = compare_metrics({cfg.reducer._name_: metrics})
-    wandb.log({"metrics": fig})
+    xs = np.arange(1, cfg.max_n_neighbors + 1)
+    for name, metric in metrics.items():
+        data = [[x, value] for x, value in zip(xs, metric)]
+        table = wandb.Table(data=data, columns=["K", name])
+        wandb.log({name: wandb.plot.line(table, "K", name, title=name)})
