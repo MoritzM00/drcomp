@@ -1,0 +1,3 @@
+# @package _global_
+reducer:
+  gamma: 0.01
