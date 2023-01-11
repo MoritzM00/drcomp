@@ -106,8 +106,10 @@ def compare_metrics(metrics: dict[str, MetricsDict], figsize: tuple[int, int] = 
         ax2.set_title("Kontinuität")
         plot_metric(metric["lcmc"], label=name, ylabel="LCMC$(K)$", ax=ax3)
         ax3.set_title("LCMC")
-    plt.legend(metrics.keys())
+    keys = list(metrics.keys())
     plt.tight_layout()
+    plt.legend(keys, ncol=len(keys), loc="upper center", bbox_to_anchor=(-0.2, -0.05))
+    plt.subplots_adjust(bottom=0.1)
     return fig, [ax1, ax2, ax3]
 
 
