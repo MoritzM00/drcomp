@@ -137,13 +137,20 @@ def get_model_for_dataset(
     return model
 
 
-def get_dataset(dataset: str, root_dir: str = "."):
+def get_dataset(dataset: str, root_dir: str = ".", params_override=None):
     """Get a dataset configured by hydra for use in a notebook."""
     X: np.ndarray = None
     with initialize_config_module(version_base="1.3", config_module="drcomp.conf"):
+        if params_override is None:
+            params_override = {}
+        overrides = [
+            f"dataset={dataset}",
+            f"root_dir={root_dir}",
+            *[f"{k}={v}" for k, v in params_override.items()],
+        ]
         cfg = compose(
             config_name="config.yaml",
-            overrides=[f"dataset={dataset}", f"root_dir={root_dir}"],
+            overrides=overrides,
         )
         X, targets = load_dataset_from_cfg(cfg)
     return X, targets
