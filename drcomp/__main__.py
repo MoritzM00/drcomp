@@ -64,9 +64,14 @@ def train(cfg: DictConfig):
         logger.info(f"ML Estimate of intrinsic dimensionality: {intrinsic_dim}")
         cfg.dataset.intrinsic_dim = intrinsic_dim
 
+    if cfg.wandb.group is None:
+        cfg.wandb.group = f"{cfg.dataset.name} - {cfg.reducer._name_}"
+    elif cfg.wandb.group == "dataset":
+        cfg.wandb.group = cfg.dataset.name
     wandb.init(
         project=cfg.wandb.project,
-        group=f"{cfg.dataset.name} - {cfg.reducer._name_}",
+        group=cfg.wandb.group,
+        name=cfg.wandb.name,
         config=OmegaConf.to_container(cfg, resolve=True),
         mode=cfg.wandb.mode,
     )

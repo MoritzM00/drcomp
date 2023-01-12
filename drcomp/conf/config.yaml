@@ -12,6 +12,8 @@ _skip_: False
 
 wandb:
   project: drcomp
+  group: null # if null group by dataset-reducer, if group=dataset group by dataset (will be replaced dynamically)
+  name: null
   mode: online # or offline for now log-in requirement
 
 available_datasets:
