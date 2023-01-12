@@ -9,7 +9,9 @@ AutoEncoderClass:
   encoder_act_fn:
     _target_: torch.nn.Sigmoid
     _partial_: True
-  decoder_act_fn: null # the same as the encoder activations
+  decoder_act_fn:
+    _target_: torch.nn.Sigmoid
+    _partial_: True
   include_batch_norm: True
   tied_weights: False
 criterion:
