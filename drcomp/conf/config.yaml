@@ -23,6 +23,7 @@ available_datasets:
   - FER2013
   - 20News
   - ICMR
+  - FashionMNIST
 
 available_reducers:
   - PCA

@@ -1,0 +1,9 @@
+name: FashionMNIST
+intrinsic_dim: ???
+n_samples: 60000
+flattened_size: 784
+batch_size: 128
+image_size:
+  - 1
+  - 28
+  - 28
