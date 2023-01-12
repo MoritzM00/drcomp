@@ -177,11 +177,10 @@ def load_icmr(data_dir, dataset_cfg: DictConfig):
 
 
 def load_fashion_mnist(data_dir, dataset_cfg: DictConfig, train=True):
-    X, targets = datasets.FashionMNIST(
+    fashion_mnist = datasets.FashionMNIST(
         root=data_dir, download=True, transform=transforms.ToTensor(), train=train
     )
-
-    X = X.data.numpy().astype("float32")
+    X = fashion_mnist.data.numpy().astype("float32")
     X = X.reshape((X.shape[0], -1))
-    targets = targets.numpy().astype("int64")
+    targets = fashion_mnist.targets.numpy().astype("int64")
     return X, targets

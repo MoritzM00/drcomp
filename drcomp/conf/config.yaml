@@ -12,6 +12,7 @@ _skip_: False
 
 wandb:
   project: drcomp
+  mode: online # or offline for now log-in requirement
 
 available_datasets:
   - MNIST

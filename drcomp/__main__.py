@@ -34,18 +34,16 @@ def main(cfg: DictConfig) -> None:
             f"Skipping run {cfg.dataset.name} - {cfg.reducer._name_} because this combination of reducer and dataset is not compatible."
         )
         return
-    wandb.login()
-    wandb.init(
-        project=cfg.wandb.project,
-        group=f"{cfg.dataset.name} - {cfg.reducer._name_}",
-        config=OmegaConf.to_container(cfg, resolve=True),
-    )
+    if cfg.wandb.mode == "online":
+        wandb.login()
     try:
         train(cfg)
+        exit_code = 0
     except Exception:
         logger.exception("An exception occurred during training. Exiting.")
+        exit_code = 1
     finally:
-        wandb.finish()
+        wandb.finish(exit_code=exit_code)
 
 
 if __name__ == "__main__":
@@ -65,6 +63,13 @@ def train(cfg: DictConfig):
         intrinsic_dim = estimate_intrinsic_dimension(X)
         logger.info(f"ML Estimate of intrinsic dimensionality: {intrinsic_dim}")
         cfg.dataset.intrinsic_dim = intrinsic_dim
+
+    wandb.init(
+        project=cfg.wandb.project,
+        group=f"{cfg.dataset.name} - {cfg.reducer._name_}",
+        config=OmegaConf.to_container(cfg, resolve=True),
+        mode=cfg.wandb.mode,
+    )
 
     logger.debug(f"Config: {OmegaConf.to_yaml(cfg, resolve=True)}")
 
