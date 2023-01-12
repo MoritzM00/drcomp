@@ -27,7 +27,8 @@ train-all:
 	make train dataset=TwinPeaks && \
 	make train dataset=FER2013 && \
 	make train dataset=OlivettiFaces && \
-	make train dataset=ICMR
+	make train dataset=ICMR && \
+	make train dataset=FashionMNIST
 
 evaluate-all:
 	make evaluate dataset=MNIST && \
@@ -36,7 +37,8 @@ evaluate-all:
 	make evaluate dataset=TwinPeaks && \
 	make evaluate dataset=FER2013 && \
 	make evaluate dataset=OlivettiFaces && \
-	make evaluate dataset=ICMR
+	make evaluate dataset=ICMR && \
+	make evaluate dataset=FashionMNIST
 
 zip-results:
 	zip -r models.zip models && \

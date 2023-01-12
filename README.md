@@ -63,6 +63,7 @@ The available datasets are:
 - ICMR via `ICMR`
 - 20 News Groups via `News20`
 - CIFAR10 via `CIFAR10`
+- Fashion MNIST via `FashionMNIST`
 
 All datasets except for ICMR and FER2013 can be downloaded automatically. For ICMR and FER2013, you need to download the datasets manually and place them in the `data` folder.
 
