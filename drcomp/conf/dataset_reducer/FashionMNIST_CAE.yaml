@@ -1,0 +1,10 @@
+# @package: _global_
+reducer:
+  max_epochs: 5
+  callbacks:
+    - _target_: skorch.callbacks.ProgressBar
+    - _target_: skorch.callbacks.LRScheduler
+      policy: ExponentialLR
+      monitor: valid_loss
+      gamma: 0.9
+    # no early stopping for this combination
