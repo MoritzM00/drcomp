@@ -3,3 +3,5 @@ reducer:
   AutoEncoderClass:
     encoder_act_fn:
       _target_: torch.nn.ReLU
+      _partial_: true
+    decoder_act_fn: null
