@@ -10,3 +10,13 @@ criterion:
 lr: 0.1
 weight_decay: 0.0
 max_epochs: 150
+callbacks:
+  - _target_: skorch.callbacks.ProgressBar
+  - _target_: skorch.callbacks.LRScheduler
+    policy: ExponentialLR
+    monitor: valid_loss
+    gamma: 0.9
+  - _target_: skorch.callbacks.EarlyStopping
+    monitor: valid_loss
+    load_best: True
+    patience: 10
