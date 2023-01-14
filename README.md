@@ -32,7 +32,7 @@ Install the package via pip
 pip3 install git+https://github.com/MoritzM00/drcomp.git
 ```
 
-## Usage
+## CLI Usage
 
 You can use the CLI to train and evaluate models. E.g. to train a PCA model on the MNIST Dataset, execute:
 
@@ -49,6 +49,14 @@ drcomp reducer=PCA dataset=MNIST dataset.intrinsic_dim=10
 Note that for some parameters it is cumbersome to change them on the command line. In this case, refer to the Development section below, and edit the configuration files directly.
 
 Also, note that the CLI tool is case-sensitive for the arguments. E.g. `dataset=MNIST` is correct, but `dataset=mnist` is not. This is a limitation of the Hydra-CLI that is used to build the training script.
+
+### Weights and Biases Integration
+
+Activate cloud syncing with `wandb.mode=online` (Default) or offline sync with `wandb.mode=offline`.
+Group by dataset with `wandb.group=dataset` or by dataset-reducer with `wandb.group=null` (Default).
+Randomly generated name for each run with `wandb.name=null` (Default) or use the name of the reducer with `wandb.name=reducer`.
+
+An example project can be found at the [drcomp-fullrun](https://wandb.ai/moritzm00/drcomp-fullrun/overview?workspace=user-moritzm00) project.
 
 ### Available datasets
 
