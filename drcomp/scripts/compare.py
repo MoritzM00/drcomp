@@ -23,6 +23,7 @@ logger = logging.getLogger(__name__)
     type=int,
     help="If specified (int), then print the values of the quality metrics for this value neighborhoodsize k.",
 )
+@click.option("--height", default=4, type=float, help="The height of the figure.")
 @click.option("--save", default=False, is_flag=True, help="Save the plot to a file.")
 @click.option(
     "--latex",
@@ -31,7 +32,9 @@ logger = logging.getLogger(__name__)
     help="Save the plot in for use in LaTeX (pgf format).",
 )
 @click.option("--root_dir", default=".", help="The root directory for the project.")
-def compare(datasets: list[str], k: int, save: bool, latex: bool, root_dir: str):
+def compare(
+    datasets: list[str], k: int, save: bool, height: float, latex: bool, root_dir: str
+):
     """Compare the metrics of different dimensionality reduction methods."""
     cfg: DictConfig
     with hydra.initialize_config_module(
@@ -58,20 +61,13 @@ def compare(datasets: list[str], k: int, save: bool, latex: bool, root_dir: str)
             print(50 * "=")
         plt.style.use("science")
 
-        figsize = (5.91, 4.8)
+        figsize = (5.91, height)
         fig, _ = compare_metrics(metrics, figsize=figsize)
         if save:
             fig.savefig(
                 str(get_figures_dir(cfg)) + f"/{dataset}_comparison.pdf",
                 bbox_inches="tight",
             )
-            # save_fig(
-            #     dir=get_figures_dir(cfg),
-            #     fig=fig,
-            #     name=f"{dataset}_comparison",
-            #     latex=latex,
-            #     height=4,
-            # )
         else:
             plt.show()
 

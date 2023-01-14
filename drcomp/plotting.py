@@ -111,14 +111,20 @@ def compare_metrics(
         ax3.set_title("LCMC", fontsize=fontsize)
     keys = list(metrics.keys())
     plt.tight_layout()
+    if len(keys) > 5:
+        ncol = len(keys) // 2
+        bottom_adj = 0.2
+    else:
+        ncol = len(keys)
+        bottom_adj = 0.15
     plt.legend(
         keys,
-        ncol=len(keys),
+        ncol=ncol,
         loc="upper center",
         bbox_to_anchor=(-0.25, -0.1),
         fontsize=11,
     )
-    plt.subplots_adjust(bottom=0.15)
+    plt.subplots_adjust(bottom=bottom_adj)
     return fig, [ax1, ax2, ax3]
 
 
