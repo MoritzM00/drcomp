@@ -65,9 +65,15 @@ def train(cfg: DictConfig):
         cfg.dataset.intrinsic_dim = intrinsic_dim
 
     if cfg.wandb.group is None:
+        # group the runs by dataset and reducer for parameter sweeps and easier comparison
         cfg.wandb.group = f"{cfg.dataset.name} - {cfg.reducer._name_}"
     elif cfg.wandb.group == "dataset":
+        # group the runs by dataset
         cfg.wandb.group = cfg.dataset.name
+    if cfg.wandb.name == "reducer":
+        # set the run name to the reducer's name
+        cfg.wandb.name = cfg.reducer._name_
+
     wandb.init(
         project=cfg.wandb.project,
         group=cfg.wandb.group,
@@ -75,9 +81,6 @@ def train(cfg: DictConfig):
         config=OmegaConf.to_container(cfg, resolve=True),
         mode=cfg.wandb.mode,
     )
-
-    logger.debug(f"Config: {OmegaConf.to_yaml(cfg, resolve=True)}")
-
     reducer = instantiate_reducer(cfg)
 
     # preprocess the data

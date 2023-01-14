@@ -15,10 +15,10 @@ install-dev:
 	pre-commit install
 
 train:
-	drcomp -m evaluate=False dataset=$(dataset) reducer=AE,CAE,kPCA,LLE,ConvAE,PCA
+	drcomp -m evaluate=False dataset=$(dataset) reducer=AE,CAE,kPCA,LLE,ConvAE,PCA wandb.project=drcomp wandb.group=dataset wandb.name=reducer
 
 evaluate:
-	drcomp -m evaluate=True dataset=$(dataset) reducer=AE,CAE,kPCA,LLE,ConvAE,PCA use_pretrained=True
+	drcomp -m evaluate=True dataset=$(dataset) reducer=AE,CAE,kPCA,LLE,ConvAE,PCA use_pretrained=True wandb.project=drcomp wandb.group=dataset wandb.name=reducer
 
 train-all:
 	make train dataset=MNIST && \
