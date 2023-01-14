@@ -42,13 +42,15 @@ class FullyConnectedAE(AbstractAutoEncoder):
         self,
         input_size: int,
         intrinsic_dim: int,
-        hidden_layer_dims: list[int] = [],
+        hidden_layer_dims: list[int] = None,
         encoder_act_fn: Union[object, list[object]] = nn.Sigmoid,
         decoder_act_fn: Union[object, list[object]] = None,
         include_batch_norm: bool = False,
         tied_weights: bool = False,
     ):
         super().__init__(intrinsic_dim=intrinsic_dim)
+        if hidden_layer_dims is None:
+            hidden_layer_dims = []
         self.input_size = input_size
         self.hidden_layer_dims = hidden_layer_dims
         self.include_batch_norm = include_batch_norm
