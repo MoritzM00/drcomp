@@ -114,7 +114,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         if self.contractive:
             X = to_tensor(X, device=self.device)
             contr_loss = torch.norm(
-                jacobian(self.module_.encoder, X, create_graph=True)
+                jacobian(self.module_.encoder, X, create_graph=True, vectorize=True)
             )
         else:
             contr_loss = 0
