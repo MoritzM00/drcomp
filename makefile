@@ -50,10 +50,4 @@ zip-model-for:
 
 
 tune-kpca:
-	drcomp -m evaluate=True reducer=kPCA dataset=MNIST,FER2013,SwissRoll,TwinPeaks,OlivettiFaces,ICMR,LfwPeople reducer.gamma=0.01,0.05,0.1,0.2,0.5,0.7,1,2
-
-tune-autoencoder:
-	drcomp -m evaluate=True reducer=AE dataset=MNIST,FER2013,SwissRoll,TwinPeaks,OlivettiFaces,ICMR,LfwPeople reducer.lr=0.5,0.1,0.05,0.01,0.005
-
-tune-cae:
-	drcomp -m evaluate=True reducer=CAE dataset=SwissRoll,TwinPeaks,OlivettiFaces,ICMR,LfwPeople "reducer.AutoEncoderClass.hidden_layer_dims=[],[32]" "reducer.AutoEncoderClass.encoder_act_fn._target_=nn.Sigmoid,nn.ReLU,nn.Tanh" reducer.contractive_lambda=0.0001,0.001 wandb.project=drcomp-v2
+	drcomp -m evaluate=True reducer=kPCA dataset=MNIST,FER2013,SwissRoll,TwinPeaks,OlivettiFaces,ICMR,FashionMNIST reducer.gamma=0.05,0.1,0.25,0.75,1,2,5 wandb.name=kPCA-'${reducer.gamma}' wandb.project=drcomp-sweeps max_evaluation_samples=5000
