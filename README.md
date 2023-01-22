@@ -1,4 +1,11 @@
-# Old but gold? - Statistics vs. Machine Learning in Dimensionality Reduction
+# Statistics vs. Machine Learning in Dimensionality Reduction
+
+[![Lint and Build](https://github.com/MoritzM00/drcomp/actions/workflows/lint.yml/badge.svg)](https://github.com/MoritzM00/drcomp/actions/workflows/lint.yml)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)][pre-commit]
+[![Black](https://img.shields.io/badge/code%20style-black-000000.svg)][black]
+
+[pre-commit]: https://github.com/pre-commit/pre-commit
+[black]: https://github.com/psf/black
 
 This repository contains the python code for my bachelor thesis on the topic of dimensionality reduction techniques. It compares statistical dimensionality reduction techniques like PCA, Kernel PCA and LLE with newer machine learning methods for dimensionality reduction like Autoencoders. Specifically, fully connected as well as convolutional autoencoders and contractive autoencoders are studied.
 
@@ -56,7 +63,13 @@ Activate cloud syncing with `wandb.mode=online` (Default) or offline sync with `
 Group by dataset with `wandb.group=dataset` or by dataset-reducer with `wandb.group=null` (Default).
 Randomly generated name for each run with `wandb.name=null` (Default) or use the name of the reducer with `wandb.name=reducer`.
 
-An example project can be found at the [drcomp-fullrun](https://wandb.ai/moritzm00/drcomp-fullrun/overview?workspace=user-moritzm00) project.
+An example project can be found at the [drcomp](https://wandb.ai/moritzm00/drcomp/) W&B-project. This project contains the runs executed with
+
+```bash
+drcomp -m evaluate=True max_evaluation_samples=15000 dataset=FashionMNIST,MNIST,FER2013,ICMR,OlivettiFaces,SwissRoll,TwinPeaks reducer=AE,kPCA,LLE,ConvAE,PCA,CAE use_pretrained=False wandb.project=drcomp wandb.group=dataset wandb.name=reducer
+```
+
+and takes about 2 hours to complete on an NVIDIA RTX A4000 and requires about 16 GB of RAM.
 
 ### Available datasets
 
