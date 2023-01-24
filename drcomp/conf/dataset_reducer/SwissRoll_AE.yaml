@@ -1,5 +1,5 @@
 # @package _global_
 reducer:
   AutoEncoderClass:
-    hidden_layer_dims: [5, 10, 15, 10, 5]
+    hidden_layer_dims: [5, 10, 5]
   lr: 0.01

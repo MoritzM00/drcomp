@@ -1,4 +1,0 @@
-# @package _global_
-reducer:
-  AutoEncoderClass:
-    hidden_layer_dims: [10]
