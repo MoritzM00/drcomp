@@ -20,8 +20,7 @@ criterion:
 lr: 0.1
 weight_decay: 0.0
 max_epochs: 100
-callbacks:
-  - _target_: skorch.callbacks.ProgressBar
+callbacks: # no progress bar because of fast epoch times
   - _target_: skorch.callbacks.LRScheduler
     policy: ExponentialLR
     monitor: valid_loss
