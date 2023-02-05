@@ -166,7 +166,8 @@ def get_preprocessor(dataset: str, root_dir=".", from_pretrained=True) -> BaseEs
     root_dir : str, default="."
         The root directory where the project is located.
     from_pretrained : bool, default=True
-        Whether to load the pretrained preprocessor or instantiate a new one. If True, attempt to load the pretrained model from the preprocessor directory."""
+        Whether to load the pretrained preprocessor or instantiate a new one. If True, attempt to load the pretrained model from the preprocessor directory.
+    """
     preprocessor: BaseEstimator
     with initialize_config_module(version_base="1.3", config_module="drcomp.conf"):
         cfg = compose(

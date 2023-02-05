@@ -93,7 +93,7 @@ class FullyConnectedAE(AbstractAutoEncoder):
             decoder_layers = [
                 layer for layer in decoder if isinstance(layer, nn.Linear)
             ]
-            for (enc, dec) in zip(encoder_layers, reversed(decoder_layers)):
+            for enc, dec in zip(encoder_layers, reversed(decoder_layers)):
                 weight = enc.weight.data
                 enc.weight = nn.Parameter(weight)
                 dec.weight = nn.Parameter(weight.t())

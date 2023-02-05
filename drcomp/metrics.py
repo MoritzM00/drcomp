@@ -109,7 +109,8 @@ def _compute_ranking_matrix_parallel(D, n_jobs=None):
     D : np.ndarray
         Distance matrix.
     n_jobs : int, default=None
-        Number of jobs to use for parallel computation. If None, then use 1 if the number of data points is less than 1000, otherwise use all available cores."""
+        Number of jobs to use for parallel computation. If None, then use 1 if the number of data points is less than 1000, otherwise use all available cores.
+    """
     # if data is small, no need for parallel
     if n_jobs is None:
         n_jobs = 1
