@@ -16,9 +16,11 @@ from drcomp.metrics import (
 logger = logging.getLogger(__name__)
 
 
-def estimate_intrinsic_dimension(X, K: int = 5) -> int:
+def estimate_intrinsic_dimension(X, K: int = 20) -> int:
     """Estimate the intrinsic dimensionality of the data."""
-    dimension = MLE(K=K).fit_transform(X)
+    dimension = MLE(neighborhood_based=True).fit_transform(
+        X, n_neighbors=K, comb="mean"
+    )
     return int(dimension)
 
 

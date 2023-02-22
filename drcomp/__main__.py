@@ -61,7 +61,7 @@ def train(cfg: DictConfig):
         cfg.dataset.intrinsic_dim
     except MissingMandatoryValue:
         # estimate intrinsic dimensionality
-        intrinsic_dim = estimate_intrinsic_dimension(X)
+        intrinsic_dim = estimate_intrinsic_dimension(X, K=cfg.intrinsic_dim_n_neighbors)
         logger.info(f"ML Estimate of intrinsic dimensionality: {intrinsic_dim}")
         cfg.dataset.intrinsic_dim = intrinsic_dim
 

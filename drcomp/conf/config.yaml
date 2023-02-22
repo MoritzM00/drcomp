@@ -49,6 +49,7 @@ use_gpu: True
 use_pretrained: False
 max_n_neighbors: 100
 max_evaluation_samples: 5000 # == maximum coranking dimension
+intrinsic_dim_n_neighbors: 20
 
 root_dir: .
 # the following directories are relative to root_dir
