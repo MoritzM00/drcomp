@@ -17,7 +17,7 @@ jobs:
           flake8 drcomp
       - uses: psf/black@stable
         with:
-          options: --check
+          options: "--check --diff --verbose"
           jupyter: true
   build:
     needs: lint
