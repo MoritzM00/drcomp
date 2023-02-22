@@ -52,7 +52,13 @@ if __name__ == "__main__":
 
 
 def train(cfg: DictConfig):
-    """Train a model on a dataset."""
+    """Full training and evaluation pipeline.
+
+    First, the data is loaded and preprocessed and the W&B run is initialized.
+    If no intrinsic dimensionality is specified, then it will be estimated first.
+
+    Afterwards, the model is trained and (optionally) evaluated.
+    """
     # load the data
     train_time_start = time.time()
     logger.info(f"Loading dataset: {cfg.dataset.name}")
@@ -126,7 +132,7 @@ def train(cfg: DictConfig):
 
 
 def instantiate_reducer(cfg):
-    # instantiate the reducer
+    """Instantiate the reducer from the config."""
     device = "cpu"
     if cfg.use_gpu and torch.cuda.is_available():
         device = "cuda"
@@ -142,6 +148,27 @@ def instantiate_reducer(cfg):
 
 
 def fit_reducer(cfg, reducer, X):
+    """Fit the reducer on the given Data set.
+
+    If `use_pretrained` is set to True, the reducer is loaded from the pretrained model path. If None is found, then it will be fitted.
+    Otherwise, the reducer is fitted directly.
+
+    Saves the reducer to the pretrained model path and logs the training time to wandb.
+
+    Parameters
+    ----------
+    cfg : DictConfig
+        The config object.
+    reducer : DimensionalityReducer
+        The reducer to fit.
+    X : np.ndarray
+        The data to fit the reducer on.
+
+    Returns
+    -------
+    DimensionalityReducer
+        The fitted reducer.
+    """
     failed = False
     if cfg.use_pretrained:
         logger.info(
@@ -167,6 +194,20 @@ def fit_reducer(cfg, reducer, X):
 
 
 def evaluate(cfg, reducer: DimensionalityReducer, X):
+    """Evaluate the reducer on the given data set.
+
+    If the data set is too large, it is sampled to the number of samples specified in the config as `max_evaluation_samples`.
+    Logs the metrics to wandb and saves the metrics to disk.
+
+    Parameters
+    ----------
+    cfg : DictConfig
+        The config object.
+    reducer : DimensionalityReducer
+        The reducer to evaluate.
+    X : np.ndarray
+        The data to evaluate the reducer on.
+    """
     logger.info("Evaluating model...")
     Y = None
     if isinstance(reducer, LLE):
