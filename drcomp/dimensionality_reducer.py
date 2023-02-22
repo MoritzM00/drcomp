@@ -28,6 +28,16 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
     """Base class for Dimensionality Reducers.
 
     It specifies the interface that all dimensionality reducers should implement.
+    It provides a `evaluate`-Method that computes the evaluation measures for the dimensionality reduction.
+
+    Parameters
+    ----------
+    intrinsic_dim : int, default=2
+        The intrinsic dimensionality of the data.
+    supports_inverse_transform : bool, default=False
+        Whether the dimensionality reducer supports an inverse transform from the latent representation back to an approximated original data point.
+    n_jobs : int, default=None
+        The number of jobs to use for the computation of the evaluation metrics. Default None means that one job is used.
     """
 
     def __init__(
@@ -92,7 +102,7 @@ class DimensionalityReducer(BaseEstimator, TransformerMixin, metaclass=ABCMeta):
 
         Returns
         -------
-        dict
+        MetricsDict
             A dictionary containing the evaluation measures. Arrays are numpy arrays if as_builtin_list is False, otherwise builtin lists.
         """
         n_samples = X.shape[0]

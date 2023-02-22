@@ -129,6 +129,7 @@ def compare_metrics(
 
 
 def plot_trustworthiness_continuity(t, c, ax=None):
+    """Plot the trustworthiness and continuity as a function of the number of neighbors."""
     if len(t) != len(c):
         raise ValueError(
             "Trustworthiness and Continuity arrays must have the same length."
@@ -147,6 +148,7 @@ def plot_trustworthiness_continuity(t, c, ax=None):
 
 
 def plot_lcmc(lcmc, ax=None):
+    """Plot the Local Continuity Meta Criterion as a function of the number of neighbors."""
     if ax is None:
         ax = plt.axes()
     x = np.arange(1, len(lcmc) + 1)
@@ -169,7 +171,32 @@ def plot_reconstructions(
     cmap="gray",
     figsize=None,
 ):
-    """Plot the reconstructions of the samples by the given models compared to the original images."""
+    """Plot the reconstructions of the samples by the given models compared to the original images.
+
+    Parameters
+    ----------
+    models: dict[str, DimensionalityReducer]
+        A dictionary mapping the name of a dimensionality reduction method to the corresponding model.
+    images: array-like of shape (n_samples, width * height * channels)
+        The images to reconstruct. It must be the flattend version of the images, i.e. the images must be reshaped to (n_samples, width * height * channels).
+    preprocessor: DimensionalityReducer
+        The preprocessor that was applied to the data before the models were fitted on it.
+    width: int
+        The width of the images.
+    height: int
+        The height of the images.
+    channels: int
+        The number of channels of the images.
+    cmap: str, default="gray"
+        The colormap to use for the images.
+    figsize: tuple[int, int], optional
+        The size of the figure. If None, then the size is determined automatically.
+
+    Returns
+    -------
+    matplotlib.figure.Figure, list of matplotlib.axes.Axes
+        The figure and the axes on which the reconstructions were plotted.
+    """
     n_images = len(images)
     if figsize is None:
         figsize = (n_images, len(models) + 1)
@@ -216,6 +243,8 @@ def visualize_2D_latent_space(
         Color for the points in the latent space.
     title : str, optional
         Title of the plot.
+    ax : matplotlib.axes.Axes, optional
+        Axes on which to plot the latent space.
     **kwargs
         Additional keyword arguments passed to `matplotlib.pyplot.scatter`.
     """
