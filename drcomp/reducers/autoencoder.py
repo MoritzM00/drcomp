@@ -75,7 +75,7 @@ class AutoEncoder(NeuralNet, DimensionalityReducer):
         device="cpu",
         callbacks=None,
         contractive: bool = False,
-        contractive_lambda: float = 1e-4,  #
+        contractive_lambda: float = 1e-4,
         weight_decay: float = 0.0,
         n_jobs=None,
         **kwargs,
