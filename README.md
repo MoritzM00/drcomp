@@ -15,6 +15,12 @@ The dimensionality reducers are compared via the trustworthiness, continuity and
 
 ## Installation
 
+Install the package via pip
+
+```bash
+pip3 install git+https://github.com/MoritzM00/drcomp.git
+```
+
 `drcomp` requires Python 3.9 or higher and the following dependencies:
 
 - matplotlib
@@ -31,13 +37,11 @@ The dimensionality reducers are compared via the trustworthiness, continuity and
 - numba
 - joblib
 
-### Install
+## Credits
 
-Install the package via pip
-
-```bash
-pip3 install git+https://github.com/MoritzM00/drcomp.git
-```
+This repository makes use of the following open-source content:
+- [pyDRMetrics](https://github.com/zhangys11/pyDRMetrics) for calculating the quality criteria (modifications were made)
+- The fast computation of the Co-Ranking Matrix by Tim Sainburg on [his website](https://timsainburg.com/coranking-matrix-python-numba.html)
 
 ## CLI Usage
 
