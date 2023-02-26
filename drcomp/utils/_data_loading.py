@@ -67,6 +67,7 @@ def load_dataset_from_cfg(cfg: DictConfig):
 
 
 def load_mnist(data_dir, dataset_cfg: DictConfig, train=True):
+    """Load the MNIST dataset."""
     mnist_train = datasets.MNIST(
         root=data_dir, download=True, train=train, transform=transforms.ToTensor()
     )
@@ -77,6 +78,7 @@ def load_mnist(data_dir, dataset_cfg: DictConfig, train=True):
 
 
 def load_cifar10(data_dir, dataset_cfg: DictConfig, train=True):
+    """Load the CIFAR10 dataset."""
     cifar_train = datasets.CIFAR10(
         root=data_dir, train=train, download=True, transform=transforms.ToTensor()
     )
@@ -87,6 +89,7 @@ def load_cifar10(data_dir, dataset_cfg: DictConfig, train=True):
 
 
 def load_swiss_roll(dataset_cfg: DictConfig):
+    """Load the Swiss roll dataset."""
     try:
         n_samples = dataset_cfg.n_samples
         noise = dataset_cfg.noise
@@ -100,6 +103,7 @@ def load_swiss_roll(dataset_cfg: DictConfig):
 
 
 def load_lfw_people(data_dir, dataset_cfg: DictConfig):
+    """Load the LFW People dataset."""
     try:
         min_faces_per_person = dataset_cfg.min_faces_per_person
         resize = dataset_cfg.resize
@@ -119,6 +123,7 @@ def load_lfw_people(data_dir, dataset_cfg: DictConfig):
 
 
 def load_olivetti_faces(data_dir, dataset_cfg: DictConfig):
+    """Load the Olivetti faces dataset."""
     X, targets = fetch_olivetti_faces(
         data_home=data_dir, return_X_y=True, shuffle=False
     )
@@ -126,6 +131,7 @@ def load_olivetti_faces(data_dir, dataset_cfg: DictConfig):
 
 
 def load_twin_peaks(dataset_cfg: DictConfig):
+    """Load the Twin Peaks dataset."""
     try:
         n_samples = dataset_cfg.n_samples
     except KeyError:
@@ -137,6 +143,7 @@ def load_twin_peaks(dataset_cfg: DictConfig):
 
 
 def load_fer_2013(data_dir, dataset_cfg: DictConfig, train=True):
+    """Load the FER2013 dataset."""
     dir = Path(data_dir, "fer2013")
     path = Path(dir, "train" if train else "test").with_suffix(".csv")
     if not dir.exists():
@@ -151,6 +158,7 @@ def load_fer_2013(data_dir, dataset_cfg: DictConfig, train=True):
 
 
 def load_20newsgroups(data_dir, dataset_cfg: DictConfig, train=True):
+    """Load the 20 Newsgroups dataset."""
     news20 = fetch_20newsgroups_vectorized(
         subset="train" if train else "test",
         download_if_missing=True,
@@ -163,6 +171,7 @@ def load_20newsgroups(data_dir, dataset_cfg: DictConfig, train=True):
 
 
 def load_icmr(data_dir, dataset_cfg: DictConfig):
+    """Load the ICMR dataset."""
     path = Path(data_dir, "icmr", "data.csv")
     if not path.exists():
         raise RuntimeError(
@@ -177,6 +186,7 @@ def load_icmr(data_dir, dataset_cfg: DictConfig):
 
 
 def load_fashion_mnist(data_dir, dataset_cfg: DictConfig, train=True):
+    """Load the Fashion MNIST dataset."""
     fashion_mnist = datasets.FashionMNIST(
         root=data_dir, download=True, transform=transforms.ToTensor(), train=train
     )
