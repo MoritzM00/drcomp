@@ -8,6 +8,8 @@ from drcomp.autoencoder.base import AbstractAutoEncoder
 
 
 class MnistConvAE(AbstractAutoEncoder):
+    """Convolutional AutoEncoder for MNIST."""
+
     def __init__(self, intrinsic_dim: int = 16):
         super().__init__(intrinsic_dim=intrinsic_dim)
         self.encoder = nn.Sequential(
@@ -59,6 +61,8 @@ class MnistConvAE(AbstractAutoEncoder):
 
 
 class Cifar10ConvAE(AbstractAutoEncoder):
+    """Convolutional AutoEncoder for CIFAR10."""
+
     def __init__(self, intrinsic_dim: int = 64):
         super().__init__(intrinsic_dim=intrinsic_dim)
         self.encoder = nn.Sequential(
@@ -96,6 +100,8 @@ class Cifar10ConvAE(AbstractAutoEncoder):
 
 
 class Fer2013ConvAE(AbstractAutoEncoder):
+    """Convolutional AutoEncoder for FER2013."""
+
     def __init__(self, intrinsic_dim: int = 2):
         super().__init__(intrinsic_dim)
         self.encoder = nn.Sequential(
@@ -133,6 +139,8 @@ class Fer2013ConvAE(AbstractAutoEncoder):
 
 
 class LfwPeopleConvAE(AbstractAutoEncoder):
+    """Convolutional AutoEncoder for LFW People."""
+
     def __init__(self, intrinsic_dim: int = 2):
         super().__init__(intrinsic_dim)
         self.encoder = nn.Sequential(
@@ -170,6 +178,8 @@ class LfwPeopleConvAE(AbstractAutoEncoder):
 
 
 class OlivettiFacesConvAE(AbstractAutoEncoder):
+    """Convolutional AutoEncoder for Olivetti Faces."""
+
     def __init__(self, intrinsic_dim: int = 2):
         super().__init__(intrinsic_dim)
         self.encoder = nn.Sequential(
