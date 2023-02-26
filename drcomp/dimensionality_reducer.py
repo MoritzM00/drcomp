@@ -17,7 +17,20 @@ logger = logging.getLogger(__name__)
 
 
 def estimate_intrinsic_dimension(X, K: int = 20) -> int:
-    """Estimate the intrinsic dimensionality of the data."""
+    """Estimate the intrinsic dimensionality of the data.
+
+    Parameters
+    ----------
+    X : array-like of shape (n_samples, n_features)
+        The data.
+    K : int, default=20
+        The number of nearest neighbors to use for the estimation.
+
+    Returns
+    -------
+    int
+        The estimated intrinsic dimensionality.
+    """
     dimension = MLE(neighborhood_based=True).fit_transform(
         X, n_neighbors=K, comb="mean"
     )
