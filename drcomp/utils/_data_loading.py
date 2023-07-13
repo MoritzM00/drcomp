@@ -113,7 +113,7 @@ def load_lfw_people(data_dir, dataset_cfg: DictConfig):
         )
     X, targets = fetch_lfw_people(
         min_faces_per_person=min_faces_per_person,
-        data_home=data_dir,
+        data_home=str(data_dir),
         resize=resize,
         return_X_y=True,
         color=False,
@@ -125,7 +125,7 @@ def load_lfw_people(data_dir, dataset_cfg: DictConfig):
 def load_olivetti_faces(data_dir, dataset_cfg: DictConfig):
     """Load the Olivetti faces dataset."""
     X, targets = fetch_olivetti_faces(
-        data_home=data_dir, return_X_y=True, shuffle=False
+        data_home=str(data_dir), return_X_y=True, shuffle=False
     )
     return X, targets
 
@@ -162,7 +162,7 @@ def load_20newsgroups(data_dir, dataset_cfg: DictConfig, train=True):
     news20 = fetch_20newsgroups_vectorized(
         subset="train" if train else "test",
         download_if_missing=True,
-        data_home=data_dir,
+        data_home=str(data_dir),
         remove=("headers", "footers", "quotes"),
     )
     X = np.array(news20.data.todense(), dtype="float32")
