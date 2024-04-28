@@ -7,7 +7,7 @@
 [pre-commit]: https://github.com/pre-commit/pre-commit
 [black]: https://github.com/psf/black
 
-This repository contains the python code for my bachelor thesis on the topic of dimensionality reduction techniques. It compares statistical dimensionality reduction techniques like PCA, Kernel PCA and LLE with newer machine learning methods for dimensionality reduction like Autoencoders. Specifically, fully connected as well as convolutional autoencoders and contractive autoencoders are studied.
+This repository contains the python code for my [bachelor thesis](https://github.com/MoritzM00/Bachelor-Thesis/releases/latest) on the topic of dimensionality reduction techniques. It compares statistical dimensionality reduction techniques like PCA, Kernel PCA and LLE with newer machine learning methods for dimensionality reduction like Autoencoders. Specifically, fully connected as well as convolutional autoencoders and contractive autoencoders are studied.
 
 The dimensionality reducers are compared via the trustworthiness, continuity and the local continuity meta-criterion (LCMC) on several datasets including artifical and real-world datasets. For an example, see below.
 
